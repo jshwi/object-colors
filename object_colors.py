@@ -141,6 +141,23 @@ class ColorObj:
         """
         print(self.get(" ".join(str(string) for string in args)), **kwargs)
 
+    def pop(self, select: str) -> Union[str, dict, None]:
+        """Delete key and value from list and return them to a variable,
+        if that's what you want to do...
+
+        :param select:  Key selection to delete
+        :return:        Dictionary item if removing class, str if a
+                        keypair and None if there was nothing to remove
+        """
+        for key in list(self.__dict__):
+            if select == key:
+                popped = self.__dict__[key]
+                del self.__dict__[key]
+                if isinstance(popped, ColorObj):
+                    return {key: popped.__dict__}
+                return popped
+        return
+
     def get_key_values(self) -> dict:
         """Resolve type errors for the various types that the class may
         contain so that they may be printed as a string

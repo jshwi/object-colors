@@ -1,3 +1,7 @@
 **/.idea/
 **/__pycache__/
 **/venv/
+**/.pytest_cache/
+**/dev/
+**/docs/
+!/docs/_build/
