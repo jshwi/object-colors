@@ -8,7 +8,7 @@ from json import dumps
 from typing import Union, Any
 
 
-class Color:
+class ColorObj:
     """Instantiate with escape codes, values or key-values and get or
     print processed arguments
     """
@@ -21,6 +21,15 @@ class Color:
                         color, effect, background
         """
         self.add(*args, **kwargs)
+
+    def __call__(self, *args: Any, **kwargs: Union[str, int, dict]) -> dict:
+        return self.process_args_kwargs(*args, **kwargs)
+
+    def __getattr__(self, item: str) -> str:
+        return self[item]
+
+    def __dir__(self) -> list:
+        return [str(k) for k in self.__dict__]
 
     def add(self, *args: Any, **kwargs: Union[str, int, dict]):
         """
@@ -68,13 +77,12 @@ class Color:
                         kwarg parameters
         :return:        validated dictionary for class __dict__
         """
-        value = {}
         data = self.__dict__
         for key, val in list(kwargs.items()):
             if isinstance(val, dict):
                 val = self.process_kwargs(args, val)
-                value[key] = Color(*args, **val)
-                data.update({key: value[key]})
+                color = ColorObj(*args, **val)
+                setattr(self, key, color)
             else:
                 data.update(self.process_kwargs(args, kwargs))
         return data
@@ -96,11 +104,14 @@ class Color:
             # set default value
             val = 0 if key == "effect" else 9
             if 0 <= idx < len(args):
-                val = args[idx]  # valid argument
+                # valid argument
+                val = args[idx]
             elif key in kwargs and kwargs[key] in opts:
-                val = kwargs[key]  # valid keyword argument
+                # valid keyword argument
+                val = kwargs[key]
             elif key in kwargs and 0 <= idx < len(opts):
-                continue  # valid value already set
+                # valid value already set
+                continue
             # if val is a string return its index value for escape code
             val = opts.index(val) if isinstance(val, str) else val
             kwargs.update({key: val})
