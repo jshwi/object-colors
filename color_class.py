@@ -12,8 +12,7 @@ class Color:
     """Instantiate with escape codes, values or key-values and get or
     print processed arguments
     """
-
-    def __init__(self, *args: Union[str, int], **kwargs: Union[str, int]):
+    def __init__(self, *args: Any, **kwargs: Union[str, int, dict]):
         """Set desired attributes for Color.print() or Color.get()
 
         :param args:    Codes can be entered in any number of arguments
@@ -21,10 +20,18 @@ class Color:
         :param kwargs:  Three specific keys can be used
                         color, effect, background
         """
+        self.add(*args, **kwargs)
+
+    def add(self, *args: Any, **kwargs: Union[str, int, dict]):
+        """
+
+        :param args:
+        :param kwargs:
+        """
         self.__dict__ = self.process_args_kwargs(args, kwargs)
 
     @staticmethod
-    def process_args(args) -> list:
+    def process_args(args: Any) -> list:
         """e.g. instead of color="red", effect="bold", background="blue"
         114 will get the same result
 
@@ -61,23 +68,41 @@ class Color:
                         kwarg parameters
         :return:        validated dictionary for class __dict__
         """
+        value = {}
+        data = self.__dict__
+        for key, val in list(kwargs.items()):
+            if isinstance(val, dict):
+                val = self.process_kwargs(args, val)
+                value[key] = Color(*args, **val)
+                data.update({key: value[key]})
+            else:
+                data.update(self.process_kwargs(args, kwargs))
+        return data
+
+    def process_kwargs(self, args: Any, kwargs: dict) -> dict:
+        """Organise arguments and keyword arguments into a valid
+        dictionary
+
+        :param args:    User defined arguments: list(s) of integers or
+                        tuple of strings
+        :param kwargs:  Keyword arguments for class attributes or new
+                        subclass attributes
+        :return:        Dictionary for class attributes
+        """
         args = self.process_args(args)
         keys = ["color", "effect", "background"]
         for idx, key in enumerate(keys):
             opts = self.get_opts(key)
-            default = 9 if key == "effect" else 0
-            if key in kwargs and kwargs[key] in opts:
-                val = kwargs[key]
-            elif 0 <= idx < len(args):
-                val = args[idx]
+            # set default value
+            val = 0 if key == "effect" else 9
+            if 0 <= idx < len(args):
+                val = args[idx]  # valid argument
+            elif key in kwargs and kwargs[key] in opts:
+                val = kwargs[key]  # valid keyword argument
             elif key in kwargs and 0 <= idx < len(opts):
-                # valid value already set
-                continue
-            else:
-                val = default
+                continue  # valid value already set
+            # if val is a string return its index value for escape code
             val = opts.index(val) if isinstance(val, str) else val
-            if not val or val >= len(opts):
-                val = default
             kwargs.update({key: val})
         return kwargs
 
@@ -96,7 +121,7 @@ class Color:
         return f"\033[{effect};{color};{background}m{string}\033[0;0m"
 
     def print(self, *args: Any, **kwargs: Union[str, int]):
-        """
+        """Enhanced print function for class and subclasses
 
         :param args:    Variable number of strings can be entered if
                         syntax allows so this method behaves just like
@@ -105,8 +130,12 @@ class Color:
         """
         print(self.get(" ".join(str(string) for string in args)), **kwargs)
 
-    def vals(self):
-        """Used for debugging: Print class dict as json"""
+    def get_key_values(self) -> dict:
+        """Resolve type errors for the various types that the class may
+        contain so that they may be printed as a string
+
+        :return: Temporary key values to be printed in a readable form
+        """
         key_values = {}
         for key in self.__dict__:
             opts = self.get_opts(key)
@@ -117,4 +146,19 @@ class Color:
             except IndexError:
                 value = None
             key_values[key] = value
-        self.print(dumps(key_values, indent=4, sort_keys=True))
+        return key_values
+
+    def vals(self):
+        """Used for debugging: Print class dict as json"""
+        key_values = self.get_key_values()
+        while True:
+            try:
+                print(dumps(key_values, indent=4, sort_keys=True))
+                break
+            except TypeError:
+                for key, value in key_values.items():
+                    try:
+                        value = value.__dict__
+                        key_values[key] = value
+                    except AttributeError:
+                        continue
