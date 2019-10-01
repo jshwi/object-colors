@@ -23,12 +23,6 @@ def test_set_str_class_vars():
     assert c.background == 4
 
 
-def test__call__():
-    c = Color()
-    c(color='blue')
-    assert c.color == 4
-
-
 def test__dir__():
     c = Color(color='green')
     attrs = c.__dir__()
@@ -73,3 +67,32 @@ def test_class_in_class():
     c = Color(red={'color': 'red'})
     assert c.red
     assert isinstance(c.red, Color)
+
+
+def test_getattr():
+    c = Color(red={'color': 'red'})
+    assert c.__getattr__('red')
+
+
+def test_pop_class():
+    c = Color(red={'color': 'red'})
+    assert 'red' in c.__dict__
+    red = c.pop('red')
+    assert 'red' not in c.__dict__
+    assert red == {'red': {'background': 9, 'color': 1, 'effect': 0}}
+
+
+def test_pop_var():
+    c = Color(color='red')
+    assert c.__dict__['color'] == 1
+    red = c.pop('color')
+    assert 'color' not in c.__dict__
+    assert red == 1
+    none = c.pop('cyan')
+    assert not none
+
+
+def test_get():
+    c = Color(color='red', effect='bold', background='blue')
+    got = c.get('this string is for testing')
+    assert got == '\033[1;31;44mthis string is for testing\033[0;0m'

@@ -3,5 +3,3 @@
 **/venv/
 **/.pytest_cache/
 **/dev/
-**/docs/
-!/docs/_build/
