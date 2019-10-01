@@ -5,6 +5,13 @@ This is a simple to use module designed to print to the terminal in
 color with minimal setup and instantiation
 """
 from typing import Union, Any
+__author__ = "Stephen Whitlock"
+__copyright__ = "Copyright 2019, Stephen Whitlock"
+__license__ = "MIT"
+__version__ = "2019.10"
+__maintainer__ = "Stephen Whitlock"
+__email__ = "stephen@jshwisolutions.com"
+__status__ = "Production"
 
 
 class Color:
@@ -13,6 +20,7 @@ class Color:
     """
     def __init__(self, *args: Any, **kwargs: Union[str, int, dict]):
         """Set class attributes for Color.print() or Color.get()
+
         keys:
             "color", "effect", "background"
         effects:
@@ -31,14 +39,14 @@ class Color:
         self.background = 9
         self.set(*args, **kwargs)
 
-    def __getattr__(self, item: str) -> Union[str, None]:
+    def __getattr__(self, item: str) -> str:
         return item
 
     def __dir__(self) -> list:
         """Override the __dir__ method to resolve dynamic attributes
         Especially useful when using an IDE like  PyCharm
 
-        :return: list of attributes - dynamic and static
+        :return:    list of attributes - dynamic and static
         """
         return [str(item) for item in self.__dict__]
 
@@ -50,26 +58,8 @@ class Color:
                         into escape codes
         :param kwargs:  Be more precise with keyword arguments
         """
-        self.process_args_kwargs(args, kwargs)
-
-    def process_args_kwargs(self, args: Any, kwargs: dict) -> None:
-        """Compile the dictionary to be used as values for get and print
-
-        :param args:    Class arguments
-        :param kwargs   Class keyword-arguments
-                        returned list and dict will replace the arg and
-                        kwarg parameters
-        :return:        validated dictionary for class __dict__
-        """
-        args = self.process_args(args)
-        for key, val in list(kwargs.items()):
-            if isinstance(val, dict):
-                val = self.process_kwargs(args, val)
-                color = Color(*args, **val)
-                setattr(self, key, color)
-                return
-        self.__dict__.update(self.process_kwargs(args, kwargs))
-        return
+        keys = ["color", "effect", "background"]
+        self.process_args_kwargs(keys, args, kwargs)
 
     def get(self, string: str) -> str:
         """String can be return as variables for mixed printing or can
@@ -80,11 +70,11 @@ class Color:
         :return:        Colored string
         """
         esc = "\033["
-        reset = "0;0m"
+        reset = f"{esc}0;0m"
         text = f"3{self.color}"
         background = f"4{self.background}"
-        setting = f"{self.effect};{text};{background}m"
-        return esc + setting + string + esc + reset
+        setting = f"{esc}{self.effect};{text};{background}m"
+        return setting + string + reset
 
     def print(self, *args: Any, **kwargs: Union[str, int]):
         """Enhanced print function for class and subclasses
@@ -113,6 +103,48 @@ class Color:
                 return popped
         return
 
+    def class_ints(self, keys: list, kwargs: dict) -> dict:
+        """Resolves values which may not be entered as tuples, and
+        therefore will confuse the class methods which are expecting
+        args
+
+        :param keys:    Valid keys for kwargs
+        :param kwargs:  Subclass dictionary
+        :return:        Subclass dictionary with processed tuple as args
+        """
+        for key, value in list(kwargs.items()):
+            if (not isinstance(value, dict) and not isinstance(value, tuple)
+                    and key not in keys):
+                args = self.process_args((value,))
+                ints = {}
+                for index_, sub_key in enumerate(keys):
+                    if 0 <= index_ < len(args):
+                        ints.update({sub_key: args[index_]})
+                    kwargs[key] = ints
+        return kwargs
+
+    def process_args_kwargs(self, keys: list, args: Any, kwargs: dict) -> None:
+        """Compile the dictionary to be used as values for get and print
+
+        :param keys:
+        :param args:    Class arguments
+        :param kwargs:  Class keyword-arguments
+                        Returned list and dict will replace the arg and
+                        kwarg parameters
+        :return:        Validated dictionary for class __dict__
+        """
+        kwargs = self.class_ints(keys, kwargs)
+        args = self.process_args(args)
+        for key, value in list(kwargs.items()):
+            if isinstance(value, dict):
+                value = self.process_kwargs(keys, args, value)
+                color = Color(*args, **value)
+                setattr(self, key, color)
+                return
+        kwargs = self.process_kwargs(keys, args, kwargs)
+        self.__dict__.update(kwargs)
+        return
+
     @staticmethod
     def process_args(args: Any) -> list:
         """e.g. instead of color="red", effect="bold", background="blue"
@@ -132,30 +164,33 @@ class Color:
         return values
 
     @staticmethod
-    def process_kwargs(args: Any, kwargs: dict) -> dict:
+    def process_kwargs(keys: list, args: Any, kwargs: dict) -> dict:
         """Organise arguments and keyword arguments into a valid
         dictionary
 
+        :param keys:    Allow keys for kwargs
         :param args:    User defined arguments: list(s) of integers or
                         tuple of strings
         :param kwargs:  Keyword arguments for class attributes or new
                         subclass attributes
         :return:        Dictionary for class attributes
         """
-        keys = ["color", "effect", "background"]
         effects = [None, "bold", "underline", "negative"]
         colors = ["black", "red", "green", "yellow", "blue", "purple", "cyan"]
-        for idx, key in enumerate(keys):
+        for index_, key in enumerate(keys):
             opts = effects if key == "effect" else colors
-            val = 0 if key == "effect" else 9
-            if 0 <= idx < len(args):
-                val = args[idx]
+            value = 0 if key == "effect" else 9
+            if 0 <= index_ < len(args):
+                value = args[index_]
             elif key in kwargs and kwargs[key] in opts:
-                val = kwargs[key]
-            elif key in kwargs and 0 <= idx < len(opts):
-                # without this continue statement there are key errors
-                # below
+                value = kwargs[key]
+            elif key in kwargs and 0 <= index_ < len(opts):
+                # keypair will be assigned default values if incorrect
+                # value is given or value will be maintained if key
+                # was not an argument to avoid a key error below
+                if isinstance(kwargs[key], str):
+                    kwargs[key] = value
                 continue
-            val = opts.index(val) if isinstance(val, str) else val
-            kwargs.update({key: val})
+            value = opts.index(value) if isinstance(value, str) else value
+            kwargs.update({key: value})
         return kwargs

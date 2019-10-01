@@ -1,0 +1,259 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Color &#8212; Object Colors 2019.10 documentation</title>
+    <link rel="stylesheet" href="_static/graphite.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Welcome to Object Color’s documentation !" href="index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to Object Color’s documentation !"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Object Colors 2019.10 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="color">
+<h1>Color<a class="headerlink" href="#color" title="Permalink to this headline">¶</a></h1>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<dl class="class">
+<dt id="color_class.Color">
+<em class="property">class </em><code class="sig-prename descclassname">color_class.</code><code class="sig-name descname">Color</code><span class="sig-paren">(</span><em class="sig-param">*args: Any, **kwargs: Union[str, int, dict]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/color_class.html#Color"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#color_class.Color" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instantiate with escape codes, values or key-values and get or
+print processed arguments</p>
+<p>Set class attributes for Color.print() or Color.get()</p>
+<dl class="simple">
+<dt>keys:</dt><dd><p>“color”, “effect”, “background”</p>
+</dd>
+<dt>effects:</dt><dd><p>None, “bold”, “underline”, “negative”</p>
+</dd>
+<dt>colors:</dt><dd><p>“black”, “red”, “green”, “yellow”, “blue”, “purple”, “cyan”</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>args</strong> – Codes can be entered in any number of arguments
+The first three integers/strings will be used</p></li>
+<li><p><strong>kwargs</strong> – Three specific keys can be used
+color, effect, background for class kwargs,
+though subclasses can also be added</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="color_class.Color.set">
+<code class="sig-name descname">set</code><span class="sig-paren">(</span><em class="sig-param">*args: Any, **kwargs: Union[str, int, dict]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/color_class.html#Color.set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#color_class.Color.set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call to change class values, or add new subclasses of
+separate colors, effects and backgrounds</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>args</strong> – Integer escape codes or strings to be converted
+into escape codes</p></li>
+<li><p><strong>kwargs</strong> – Be more precise with keyword arguments</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="color_class.Color.get">
+<code class="sig-name descname">get</code><span class="sig-paren">(</span><em class="sig-param">string: str</em><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/color_class.html#Color.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#color_class.Color.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>String can be return as variables for mixed printing or can
+be printed directly by calling Color.print() instead of
+Color.get()</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>string</strong> – User args to be processed</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Colored string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="color_class.Color.print">
+<code class="sig-name descname">print</code><span class="sig-paren">(</span><em class="sig-param">*args: Any, **kwargs: Union[str, int]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/color_class.html#Color.print"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#color_class.Color.print" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enhanced print function for class and subclasses</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>args</strong> – Variable number of strings can be entered if
+syntax allows so this method behaves just like
+the __builtin__</p></li>
+<li><p><strong>kwargs</strong> – Keyword arguments for print() function</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="color_class.Color.pop">
+<code class="sig-name descname">pop</code><span class="sig-paren">(</span><em class="sig-param">select: str</em><span class="sig-paren">)</span> &#x2192; Union[str, dict, None]<a class="reference internal" href="_modules/color_class.html#Color.pop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#color_class.Color.pop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete key and value from list and return them to a variable,
+if that’s what you want to do…</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>select</strong> – Key selection to delete</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Dictionary item if removing class, str if a
+keypair and None if there was nothing to remove</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="color_class.Color.class_ints">
+<code class="sig-name descname">class_ints</code><span class="sig-paren">(</span><em class="sig-param">keys: list</em>, <em class="sig-param">kwargs: dict</em><span class="sig-paren">)</span> &#x2192; dict<a class="reference internal" href="_modules/color_class.html#Color.class_ints"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#color_class.Color.class_ints" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resolves values which may not be entered as tuples, and
+therefore will confuse the class methods which are expecting
+args</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>keys</strong> – Valid keys for kwargs</p></li>
+<li><p><strong>kwargs</strong> – Subclass dictionary</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Subclass dictionary with processed tuple as args</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="color_class.Color.process_args_kwargs">
+<code class="sig-name descname">process_args_kwargs</code><span class="sig-paren">(</span><em class="sig-param">keys: list</em>, <em class="sig-param">args: Any</em>, <em class="sig-param">kwargs: dict</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/color_class.html#Color.process_args_kwargs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#color_class.Color.process_args_kwargs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compile the dictionary to be used as values for get and print</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>keys</strong> – </p></li>
+<li><p><strong>args</strong> – Class arguments</p></li>
+<li><p><strong>kwargs</strong> – Class keyword-arguments
+Returned list and dict will replace the arg and
+kwarg parameters</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Validated dictionary for class __dict__</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="color_class.Color.process_args">
+<em class="property">static </em><code class="sig-name descname">process_args</code><span class="sig-paren">(</span><em class="sig-param">args: Any</em><span class="sig-paren">)</span> &#x2192; list<a class="reference internal" href="_modules/color_class.html#Color.process_args"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#color_class.Color.process_args" title="Permalink to this definition">¶</a></dt>
+<dd><p>e.g. instead of color=”red”, effect=”bold”, background=”blue”
+114 will get the same result</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>args</strong> – Integer list or individual args</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>List to be iterated through for arguments</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="color_class.Color.process_kwargs">
+<em class="property">static </em><code class="sig-name descname">process_kwargs</code><span class="sig-paren">(</span><em class="sig-param">keys: list</em>, <em class="sig-param">args: Any</em>, <em class="sig-param">kwargs: dict</em><span class="sig-paren">)</span> &#x2192; dict<a class="reference internal" href="_modules/color_class.html#Color.process_kwargs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#color_class.Color.process_kwargs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Organise arguments and keyword arguments into a valid
+dictionary</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>keys</strong> – Allow keys for kwargs</p></li>
+<li><p><strong>args</strong> – User defined arguments: list(s) of integers or
+tuple of strings</p></li>
+<li><p><strong>kwargs</strong> – Keyword arguments for class attributes or new
+subclass attributes</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Dictionary for class attributes</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p><a class="reference internal" href="index.html#mastertoc"><span class="std std-ref">Return Home</span></a></p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/oc.png" alt="Logo"/>
+            </a></p>
+<h3><a href="index.html">Object Colors</a></h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Color</a></li>
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to Object Color’s documentation !"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Object Colors 2019.10 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Stephen Whitlock.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+    </div>
+  </body>
+</html>
