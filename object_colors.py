@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""color_class
+"""object_colors
 
 This is a simple to use module designed to print to the terminal in
 color with minimal setup and instantiation
@@ -8,7 +8,7 @@ from json import dumps
 from typing import Union, Any
 
 
-class ColorObj:
+class Color:
     """Instantiate with escape codes, values or key-values and get or
     print processed arguments
     """
@@ -20,10 +20,13 @@ class ColorObj:
         :param kwargs:  Three specific keys can be used
                         color, effect, background
         """
-        self.add(*args, **kwargs)
+        self.color = 9
+        self.effect = 0
+        self.background = 9
+        self.set(*args, **kwargs)
 
-    def __call__(self, *args: Any, **kwargs: Union[str, int, dict]) -> dict:
-        return self.process_args_kwargs(*args, **kwargs)
+    def __call__(self, *args: Any, **kwargs: Union[str, int, dict]):
+        self.set(*args, **kwargs)
 
     def __getattr__(self, item: str) -> str:
         return self[item]
@@ -31,13 +34,13 @@ class ColorObj:
     def __dir__(self) -> list:
         return [str(k) for k in self.__dict__]
 
-    def add(self, *args: Any, **kwargs: Union[str, int, dict]):
+    def set(self, *args: Any, **kwargs: Union[str, int, dict]):
         """
 
         :param args:
         :param kwargs:
         """
-        self.__dict__ = self.process_args_kwargs(args, kwargs)
+        self.process_args_kwargs(args, kwargs)
 
     @staticmethod
     def process_args(args: Any) -> list:
@@ -68,7 +71,7 @@ class ColorObj:
             return [None, "bold", "underline", "negative"]
         return ["black", "red", "green", "yellow", "blue", "purple", "cyan"]
 
-    def process_args_kwargs(self, args: Any, kwargs: dict) -> dict:
+    def process_args_kwargs(self, args: Any, kwargs: dict):
         """Compile the dictionary to be used as values for get and print
 
         :param args:    Class arguments
@@ -77,15 +80,15 @@ class ColorObj:
                         kwarg parameters
         :return:        validated dictionary for class __dict__
         """
-        data = self.__dict__
+        args = self.process_args(args)
         for key, val in list(kwargs.items()):
             if isinstance(val, dict):
                 val = self.process_kwargs(args, val)
-                color = ColorObj(*args, **val)
+                color = Color(*args, **val)
                 setattr(self, key, color)
-            else:
-                data.update(self.process_kwargs(args, kwargs))
-        return data
+                return
+        self.__dict__.update(self.process_kwargs(args, kwargs))
+        return
 
     def process_kwargs(self, args: Any, kwargs: dict) -> dict:
         """Organise arguments and keyword arguments into a valid
@@ -97,22 +100,16 @@ class ColorObj:
                         subclass attributes
         :return:        Dictionary for class attributes
         """
-        args = self.process_args(args)
         keys = ["color", "effect", "background"]
         for idx, key in enumerate(keys):
             opts = self.get_opts(key)
-            # set default value
             val = 0 if key == "effect" else 9
             if 0 <= idx < len(args):
-                # valid argument
                 val = args[idx]
             elif key in kwargs and kwargs[key] in opts:
-                # valid keyword argument
                 val = kwargs[key]
             elif key in kwargs and 0 <= idx < len(opts):
-                # valid value already set
                 continue
-            # if val is a string return its index value for escape code
             val = opts.index(val) if isinstance(val, str) else val
             kwargs.update({key: val})
         return kwargs
@@ -125,10 +122,9 @@ class ColorObj:
         :param string:  User args to be processed
         :return:        Colored string
         """
-        kwargs = self.process_args_kwargs([], self.__dict__)
-        color = f"3{kwargs['color']}"
-        effect = kwargs["effect"]
-        background = f"4{kwargs['background']}"
+        color = f"3{self.color}"
+        effect = self.effect
+        background = f"4{self.background}"
         return f"\033[{effect};{color};{background}m{string}\033[0;0m"
 
     def print(self, *args: Any, **kwargs: Union[str, int]):
@@ -153,12 +149,12 @@ class ColorObj:
             if select == key:
                 popped = self.__dict__[key]
                 del self.__dict__[key]
-                if isinstance(popped, ColorObj):
+                if isinstance(popped, Color):
                     return {key: popped.__dict__}
                 return popped
         return
 
-    def get_key_values(self) -> dict:
+    def vals(self):
         """Resolve type errors for the various types that the class may
         contain so that they may be printed as a string
 
@@ -174,11 +170,6 @@ class ColorObj:
             except IndexError:
                 value = None
             key_values[key] = value
-        return key_values
-
-    def vals(self):
-        """Used for debugging: Print class dict as json"""
-        key_values = self.get_key_values()
         while True:
             try:
                 print(dumps(key_values, indent=4, sort_keys=True))
