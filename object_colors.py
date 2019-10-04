@@ -18,6 +18,8 @@ class Color:
     """Instantiate with escape codes, values or key-values and get or
     print processed arguments
     """
+    keys = ["color", "effect", "background"]
+
     def __init__(self, *args: Any, **kwargs: Union[str, int, dict]):
         """Set class attributes for Color.print() or Color.get()
 
@@ -58,8 +60,11 @@ class Color:
                         into escape codes
         :param kwargs:  Be more precise with keyword arguments
         """
-        keys = ["color", "effect", "background"]
-        self.process_args_kwargs(keys, args, kwargs)
+        kwargs = self.class_ints(kwargs)
+        args = self.process_args(args)
+        if not self.class_bool(args, kwargs):
+            kwargs = self.process_kwargs(args, kwargs)
+            self.__dict__.update(kwargs)
 
     def get(self, string: str) -> str:
         """String can be return as variables for mixed printing or can
@@ -95,55 +100,47 @@ class Color:
                         keypair and None if there was nothing to remove
         """
         for key in list(self.__dict__):
-            if select == key:
+            if select == key and key not in Color.keys:
                 popped = self.__dict__[key]
                 del self.__dict__[key]
-                if isinstance(popped, Color):
-                    return {key: popped.__dict__}
                 return popped
         return
 
-    def class_ints(self, keys: list, kwargs: dict) -> dict:
+    def class_ints(self, kwargs: dict) -> dict:
         """Resolves values which may not be entered as tuples, and
         therefore will confuse the class methods which are expecting
         args
 
-        :param keys:    Valid keys for kwargs
         :param kwargs:  Subclass dictionary
         :return:        Subclass dictionary with processed tuple as args
         """
         for key, value in list(kwargs.items()):
             if (not isinstance(value, dict) and not isinstance(value, tuple)
-                    and key not in keys):
+                    and key not in Color.keys):
                 args = self.process_args((value,))
                 ints = {}
-                for index_, sub_key in enumerate(keys):
+                for index_, sub_key in enumerate(Color.keys):
                     if 0 <= index_ < len(args):
                         ints.update({sub_key: args[index_]})
                     kwargs[key] = ints
         return kwargs
 
-    def process_args_kwargs(self, keys: list, args: Any, kwargs: dict) -> None:
+    def class_bool(self, args: Any, kwargs: dict) -> bool:
         """Compile the dictionary to be used as values for get and print
 
-        :param keys:
         :param args:    Class arguments
         :param kwargs:  Class keyword-arguments
                         Returned list and dict will replace the arg and
                         kwarg parameters
         :return:        Validated dictionary for class __dict__
         """
-        kwargs = self.class_ints(keys, kwargs)
-        args = self.process_args(args)
         for key, value in list(kwargs.items()):
             if isinstance(value, dict):
-                value = self.process_kwargs(keys, args, value)
+                value = self.process_kwargs(args, value)
                 color = Color(*args, **value)
                 setattr(self, key, color)
-                return
-        kwargs = self.process_kwargs(keys, args, kwargs)
-        self.__dict__.update(kwargs)
-        return
+                return True
+        return False
 
     @staticmethod
     def process_args(args: Any) -> list:
@@ -164,11 +161,10 @@ class Color:
         return values
 
     @staticmethod
-    def process_kwargs(keys: list, args: Any, kwargs: dict) -> dict:
+    def process_kwargs(args: Any, kwargs: dict) -> dict:
         """Organise arguments and keyword arguments into a valid
         dictionary
 
-        :param keys:    Allow keys for kwargs
         :param args:    User defined arguments: list(s) of integers or
                         tuple of strings
         :param kwargs:  Keyword arguments for class attributes or new
@@ -177,7 +173,7 @@ class Color:
         """
         effects = [None, "bold", "underline", "negative"]
         colors = ["black", "red", "green", "yellow", "blue", "purple", "cyan"]
-        for index_, key in enumerate(keys):
+        for index_, key in enumerate(Color.keys):
             opts = effects if key == "effect" else colors
             value = 0 if key == "effect" else 9
             if 0 <= index_ < len(args):
