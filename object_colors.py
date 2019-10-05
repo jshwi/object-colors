@@ -14,17 +14,17 @@ __email__ = "stephen@jshwisolutions.com"
 __status__ = "Production"
 
 
-class Color:
+class Color(object):
     """Instantiate with escape codes, values or key-values and get or
     print processed arguments
     """
-    keys = ["color", "effect", "background"]
+    keys = ["text", "effect", "background"]
 
     def __init__(self, *args: Any, **kwargs: Union[str, int, dict]):
         """Set class attributes for Color.print() or Color.get()
 
         keys:
-            "color", "effect", "background"
+            "text", "effect", "background"
         effects:
             None, "bold", "underline", "negative"
         colors:
@@ -33,12 +33,12 @@ class Color:
         :param args:    Codes can be entered in any number of arguments
                         The first three integers/strings will be used
         :param kwargs:  Three specific keys can be used
-                        color, effect, background for class kwargs,
+                        text, effect, background for class kwargs,
                         though subclasses can also be added
         """
-        self.color = 9
+        self.text = 7
         self.effect = 0
-        self.background = 9
+        self.background = 7
         self.set(*args, **kwargs)
 
     def __getattr__(self, item: str) -> str:
@@ -54,7 +54,7 @@ class Color:
 
     def set(self, *args: Any, **kwargs: Union[str, int, dict]):
         """Call to change class values, or add new subclasses of
-        separate colors, effects and backgrounds
+        separate text, effects and backgrounds
 
         :param args:    Integer escape codes or strings to be converted
                         into escape codes
@@ -76,7 +76,7 @@ class Color:
         """
         esc = "\033["
         reset = f"{esc}0;0m"
-        text = f"3{self.color}"
+        text = f"3{self.text}"
         background = f"4{self.background}"
         setting = f"{esc}{self.effect};{text};{background}m"
         return setting + string + reset
@@ -144,7 +144,7 @@ class Color:
 
     @staticmethod
     def process_args(args: Any) -> list:
-        """e.g. instead of color="red", effect="bold", background="blue"
+        """e.g. instead of text="red", effect="bold", background="blue"
         114 will get the same result
 
         :param args:    Integer list or individual args
@@ -161,7 +161,13 @@ class Color:
         return values
 
     @staticmethod
-    def process_kwargs(args: Any, kwargs: dict) -> dict:
+    def opts(key):
+        effects = ['none', "bold", 'bright', "underline", "negative"]
+        colors = ["black", "red", "green", "yellow",
+                  "blue", "purple", "cyan", "white"]
+        return effects if key == "effect" else colors
+
+    def process_kwargs(self, args: Any, kwargs: dict) -> dict:
         """Organise arguments and keyword arguments into a valid
         dictionary
 
@@ -171,22 +177,16 @@ class Color:
                         subclass attributes
         :return:        Dictionary for class attributes
         """
-        effects = [None, "bold", "underline", "negative"]
-        colors = ["black", "red", "green", "yellow", "blue", "purple", "cyan"]
         for index_, key in enumerate(Color.keys):
-            opts = effects if key == "effect" else colors
-            value = 0 if key == "effect" else 9
+            default = 0 if key == "effect" else 7
+            opts = self.opts(key)
             if 0 <= index_ < len(args):
-                value = args[index_]
-            elif key in kwargs and kwargs[key] in opts:
-                value = kwargs[key]
-            elif key in kwargs and 0 <= index_ < len(opts):
-                # keypair will be assigned default values if incorrect
-                # value is given or value will be maintained if key
-                # was not an argument to avoid a key error below
-                if isinstance(kwargs[key], str):
-                    kwargs[key] = value
+                kwargs.update({key: args[index_]})
+            if (key in kwargs and isinstance(kwargs[key], int)
+                    and kwargs[key] <= len(opts)):
                 continue
-            value = opts.index(value) if isinstance(value, str) else value
-            kwargs.update({key: value})
+            elif key not in kwargs or key in kwargs and kwargs[key] not in opts:
+                kwargs.update({key: default})
+            elif kwargs[key] in opts:
+                kwargs.update({key: opts.index(kwargs[key])})
         return kwargs
