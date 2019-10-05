@@ -8,7 +8,7 @@ def test_text_self():
     c = Color()
     assert c.text == 7
     assert c.effect == 0
-    assert c.background == 7
+    assert c.background == 0
 
 
 def test_set_int_class_vars():
@@ -62,7 +62,7 @@ def test_skip_wrong_input():
     c = Color(txt='red', eff='bold', back='black')
     assert c.text == 7
     assert c.effect == 0
-    assert c.background == 7
+    assert c.background == 0
 
 
 def test_class_in_class():
@@ -107,20 +107,6 @@ def test_print():
     c.red.print("Hi")
 
 
-def test_methods():
-    """c = Color()
-    [+] c.class_ints()
-    [+] c.process_args()
-    [ ] c.process_kwargs()
-    [+] c.process_args_kwargs()
-    [+] c.pop()
-    [+] c.set()
-    [+] c.print()
-    [+] c.get()
-    """
-    pass
-
-
 def test_class_ints():
     c = Color()
     kwargs = {'kwarg': 114}
@@ -142,38 +128,38 @@ def test_process_args():
 
 
 def test_process_kwargs_int_kwarg():
-    c = Color().process_kwargs((), {'text': 1})
+    c = Color().get_processed((), {'text': 1})
     assert c['text'] == 1
 
 
 def test_process_kwargs_str_kwarg():
-    c = Color().process_kwargs((), {'text': 'red'})
+    c = Color().get_processed((), {'text': 'red'})
     assert c['text'] == 1
 
 
 def test_process_kwargs_int_arg():
-    c = Color().process_kwargs((1, 1, 4), {})
+    c = Color().get_processed((1, 1, 4), {})
     assert c['text'] == 1
     assert c['effect'] == 1
     assert c['background'] == 4
 
 
 def test_process_kwargs_mistake_kwargs():
-    c = Color().process_kwargs((), {
+    c = Color().get_processed((), {
         'text': 'rainbow',
         'effect': '3d',
         'background': 'forrest'
     })
     assert c['text'] == 7
     assert c['effect'] == 0
-    assert c['background'] == 7
+    assert c['background'] == 0
 
 
 def test_high_numbers():
     c = Color(text=100, effect=100, background=100)
     assert c.text == 7
     assert c.effect == 0
-    assert c.background == 7
+    assert c.background == 0
 
 
 def test_no_pop_defaults():
@@ -185,3 +171,10 @@ def test_no_pop_defaults():
     assert 'text' in c.__dict__
     assert 'effect' in c.__dict__
     assert 'background' in c.__dict__
+
+
+def test_none():
+    c = Color(test='white', effect='none', background='none')
+    assert c.text == 7
+    assert c.effect == 0
+    assert c.background == 0

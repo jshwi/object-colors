@@ -1,10 +1,10 @@
 import os
 import sys
-sys.path.append(os.path.abspath('../../object_colors'))
+sys.path.append(os.path.abspath('../../'))
 project = u'Object Colors'
 copyright = u'2019, Stephen Whitlock'
 author = u'Stephen Whitlock'
-release = '2019.10'
+release = '1.0.1'
 source_suffix = ['.rst']
 master_doc = 'index'
 exclude_patterns = ['_build']
@@ -26,6 +26,7 @@ imgmath_latex_preamble = r'''
 \everymath{\color{offwhite}}
 \everydisplay{\color{offwhite}}
 '''
+
 html_theme = 'graphite'
 html_theme_path = ['.']
 html_static_path = ['_static']
