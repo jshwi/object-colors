@@ -18,7 +18,7 @@ class Color(object):
     """Instantiate object with all attributes or set later"""
     keys = ["text", "effect", "background"]
 
-    def __init__(self, *args: Any, **kwargs: Union[str, int, dict]) -> None:
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Set class attributes for Color.print() or Color.get()
 
         effects:
@@ -209,9 +209,10 @@ class Color(object):
         :return:        Subclass dictionary with processed tuple as args
         """
         for key, value in list(kwargs.items()):
-            if (not isinstance(value, dict) and not isinstance(value, tuple)
-                    and key not in Color.keys):
-                args = self.process_args((value,))
+            if not isinstance(value, dict) and key not in Color.keys:
+                if not isinstance(value, tuple):
+                    value = (value,)
+                args = self.process_args(value)
                 kwargs = self.get_nest_dict(key, args, kwargs)
         return kwargs
 
