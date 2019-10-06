@@ -149,13 +149,14 @@ class Color(object):
         :param kwargs:  Class kwargs for Color subclass
         :return:        Validated dictionary for class __dict__
         """
+        sub = False
         for key, value in list(kwargs.items()):
             if isinstance(value, dict):
                 value = self.get_processed(args, value)
                 color = Color(*args, **value)
                 setattr(self, key, color)
-                return True
-        return False
+                sub = True
+        return sub
 
     def class_kwargs(self, args: Any, kwargs: dict) -> None:
         if not self.make_subclass(args, kwargs):

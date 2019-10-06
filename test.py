@@ -314,3 +314,8 @@ class TestSubClass(object):
         assert c.red.text == 7
         assert c.red.effect == 1
         assert c.red.background == 4
+
+    def test_instantiate_two(self):
+        c = Color(red={'text': 'red'}, yellow={'text': 'yellow'})
+        c.red.print("testing")
+        c.yellow.print("testing")
