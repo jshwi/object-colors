@@ -8,7 +8,7 @@ from typing import Union, Any
 __author__ = "Stephen Whitlock"
 __copyright__ = "Copyright 2019, Stephen Whitlock"
 __license__ = "MIT"
-__version__ = "1.0.1"
+__version__ = "1.0.2"
 __maintainer__ = "Stephen Whitlock"
 __email__ = "stephen@jshwisolutions.com"
 __status__ = "Production"
@@ -78,10 +78,10 @@ class Color(object):
         :param string:  String to print
         :return:        Colored string
         """
-        esc = "\033["
+        esc = "\u001b"
         reset = f"{esc}0;0m"
         text = f"3{self.text}"
-        background = f"4{self.background}" if self.background != 0 else 0
+        background = f"4{self.background}"
         setting = f"{esc}{self.effect};{text};{background}m"
         return setting + string + reset
 
@@ -97,6 +97,19 @@ class Color(object):
         colors = ["black", "red", "green", "yellow",
                   "blue", "purple", "cyan", "white"]
         return effects if key == "effect" else colors
+
+    def kwargs__dict__(self, kwargs):
+        """Set any gaps in kwargs with the existing class values (not
+        subclasses) so as not to override them with the defaults
+
+        :param kwargs:  New kwargs
+        :return:        Kwargs with existing attributes for keys not
+                        given a value
+        """
+        for key in self.__dict__:
+            if key in Color.keys and key not in kwargs:
+                kwargs[key] = self.__dict__[key]
+        return kwargs
 
     @staticmethod
     def assign_kw(key: str, kwargs: dict, opts: list, default: int) -> dict:
@@ -225,6 +238,7 @@ class Color(object):
                         into escape codes
         :param kwargs:  More precise keyword arguments
         """
+        kwargs = self.kwargs__dict__(kwargs)
         kwargs = self.class_ints(kwargs)
         args = self.process_args(args)
         self.class_kwargs(args, kwargs)

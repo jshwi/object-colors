@@ -13,3 +13,4 @@
 **.egg-info
 **/lib64/
 **/lib/
+**/.tags

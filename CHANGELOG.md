@@ -7,10 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [v1.0.2](https://github.com/jshwi/object_colors/releases/tag/v1.0.2) ([compare](https://github.com/jshwi/object_colors/compare/v1.0.1...v1.0.2))
 
 ### Misc
-- [docs] updated ([ef63eae](https://github.com/jshwi/object_colors/commit/ef63eae8de6be2e8d9929e42f50b3b768e8e5125)).
-- [fix] Valid integers were missed in main loop ([bf523f7](https://github.com/jshwi/object_colors/commit/bf523f744f933bf2a8bada6c054b058a148ee07e)).
-- [refactor] Adds docstrings and typehints ([c855115](https://github.com/jshwi/object_colors/commit/c855115f5a005f9517c5578ca0459d7b9b1f7dc1)).
-- [Refactor] Made keys list global (class scope) ([74815a6](https://github.com/jshwi/object_colors/commit/74815a629bc8ec7eafe566a0de08808e2d4f156f)).
+- [docs] Updated ([0acd846](https://github.com/jshwi/object_colors/commit/0acd846265cbc254236616c9f4afa89816883357)).
+- [fix] Instantiate several subclasses at once ([63abc2f](https://github.com/jshwi/object_colors/commit/63abc2f869507bf2cc48386b8a3c6a1238c249f5)).
+- [fix] Uses set() without overwriting previous values ([0a26728](https://github.com/jshwi/object_colors/commit/0a26728dbd0384ccfd8afa69d1c6a9ab0236c206)).
+- [fix] Valid integers were missed in main loop ([583bc28](https://github.com/jshwi/object_colors/commit/583bc287d3bef1cf4cc96ca1bc2e69026541af13)).
+- [Refactor] Made keys list global (class scope) ([1dd7d53](https://github.com/jshwi/object_colors/commit/1dd7d535fc90130ddad25afc9300cdfbe4f42102)).
+- [test] Adds subclass tests ([2720a22](https://github.com/jshwi/object_colors/commit/2720a223ed7ddd6dbe246589b64a365b66a1beb6)).
 
 
 ## [v1.0.1](https://github.com/jshwi/object_colors/releases/tag/v1.0.1) ([compare](https://github.com/jshwi/object_colors/compare/233fd991be9d224b365058f7359a365c046fb3cd...v1.0.1)) - 2019-10-03

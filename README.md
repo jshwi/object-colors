@@ -1,6 +1,9 @@
 ![alt text](./docs/source/img/oc.png)
-### The minimalist - all purpose - color class for printing
 
+
+### The minimalist - all purpose - color class for printing
+[![Build Status](https://travis-ci.org/jshwi/object_colors.svg?branch=master)](https://travis-ci.org/jshwi/object_colors)
+    
     Default values set for standard printing
 
 ![alt text](./docs/source/img/Screenshot%20from%202019-10-02%2012-20-05.png)

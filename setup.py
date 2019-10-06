@@ -1,17 +1,18 @@
+from os import path
 from pathlib import Path
 
 from setuptools import setup, find_packages
 
 HERE = Path(__file__).parent
 
-README = (HERE / "README.md").read_text()
+README = (HERE / path.join("docs", "source", "README.rst")).read_text()
 
 setup(
     name="object-colors",
-    version="1.0.1",
-    description='Adding colours to Python terminal simplified into a single class',
+    version="1.0.2",
+    description='Adding colours to Python simplified into a single class',
     long_description=README,
-    long_description_content_type="text/markdown",
+    long_description_content_type="text/x-rst",
     url='https://github.com/jshwi/object_colors',
     author='Stephen Whitlock',
     author_email='stephen@jshwisolutions.com',

@@ -15,6 +15,7 @@ The source code is available `here <https://github.com/jshwi/object_colors>`_
    :name: mastertoc
 
    object_colors
+   readme_include
 
 
 * :ref:`genindex`
