@@ -2,6 +2,8 @@ language: python
 python:
   - "3.7"
 install:
-  - pip install -r requirements.txt
+  - pip install pytest coverage pytest-cov codecov
 script:
-  - pytest test.py
+  - pytest --cov=object_colors test.py
+after_success:
+  - codecov --file coverage.xml --token 01d10071-a518-43aa-b4ea-3f3cea4d5bc2

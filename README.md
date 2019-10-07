@@ -1,12 +1,13 @@
 ![alt text](./docs/source/img/oc.png)
 
-
 ### The minimalist - all purpose - color class for printing
+[PyPi](https://pypi.org/project/object-colors/) |
+[Read the Docs](https://object-colors.readthedocs.io/en/latest/) |
+[Github Pages](https://jshwi.github.io/object_colors/build/html/index.html)  
 [![Build Status](https://travis-ci.org/jshwi/object_colors.svg?branch=master)](https://travis-ci.org/jshwi/object_colors)
-    
-    Default values set for standard printing
-
-![alt text](./docs/source/img/Screenshot%20from%202019-10-02%2012-20-05.png)
+[![codecov.io](https://codecov.io/github/jshwi/object_colors/coverage.svg?branch=master)](https://codecov.io/github/jshwi/object_colors?branch=master)
+[![PyPI version](https://badge.fury.io/py/object-colors.svg)](https://badge.fury.io/py/object-colors)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
     Instantiate with string for class colors
     

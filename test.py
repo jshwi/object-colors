@@ -67,7 +67,7 @@ class TestMasterClass(object):
     def test_get(self):
         c = Color(text='red', effect='bold', background='blue')
         got = c.get('this string is for testing')
-        assert got == '\033[1;31;44mthis string is for testing\033[0;0m'
+        assert got == '\u001b[1;31;44mthis string is for testing\u001b[0;0m'
 
     def test_class_ints(self):
         c = Color()
@@ -233,7 +233,7 @@ class TestSubClass(object):
     def test_get_subclass(self):
         c = Color(red={'text': 'red', 'effect': 'bold', 'background': 'blue'})
         got = c.red.get('this string is for testing')
-        assert got == '\033[1;31;44mthis string is for testing\033[0;0m'
+        assert got == '\u001b[1;31;44mthis string is for testing\u001b[0;0m'
 
     def test_class_ints_subclass(self):
         c = Color(red={})

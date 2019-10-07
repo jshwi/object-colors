@@ -9,7 +9,7 @@ README = (HERE / path.join("docs", "source", "README.rst")).read_text()
 
 setup(
     name="object-colors",
-    version="1.0.2",
+    version="1.0.3",
     description='Adding colours to Python simplified into a single class',
     long_description=README,
     long_description_content_type="text/x-rst",

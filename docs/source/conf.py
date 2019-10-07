@@ -4,7 +4,7 @@ sys.path.append(os.path.abspath('../../'))
 project = u'Object Colors'
 copyright = u'2019, Stephen Whitlock'
 author = u'Stephen Whitlock'
-release = '1.0.1'
+release = '1.0.3'
 source_suffix = ['.rst']
 master_doc = 'index'
 exclude_patterns = ['_build']

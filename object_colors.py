@@ -8,7 +8,7 @@ from typing import Union, Any
 __author__ = "Stephen Whitlock"
 __copyright__ = "Copyright 2019, Stephen Whitlock"
 __license__ = "MIT"
-__version__ = "1.0.2"
+__version__ = "1.0.3"
 __maintainer__ = "Stephen Whitlock"
 __email__ = "stephen@jshwisolutions.com"
 __status__ = "Production"
@@ -78,7 +78,7 @@ class Color(object):
         :param string:  String to print
         :return:        Colored string
         """
-        esc = "\u001b"
+        esc = "\u001b["
         reset = f"{esc}0;0m"
         text = f"3{self.text}"
         background = f"4{self.background}"

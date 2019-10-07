@@ -14,3 +14,5 @@
 **/lib64/
 **/lib/
 **/.tags
+**/.coverage
+**/coverage.xml
