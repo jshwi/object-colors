@@ -1,6 +1,6 @@
 import os
 import sys
-sys.path.append(os.path.abspath('../../'))
+sys.path.append(os.path.abspath('../'))
 project = u'Object Colors'
 copyright = u'2019, Stephen Whitlock'
 author = u'Stephen Whitlock'

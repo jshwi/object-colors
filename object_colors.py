@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
+
 """object-colors
 A simple to use module designed to stylise output with  minimal setup
 and instantiation
 
 The philosophy behind object-colors is more terminal for less code
 """
-from typing import Union, Any, Tuple, Dict
 
 __author__ = "Stephen Whitlock"
 __copyright__ = "Copyright 2019, Stephen Whitlock"
@@ -15,12 +15,28 @@ __maintainer__ = "Stephen Whitlock"
 __email__ = "stephen@jshwisolutions.com"
 __status__ = "Production"
 
+from typing import Union, Any, Dict, Tuple, List
+
 
 class Color(object):
     """Instantiate object with all attributes or set later"""
+
     keys = ["text", "effect", "background"]
 
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
+    def __init__(
+        self,
+        *args: Union[str, int],
+        **kwargs: Union[
+            str,
+            int,
+            None,
+            Dict[str, str],
+            Dict[str, int],
+            Tuple[int],
+            Tuple[int, int],
+            Tuple[str, str, str],
+        ],
+    ) -> None:
         """Set class attributes for Color.print() or Color.get()
 
         effects:
@@ -50,7 +66,7 @@ class Color(object):
     def __dir__(self) -> list:
         return [str(item) for item in self.__dict__]
 
-    def pop(self, select: str) -> Union[str, dict, None]:
+    def pop(self, select: str) -> Union[int, None]:
         """Remove keypair from __dict__ and return to variable
 
         :param select:  Key to remove
@@ -62,16 +78,6 @@ class Color(object):
                 del self.__dict__[key]
                 return popped
         return
-
-    def print(self, *args: Tuple[Any], **kwargs: Dict[str, int]) -> None:
-        """Enhanced print function for class and subclasses
-
-        :param args:    Variable number of strings can be entered if
-                        syntax allows
-                        Method behaves just like builtin print()
-        :param kwargs:  builtin print() kwargs
-        """
-        print(self.get(*args), **kwargs)
 
     def get(self, *args: Union[str, Tuple[Any]]) -> Union[str, Tuple[str]]:
         """String can be returned as variable(s) for assorted color
@@ -100,12 +106,20 @@ class Color(object):
         :return:    effects for effect and colors for text and
                     background
         """
-        effects = ['none', "bold", 'bright', "underline", "negative"]
-        colors = ["black", "red", "green", "yellow",
-                  "blue", "purple", "cyan", "white"]
+        effects = ["none", "bold", "bright", "underline", "negative"]
+        colors = [
+            "black",
+            "red",
+            "green",
+            "yellow",
+            "blue",
+            "purple",
+            "cyan",
+            "white",
+        ]
         return effects if key == "effect" else colors
 
-    def kwargs__dict__(self, kwargs):
+    def kwargs__dict__(self, kwargs: Dict[str, str]):
         """Set any gaps in kwargs with the existing class values (not
         subclasses) so as not to override them with the defaults
 
@@ -119,7 +133,9 @@ class Color(object):
         return kwargs
 
     @staticmethod
-    def assign_kw(key: str, kwargs: dict, opts: list, default: int) -> dict:
+    def assign_kw(
+        key: str, kwargs: Dict[str, int], opts: list, default: int
+    ) -> Dict[str, int]:
         """First statement returns kwargs as is if valid escape code
         provided
         The second will assign the default value to kwargs if invalid
@@ -135,8 +151,11 @@ class Color(object):
         :return:        kwargs with default values, original args or
                         string converted to an integer
         """
-        if (key in kwargs and isinstance(kwargs[key], int)
-                and kwargs[key] <= len(opts)):
+        if (
+            key in kwargs
+            and isinstance(kwargs[key], int)
+            and kwargs[key] <= len(opts)
+        ):
             return kwargs
         if key not in kwargs or key in kwargs and kwargs[key] not in opts:
             kwargs.update({key: default})
@@ -144,7 +163,9 @@ class Color(object):
             kwargs.update({key: opts.index(kwargs[key])})
         return kwargs
 
-    def get_processed(self, args: Any, kwargs: dict) -> dict:
+    def get_processed(
+        self, args: Tuple, kwargs: Union[Dict[str, int], Dict[str, str]]
+    ) -> Union[Dict[str, int], Dict[str, str]]:
         """Organise args and kwargs into a parsable dictionary
 
         :param args:    User defined arguments: list(s) of integers or
@@ -161,7 +182,7 @@ class Color(object):
             kwargs = self.assign_kw(key, kwargs, opts, default)
         return kwargs
 
-    def make_subclass(self, args: Any, kwargs: dict) -> bool:
+    def make_subclass(self, args: tuple, kwargs: dict) -> bool:
         """Compile the dictionary to be used as values for new class
         Returned list and dict will replace the arg and kwarg parameters
 
@@ -184,7 +205,7 @@ class Color(object):
             self.__dict__.update(kwargs)
 
     @staticmethod
-    def process_args(args: Any) -> list:
+    def process_args(args: Union[Tuple[Any], tuple]) -> List[int]:
         """e.g. instead of text="red", effect="bold", background="blue"
         114 would get the same result
 
@@ -202,7 +223,7 @@ class Color(object):
         return values
 
     @staticmethod
-    def get_nest_dict(key: str, args: list, kwargs: dict) -> dict:
+    def get_nest_dict(key: str, args: List[int], kwargs: dict) -> dict:
         """Run through corresponding allowed keys against the length of
         the processed args list and assign ordered list indices to each
         key
@@ -221,7 +242,14 @@ class Color(object):
             kwargs[key] = ints
         return kwargs
 
-    def class_ints(self, kwargs: dict) -> dict:
+    def class_ints(
+        self,
+        kwargs: Union[
+            Dict[str, str], Dict[str, int], Dict[str, Dict[str, int]]
+        ],
+    ) -> Union[
+        Dict[str, str], Dict[str, int], Dict[str, Dict[str, int]], dict
+    ]:
         """Resolves values which may not be entered as tuples, and
         therefore will confuse the class methods which are expecting
         args
@@ -237,7 +265,7 @@ class Color(object):
                 kwargs = self.get_nest_dict(key, args, kwargs)
         return kwargs
 
-    def set(self, *args: Any, **kwargs: Union[str, int, dict]) -> None:
+    def set(self, *args: Any, **kwargs: Union[str, Dict[str, str]]) -> None:
         """Call to change/update/add class values or add subclasses for
         new text, effects and backgrounds
 

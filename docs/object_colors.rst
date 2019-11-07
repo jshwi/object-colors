@@ -1,5 +1,5 @@
-object\_colors module
-=====================
+object\_colors
+==============
 
 .. automodule:: object_colors
    :members:
