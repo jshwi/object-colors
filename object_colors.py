@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
-"""object_colors
+"""object-colors
+A simple to use module designed to stylise output with  minimal setup
+and instantiation
 
-This is a simple to use module designed to print to the terminal in
-color with minimal setup and instantiation
+The philosophy behind object-colors is more terminal for less code
 """
-from typing import Union, Any
+from typing import Union, Any, Tuple, Dict
+
 __author__ = "Stephen Whitlock"
 __copyright__ = "Copyright 2019, Stephen Whitlock"
 __license__ = "MIT"
@@ -61,7 +63,7 @@ class Color(object):
                 return popped
         return
 
-    def print(self, *args: Any, **kwargs: Union[str, int]) -> None:
+    def print(self, *args: Tuple[Any], **kwargs: Dict[str, int]) -> None:
         """Enhanced print function for class and subclasses
 
         :param args:    Variable number of strings can be entered if
@@ -69,21 +71,26 @@ class Color(object):
                         Method behaves just like builtin print()
         :param kwargs:  builtin print() kwargs
         """
-        print(self.get(" ".join(str(string) for string in args)), **kwargs)
+        print(self.get(*args), **kwargs)
 
-    def get(self, string: str) -> str:
+    def get(self, *args: Union[str, Tuple[Any]]) -> Union[str, Tuple[str]]:
         """String can be returned as variable(s) for assorted color
         printing or can be printed directly by calling self.print()
 
-        :param string:  String to print
+        :param args:    Manipulate string(s)
         :return:        Colored string
         """
         esc = "\u001b["
-        reset = f"{esc}0;0m"
         text = f"3{self.text}"
         background = f"4{self.background}"
         setting = f"{esc}{self.effect};{text};{background}m"
-        return setting + string + reset
+        reset = f"{esc}0;0m"
+        if isinstance(args, str):
+            return setting + args + reset
+        arg_list = []
+        for arg in args:
+            arg_list.append(setting + arg + reset)
+        return tuple(arg_list)
 
     @staticmethod
     def opts(key: str) -> list:
