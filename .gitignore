@@ -15,6 +15,7 @@ dist/
 ehthumbs.db
 *.exe
 *.gz
+.history
 htmlcov/
 .hypothesis/
 Icon?
