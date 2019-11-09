@@ -1,4 +1,4 @@
-object\_colors
+object-colors
 ==============
 
 .. automodule:: object_colors

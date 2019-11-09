@@ -11,7 +11,7 @@ The philosophy behind object-colors is more terminal for less code
 __author__ = "Stephen Whitlock"
 __copyright__ = "Copyright 2019, Stephen Whitlock"
 __license__ = "MIT"
-__version__ = "1.0.3"
+__version__ = "1.0.4"
 __maintainer__ = "Stephen Whitlock"
 __email__ = "stephen@jshwisolutions.com"
 __status__ = "Production"
@@ -197,6 +197,19 @@ class Color(object):
                 sub = True
         return sub
 
+    def switch_bold(self):
+        """Instantiate bold class object if bold is not set for more
+        flexible usage and less setting up when using this module
+        """
+        kwargs = {
+            "bold": {
+                "text": self.__dict__["text"],
+                "effect": "bold",
+                "background": self.__dict__["background"],
+            }
+        }
+        self.make_subclass((), kwargs)
+
     def class_kwargs(self, args: Union[tuple, list], kwargs: dict) -> None:
         if not self.make_subclass(args, kwargs):
             kwargs = self.get_processed(args, kwargs)
@@ -268,3 +281,5 @@ class Color(object):
         kwargs = self.class_ints(kwargs)
         args = self.process_args(args)
         self.class_kwargs(args, kwargs)
+        if self.effect != 1:
+            self.switch_bold()

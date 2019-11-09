@@ -4,6 +4,6 @@ python:
 install:
   - pip install pytest coverage pytest-cov codecov
 script:
-  - pytest --cov=object_colors test.py
+  - python3 -m pytest --cov=object_colors tests
 after_success:
   - codecov --file coverage.xml --token 01d10071-a518-43aa-b4ea-3f3cea4d5bc2

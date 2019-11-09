@@ -1,5 +1,5 @@
 Object Color's Docs
-=========================================================
+===================
 |
 
 Adding colours to Python simplified into a single class

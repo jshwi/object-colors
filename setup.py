@@ -5,11 +5,11 @@ from setuptools import setup, find_packages
 
 HERE = Path(__file__).parent
 
-README = (HERE / path.join("docs", "source", "README.rst")).read_text()
+README = (HERE / path.join("docs", "README.rst")).read_text()
 
 setup(
     name="object-colors",
-    version="1.0.3",
+    version="1.0.4",
     description='Adding colours to Python simplified into a single class',
     long_description=README,
     long_description_content_type="text/x-rst",
@@ -25,4 +25,5 @@ setup(
     py_modules=['object_colors'],
     packages=find_packages(exclude=("tests",)),
     include_package_data=True,
+    zip_safe=True,
 )

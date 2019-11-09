@@ -23,6 +23,7 @@ class TestMasterClass(object):
     def test__dir__(self):
         c = Color(text="green")
         attrs = c.__dir__()
+        Color.keys.append("bold")
         assert attrs == Color.keys
 
     def test_process_args_int(self):
@@ -137,3 +138,19 @@ class TestMasterClass(object):
         assert c.text == 7
         assert c.effect == 1
         assert c.background == 4
+
+    def test_unpacking_tuples(self):
+        cc = Color(text="red")
+        a, b, c = cc.get("a", "b", "c")
+        assert a == "\u001b[0;31;40ma\u001b[0;0m"
+        assert b == "\u001b[0;31;40mb\u001b[0;0m"
+        assert c == "\u001b[0;31;40mc\u001b[0;0m"
+        tup = cc.get("a", "b", "c")
+        assert isinstance(tup, tuple)
+        a, b, c = tup
+        assert isinstance(a, str)
+        assert isinstance(b, str)
+        assert isinstance(c, str)
+        assert a == "\u001b[0;31;40ma\u001b[0;0m"
+        assert b == "\u001b[0;31;40mb\u001b[0;0m"
+        assert c == "\u001b[0;31;40mc\u001b[0;0m"
