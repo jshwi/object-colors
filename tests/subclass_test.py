@@ -62,7 +62,25 @@ class TestSubClass(object):
         assert c.red.effect == 1
         assert c.red.background == 4
 
+    def test_process_args_multi_int_subclass_1(self):
+        c = Color(red=(1, 1, 4))
+        assert c.red.text == 1
+        assert c.red.effect == 1
+        assert c.red.background == 4
+
     def test_str_args_subclass(self):
+        c = Color(red=("red",))
+        assert c.red.text == 1
+        assert c.red.effect == 0
+        assert c.red.background == 0
+
+    def test_str_args_subclass_2(self):
+        c = Color(red=("red", "bold"))
+        assert c.red.text == 1
+        assert c.red.effect == 1
+        assert c.red.background == 0
+
+    def test_str_args_subclass_3(self):
         c = Color(red=("red", "bold", "yellow"))
         assert c.red.text == 1
         assert c.red.effect == 1

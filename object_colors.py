@@ -16,7 +16,7 @@ __maintainer__ = "Stephen Whitlock"
 __email__ = "stephen@jshwisolutions.com"
 __status__ = "Production"
 
-from typing import Union, Any, Dict, Tuple, List
+from typing import Union, Any
 
 
 class Color(object):
@@ -27,16 +27,7 @@ class Color(object):
     def __init__(
         self,
         *args: Union[int, str],
-        **kwargs: Union[
-            int,
-            str,
-            None,
-            Dict[str, str],
-            Dict[str, int],
-            Tuple[int],
-            Tuple[int, int],
-            Tuple[str, str, str],
-        ],
+        **kwargs: Union[int, str, None, tuple, dict],
     ) -> None:
         """Set class attributes for Color.print() or Color.get()
 
@@ -64,10 +55,10 @@ class Color(object):
     def __getattr__(self, item: str) -> str:
         return item
 
-    def __dir__(self) -> List[str]:
+    def __dir__(self) -> list:
         return [str(item) for item in self.__dict__]
 
-    def pop(self, select: str) -> Union[str, dict, None]:
+    def pop(self, select: str) -> Any:
         """Remove keypair from __dict__ and return to variable
 
         :param select:  Key to remove
@@ -80,7 +71,7 @@ class Color(object):
                 return popped
         return
 
-    def print(self, *args: Any, **kwargs: Any) -> None:
+    def print(self, *args: Union[str, int], **kwargs: str) -> None:
         """Enhanced print function for class and subclasses
 
         :param args:    Variable number of strings can be entered if
@@ -90,7 +81,7 @@ class Color(object):
         """
         print(self.get(*args), **kwargs)
 
-    def get(self, *args: Any) -> Any:
+    def get(self, *args: Union[str, int]) -> Union[str, tuple]:
         """String can be returned as variable(s) for assorted color
         printing or can be printed directly by calling self.print()
 
@@ -130,7 +121,7 @@ class Color(object):
         ]
         return effects if key == "effect" else colors
 
-    def kwargs__dict__(self, kwargs):
+    def kwargs__dict__(self, kwargs: dict):
         """Set any gaps in kwargs with the existing class values (not
         subclasses) so as not to override them with the defaults
 
@@ -172,7 +163,7 @@ class Color(object):
             kwargs.update({key: opts.index(kwargs[key])})
         return kwargs
 
-    def get_processed(self, args: Any, kwargs: dict) -> dict:
+    def get_processed(self, args: tuple, kwargs: dict) -> dict:
         """Organise args and kwargs into a parsable dictionary
 
         :param args:    User defined arguments: list(s) of integers or
@@ -189,35 +180,25 @@ class Color(object):
             kwargs = self.assign_kw(key, kwargs, opts, default)
         return kwargs
 
-    def make_subclass(self, args: Any, kwargs: dict, frozen: dict) -> bool:
+    def make_subclass(self, args: tuple, kwargs: dict) -> bool:
         """Compile the dictionary to be used as values for new class
         Returned list and dict will replace the arg and kwarg parameters
 
         :param args:    Class args for Color subclass
         :param kwargs:  Class kwargs for Color subclass
-        :param frozen:
         :return:        Validated dictionary for class __dict__
         """
         sub = False
         for key, value in list(kwargs.items()):
             if isinstance(value, dict):
                 value = self.get_processed(args, value)
-                kwargs = self.filter_defaults(kwargs, frozen)
                 color = Color(*args, **value)
                 setattr(self, key, color)
                 sub = True
         return sub
 
-    @staticmethod
-    def filter_defaults(kwargs: dict, frozen: dict) -> dict:
-        filtered = {}
-        for key, value in list(kwargs.items()):
-            if key in frozen:
-                filtered.update({key: value})
-        return filtered
-
-    def class_kwargs(self, args: Any, kwargs: dict, frozen: dict) -> None:
-        if not self.make_subclass(args, kwargs, frozen):
+    def class_kwargs(self, args: Union[tuple, list], kwargs: dict) -> None:
+        if not self.make_subclass(args, kwargs):
             kwargs = self.get_processed(args, kwargs)
             self.__dict__.update(kwargs)
 
@@ -283,8 +264,7 @@ class Color(object):
                         into escape codes
         :param kwargs:  More precise keyword arguments
         """
-        class_dict = self.__dict__
         kwargs = self.kwargs__dict__(kwargs)
         kwargs = self.class_ints(kwargs)
         args = self.process_args(args)
-        self.class_kwargs(args, kwargs, class_dict)
+        self.class_kwargs(args, kwargs)
