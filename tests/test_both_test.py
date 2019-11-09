@@ -6,5 +6,4 @@ class TestBoth(object):
         c = Color()
         c.set(text="blue")
         c.set(effect="bold")
-        assert c.text == 4
-        assert c.effect == 1
+        assert c.text == 4 and c.effect == 1

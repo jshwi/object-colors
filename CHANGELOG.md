@@ -4,14 +4,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [v1.0.4](https://github.com/jshwi/object_colors/releases/tag/v1.0.4) ([compare](https://github.com/jshwi/object_colors/compare/v1.0.3...v1.0.4))
+## [v1.0.5](https://github.com/jshwi/object_colors/releases/tag/v1.0.5) ([compare](https://github.com/jshwi/object_colors/compare/v1.0.4...v1.0.5))
 
 ### Misc
-- [feat] Adds additional bold switch for more flexible use ([49e4c5b](https://github.com/jshwi/object_colors/commit/49e4c5b1815c4976f0e242934ebfadc332b3aca0)).
-- [feat] Adds unpack tuple feature to self.get() ([f1d8295](https://github.com/jshwi/object_colors/commit/f1d82956ed9c90ddb50fc1f0de20eab5f020cbc7)).
-- [refactor] Updates docs structure ([d89cb66](https://github.com/jshwi/object_colors/commit/d89cb66f7e9069bf83e27aa626d8177c70eebd51)).
-- [test] Adds full pop() return test module ([1448d73](https://github.com/jshwi/object_colors/commit/1448d7395bccd1be0679cf88973697c55523235a)).
-- [test] Modularizes tests ([6ad7ab4](https://github.com/jshwi/object_colors/commit/6ad7ab4a7222e4b5a91b4ec3ffe719f3cfd5a373)).
+- [feat] Adds populate colors feature ([a801ee3](https://github.com/jshwi/object_colors/commit/a801ee3c1047325a4f3b9f78e2744ede980e4974)).
+- [refactor] Make private methods ([67d41c6](https://github.com/jshwi/object_colors/commit/67d41c6cfc35c9dbaa2a12039e3726ba5f611e0b)).
+
+
+## [v1.0.4](https://github.com/jshwi/object_colors/releases/tag/v1.0.4) ([compare](https://github.com/jshwi/object_colors/compare/v1.0.3...v1.0.4)) - 2019-11-09
+
+### Misc
+- [feat] Adds additional bold switch for more flexible use ([fb675cc](https://github.com/jshwi/object_colors/commit/fb675cc9269a2ec9be393eef45ec1ae53a67f97e)).
+- [feat] Adds unpack tuple feature to self.get() ([7bf119f](https://github.com/jshwi/object_colors/commit/7bf119f517e497a2c5f07edee54cbc9285369008)).
+- [refactor] Updates docs structure ([307a762](https://github.com/jshwi/object_colors/commit/307a762a4545789e961c852615ec14814b4040f8)).
+- [test] Adds full pop() return test module ([bb8301e](https://github.com/jshwi/object_colors/commit/bb8301ead3306d5b0c8359a4ad8672c2948373d0)).
+- [test] Modularizes tests ([c79e87d](https://github.com/jshwi/object_colors/commit/c79e87d3723eb01a63cc679ff6ffbbd2a5e7e79d)).
 
 
 ## [v1.0.3](https://github.com/jshwi/object_colors/releases/tag/v1.0.3) ([compare](https://github.com/jshwi/object_colors/compare/v1.0.2...v1.0.3)) - 2019-10-08

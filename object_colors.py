@@ -5,16 +5,7 @@
 
 A simple to use class module designed to stylise output with minimal
 setup and instantiation
-
-The philosophy behind object-colors is more terminal for less code
 """
-__author__ = "Stephen Whitlock"
-__copyright__ = "Copyright 2019, Stephen Whitlock"
-__license__ = "MIT"
-__version__ = "1.0.4"
-__maintainer__ = "Stephen Whitlock"
-__email__ = "stephen@jshwisolutions.com"
-__status__ = "Production"
 
 from typing import Union, Any
 
@@ -30,12 +21,6 @@ class Color(object):
         **kwargs: Union[int, str, None, tuple, dict],
     ) -> None:
         """Set class attributes for Color.print() or Color.get()
-
-        effects:
-            'none', "bold", 'bright', "underline", "negative"
-        colors:
-            "black", "red", "green", "yellow",
-            "blue", "purple", "cyan", "white"
 
         :param args:    Single digit ANSI Escape code (second) or string
                         arguments
@@ -58,50 +43,8 @@ class Color(object):
     def __dir__(self) -> list:
         return [str(item) for item in self.__dict__]
 
-    def pop(self, select: str) -> Any:
-        """Remove keypair from __dict__ and return to variable
-
-        :param select:  Key to remove
-        :return:        Class dict or None
-        """
-        for key in list(self.__dict__):
-            if select == key and key not in Color.keys:
-                popped = self.__dict__[key]
-                del self.__dict__[key]
-                return popped
-        return
-
-    def print(self, *args: Union[str, int], **kwargs: str) -> None:
-        """Enhanced print function for class and subclasses
-
-        :param args:    Variable number of strings can be entered if
-                        syntax allows
-                        Method behaves just like builtin print()
-        :param kwargs:  builtin print() kwargs
-        """
-        print(self.get(*args), **kwargs)
-
-    def get(self, *args: Union[str, int]) -> Union[str, tuple]:
-        """String can be returned as variable(s) for assorted color
-        printing or can be printed directly by calling self.print()
-
-        :param args:    Manipulate string(s)
-        :return:        Colored string
-        """
-        esc = "\u001b["
-        text = f"3{self.text}"
-        background = f"4{self.background}"
-        setting = f"{esc}{self.effect};{text};{background}m"
-        reset = f"{esc}0;0m"
-        if len(args) == 1:
-            return setting + args[0] + reset
-        arg_list = []
-        for arg in args:
-            arg_list.append(setting + arg + reset)
-        return tuple(arg_list)
-
     @staticmethod
-    def opts(key: str) -> list:
+    def __opts(key: str) -> list:
         """Get allowed values paired with text, effect and background
 
         :param key: Specific key for allowed values
@@ -121,21 +64,8 @@ class Color(object):
         ]
         return effects if key == "effect" else colors
 
-    def kwargs__dict__(self, kwargs: dict):
-        """Set any gaps in kwargs with the existing class values (not
-        subclasses) so as not to override them with the defaults
-
-        :param kwargs:  New kwargs
-        :return:        Kwargs with existing attributes for keys not
-                        given a value
-        """
-        for key in self.__dict__:
-            if key in Color.keys and key not in kwargs:
-                kwargs[key] = self.__dict__[key]
-        return kwargs
-
     @staticmethod
-    def assign_kw(key: str, kwargs: dict, opts: list, default: int) -> dict:
+    def __assign_kw(key: str, kwargs: dict, opts: list, default: int) -> dict:
         """First statement returns kwargs as is if valid escape code
         provided
         The second will assign the default value to kwargs if invalid
@@ -163,67 +93,8 @@ class Color(object):
             kwargs.update({key: opts.index(kwargs[key])})
         return kwargs
 
-    def get_processed(self, args: tuple, kwargs: dict) -> dict:
-        """Organise args and kwargs into a parsable dictionary
-
-        :param args:    User defined arguments: list(s) of integers or
-                        tuple of strings
-        :param kwargs:  Keyword arguments for class attributes or subclass
-                        attributes
-        :return:        Dictionary for class attributes
-        """
-        for index_, key in enumerate(Color.keys):
-            default = 7 if key == "text" else 0
-            opts = self.opts(key)
-            if 0 <= index_ < len(args):
-                kwargs.update({key: args[index_]})
-            kwargs = self.assign_kw(key, kwargs, opts, default)
-        return kwargs
-
-    def make_subclass(self, args: tuple, kwargs: dict) -> bool:
-        """Compile the dictionary to be used as values for new class
-        Returned list and dict will replace the arg and kwarg parameters
-
-        :param args:    Class args for Color subclass
-        :param kwargs:  Class kwargs for Color subclass
-        :return:        Validated dictionary for class __dict__
-        """
-        sub = False
-        for key, value in list(kwargs.items()):
-            if isinstance(value, dict):
-                value = self.get_processed(args, value)
-                color = Color(*args, **value)
-                setattr(self, key, color)
-                sub = True
-        return sub
-
-    def switch_bold(self):
-        """Instantiate bold class object if bold is not set for more
-        flexible usage and less setting up when using this module
-        """
-        kwargs = {
-            "bold": {
-                "text": self.__dict__["text"],
-                "effect": "bold",
-                "background": self.__dict__["background"],
-            }
-        }
-        self.make_subclass((), kwargs)
-
-    def populate_colors(self):
-        """This will create a subclass for every available color when
-        "colors" is called whilst instantiating self"""
-        for color in self.opts("colors"):
-            kwargs = {color: {"text": color}}
-            self.make_subclass((), kwargs)
-
-    def class_kwargs(self, args: Union[tuple, list], kwargs: dict) -> None:
-        if not self.make_subclass(args, kwargs):
-            kwargs = self.get_processed(args, kwargs)
-            self.__dict__.update(kwargs)
-
     @staticmethod
-    def process_args(args: Any) -> list:
+    def __process_args(args: Any) -> list:
         """e.g. instead of text="red", effect="bold", background="blue"
         114 would get the same result
 
@@ -241,7 +112,7 @@ class Color(object):
         return values
 
     @staticmethod
-    def get_nest_dict(key: str, args: list, kwargs: dict) -> dict:
+    def __get_nested(key: str, args: list, kwargs: dict) -> dict:
         """Run through corresponding allowed keys against the length of
         the processed args list and assign ordered list indices to each
         key
@@ -260,7 +131,79 @@ class Color(object):
             kwargs[key] = ints
         return kwargs
 
-    def class_ints(self, kwargs: dict) -> dict:
+    def __kwargs_dict(self, kwargs: dict):
+        """Set any gaps in kwargs with the existing class values (not
+        subclasses) so as not to override them with the defaults
+
+        :param kwargs:  New kwargs
+        :return:        Kwargs with existing attributes for keys not
+                        given a value
+        """
+        for key in self.__dict__:
+            if key in Color.keys and key not in kwargs:
+                kwargs[key] = self.__dict__[key]
+        return kwargs
+
+    def __get_processed(self, args: tuple, kwargs: dict) -> dict:
+        """Organise args and kwargs into a parsable dictionary
+
+        :param args:    User defined arguments: list(s) of integers or
+                        tuple of strings
+        :param kwargs:  Keyword arguments for class attributes or subclass
+                        attributes
+        :return:        Dictionary for class attributes
+        """
+        for index_, key in enumerate(Color.keys):
+            default = 7 if key == "text" else 0
+            opts = self.__opts(key)
+            if 0 <= index_ < len(args):
+                kwargs.update({key: args[index_]})
+            kwargs = self.__assign_kw(key, kwargs, opts, default)
+        return kwargs
+
+    def __make_subclass(self, args: tuple, kwargs: dict) -> bool:
+        """Compile the dictionary to be used as values for new class
+        Returned list and dict will replace the arg and kwarg parameters
+
+        :param args:    Class args for Color subclass
+        :param kwargs:  Class kwargs for Color subclass
+        :return:        Validated dictionary for class __dict__
+        """
+        sub = False
+        for key, value in list(kwargs.items()):
+            if isinstance(value, dict):
+                value = self.__get_processed(args, value)
+                color = Color(*args, **value)
+                setattr(self, key, color)
+                sub = True
+        return sub
+
+    def __switch_bold(self):
+        """Instantiate bold class object if bold is not set for more
+        flexible usage and less setting up when using this module
+        """
+        kwargs = {
+            "bold": {
+                "text": self.__dict__["text"],
+                "effect": "bold",
+                "background": self.__dict__["background"],
+            }
+        }
+        self.__make_subclass((), kwargs)
+
+    def __populate_colors(self):
+        """This will create a subclass for every available color when
+        "colors" is called whilst instantiating self"""
+        for color in self.__opts("colors"):
+            kwargs = {color: {"text": color}}
+            self.__make_subclass((), kwargs)
+
+    def __class_kwargs(self, args: Union[tuple, list], kwargs: dict) -> None:
+        if not self.__make_subclass(args, kwargs):
+            kwargs = self.__get_processed(args, kwargs)
+            self.__dict__.update(kwargs)
+
+    def __class_ints(self, kwargs: dict) -> dict:
         """Resolves values which may not be entered as tuples, and
         therefore will confuse the class methods which are expecting
         args
@@ -272,8 +215,8 @@ class Color(object):
             if not isinstance(value, dict) and key not in Color.keys:
                 if not isinstance(value, tuple):
                     value = (value,)
-                args = self.process_args(value)
-                kwargs = self.get_nest_dict(key, args, kwargs)
+                args = self.__process_args(value)
+                kwargs = self.__get_nested(key, args, kwargs)
         return kwargs
 
     def set(self, *args: Any, **kwargs: Any) -> None:
@@ -285,10 +228,50 @@ class Color(object):
         :param kwargs:  More precise keyword arguments
         """
         if "colors" in args:
-            self.populate_colors()
-        kwargs = self.kwargs__dict__(kwargs)
-        kwargs = self.class_ints(kwargs)
-        args = self.process_args(args)
-        self.class_kwargs(args, kwargs)
+            self.__populate_colors()
+        kwargs = self.__kwargs_dict(kwargs)
+        kwargs = self.__class_ints(kwargs)
+        args = self.__process_args(args)
+        self.__class_kwargs(args, kwargs)
         if self.effect != 1:
-            self.switch_bold()
+            self.__switch_bold()
+
+    def get(self, *args: Union[str, int]) -> Union[str, tuple]:
+        """String can be returned as variable(s) for assorted color
+        printing or can be printed directly by calling self.print()
+
+        :param args:    Manipulate string(s)
+        :return:        Colored string
+        """
+        esc = "\u001b["
+        reset = esc + "0;0m"
+        setting = f"{esc}{self.effect};3{self.text};4{self.background}m"
+        if len(args) == 1:
+            return setting + args[0] + reset
+        arg_list = []
+        for arg in args:
+            arg_list.append(setting + arg + reset)
+        return tuple(arg_list)
+
+    def print(self, *args: Union[str, int], **kwargs: str) -> None:
+        """Enhanced print function for class and subclasses
+
+        :param args:    Variable number of strings can be entered if
+                        syntax allows
+                        Method behaves just like builtin print()
+        :param kwargs:  builtin print() kwargs
+        """
+        print(self.get(*args), **kwargs)
+
+    def pop(self, select: str) -> Any:
+        """Remove keypair from __dict__ and return to variable
+
+        :param select:  Key to remove
+        :return:        Class dict or None
+        """
+        for key in list(self.__dict__):
+            if select == key and key not in Color.keys:
+                popped = self.__dict__[key]
+                del self.__dict__[key]
+                return popped
+        return
