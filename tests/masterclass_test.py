@@ -154,3 +154,14 @@ class TestMasterClass(object):
         assert a == "\u001b[0;31;40ma\u001b[0;0m"
         assert b == "\u001b[0;31;40mb\u001b[0;0m"
         assert c == "\u001b[0;31;40mc\u001b[0;0m"
+
+    def test_populate_colors(self):
+        c = Color("colors")
+        assert isinstance(c.black, Color)
+        assert isinstance(c.red, Color)
+        assert isinstance(c.green, Color)
+        assert isinstance(c.yellow, Color)
+        assert isinstance(c.blue, Color)
+        assert isinstance(c.purple, Color)
+        assert isinstance(c.cyan, Color)
+        assert isinstance(c.white, Color)

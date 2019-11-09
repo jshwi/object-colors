@@ -210,6 +210,13 @@ class Color(object):
         }
         self.make_subclass((), kwargs)
 
+    def populate_colors(self):
+        """This will create a subclass for every available color when
+        "colors" is called whilst instantiating self"""
+        for color in self.opts("colors"):
+            kwargs = {color: {"text": color}}
+            self.make_subclass((), kwargs)
+
     def class_kwargs(self, args: Union[tuple, list], kwargs: dict) -> None:
         if not self.make_subclass(args, kwargs):
             kwargs = self.get_processed(args, kwargs)
@@ -277,6 +284,8 @@ class Color(object):
                         into escape codes
         :param kwargs:  More precise keyword arguments
         """
+        if "colors" in args:
+            self.populate_colors()
         kwargs = self.kwargs__dict__(kwargs)
         kwargs = self.class_ints(kwargs)
         args = self.process_args(args)
