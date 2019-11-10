@@ -13,7 +13,7 @@ from setuptools import setup, find_packages
 
 HERE = Path(__file__).parent
 
-README = (HERE / path.join("docs", "README.rst")).read_text()
+README = (HERE / path.join("README.rst")).read_text()
 
 setup(
     name="object-colors",

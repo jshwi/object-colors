@@ -1,9 +1,66 @@
 language: python
 python:
-  - "3.7"
+  - '3.7'
 install:
-  - pip install pytest coverage pytest-cov codecov
+  - pip install pytest coverage pytest-cov codecov sphinx
+  - python3 setup.py install
 script:
+  - >
+    if [[ ! -f object_colors.py ]]; then
+      echo "This must be run from the gh_doc_automation project directory"
+      exit 3
+    fi
+  - cd docs
+  - make clean html EXAMPLES_PATTERN=ex_*
+  - cd ..
+  - cp README.rst docs/_build/html
+  - mv docs/_build/html ./
+  - git stash
+  - git checkout "$(git rev-list --max-parents=0 HEAD | tail -n 1)"
+  - git checkout -b gh-pages
+  - git config --global user.email "$GH_EMAIL"
+  - git config --global user.name "$GH_NAME"
+  - git rm -rf .
+  - >
+    declare -a leftover=("build"
+                         "dist"
+                         "docs"
+                         "*.egg*"
+                         "tests")
+    for left in "${leftover[@]}"; do
+        rm -rf "$left" || echo "$left not present"
+    done
+  - >
+    declare -a leftover=(".coverage"
+                         "*~"
+                         "pip-wheel-metadata"
+                         "__pycache__"
+                         "*.pyc"
+                         "*.pyo"
+                         "*.spec")
+    for left in "${leftover[@]}"; do
+        find . -name "$left" -exec rm -rf {} + || echo "$left not present"
+    done
+  - touch .nojekyll
+  - mv html/* ./
+  - rm -r html/
+  - >
+    if [[ "$TRAVIS_BRANCH" =~ ^master$|^[0-9]+\.[0-9]+\.X$ ]]; then
+      git add .
+      git commit -m "[ci skip] Publish updated documentation"
+      git remote rm origin
+      git remote add origin https://"$GH_NAME":"$GH_TOKEN"@github.com/"$GH_NAME"/object_colors.git
+      git push origin gh-pages -f
+      git checkout master
+    else
+      echo "Documentation not for master - pushing skipped"
+    fi
   - python3 -m pytest --cov=object_colors tests
+  - coverage xml
 after_success:
   - codecov --file coverage.xml --token 01d10071-a518-43aa-b4ea-3f3cea4d5bc2
+env:
+  global:
+  - secure: WJOcIxU2PDwjHBnIt3lmE0u37ubIorT//Ec2BIp4IY3T0dQmMxoVIKxNzz4cjZnFWe4isEbxQSDKhBGe1BcyNTmYJbLw3oyX1EB01vLvpE7rVMPqv1mW6vkz+oVByJ0wS0mq5WI/3f5egPZ5zWn3OpD9MugVmsw8a8zDVNwUsvotiJ7dxa2lgtDvaPIpp7UZzBZTXLlG40/sYzQilfPvcLmAdUGEp8VFH75ULpxuDzid5RsS4fmgCfPZuGFPbOzS/zD1uiGlcA0GVwjCltBJi2O6mdEsuwbBvHWCO5qC/ISbi3dxhN60k6qRCEl4ou4iuSm0ts1Ue7Z8u4mfT0z0z5GWZOWBPu9wdbDB+k5ZNIcReqgvOjNm6xI4R5yM7RvuPYw1AdFoJDprPijwgxgwfxPtLsoZ0GFsYvpxTctGXo7KchrR2AeS4CR0wYD88ZpipuLBy3FD6395LtQ6plmu4sMCdIVvjKsY/0pHYCXhBLhwTv7c30YWyV/ajlXF6WxJE/FC3scdBZSjQI8bfBdpowfnL7V5TVBvTt4vW1EmvJlOMWFtCQbfp6DaUrZfXEB14tMwtk7pfPd1Dt9SnZ+Fj3inVqqBWs3osMCrFwyI2xwgkgRNFCOuGZu/IsydQNyuVV4EAgun79ITNWlrBGZsjsjmj/4ykOnMR9wAYIxMPTQ=
+  - GH_NAME=jshwi
+  - GH_EMAIL=stephen@jshwisolutions.com

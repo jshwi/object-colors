@@ -1,5 +1,21 @@
 README
 ======
+`Pypi <https://pypi.org/project/object-colors/>`_ |
+`Read the Docs <https://object-colors.readthedocs.io/en/latest/>`_ |
+`Github Pages <https://jshwi.github.io/object_colors/build/html/index.html>`_
+
+.. image:: https://travis-ci.org/jshwi/object_colors.svg?branch=master
+    :target: https://travis-ci.org/jshwi/object_colors
+    :alt: Build Status
+.. image:: https://codecov.io/github/jshwi/object_colors/coverage.svg?branch=master
+    :target: https://codecov.io/github/jshwi/object_colors?branch=master
+    :alt: codecov.io
+.. image:: https://badge.fury.io/py/object-colors.svg
+    :target: https://badge.fury.io/py/object-colors
+    :alt: PyPi Version
+.. image:: https://img.shields.io/badge/License-MIT-yellow.svg
+    :target: https://opensource.org/licenses/MIT
+    :alt: Licence
 
 Installation
 
@@ -17,7 +33,7 @@ Setup
 
 Usage
 
-* key-values
+`key-values`
     Match `effects` with `effect` and `colors` with `text` and `background`
 
 .. code:: javascript
@@ -67,8 +83,8 @@ All colors, effects and objects can be manipulated however the user pleases, pro
 
 Methods
 
-* set()
-    `Set values with keyword arguments`
+`set()`
+    Set values with keyword arguments
 
 .. code:: python
 
@@ -115,8 +131,8 @@ Methods
     {'text': 3, 'effect': 1, 'background': 0}
 ..
 
-* get()
-    `Store values for multicolored printing`
+`get()`
+    Store values for multicolored printing
 
 .. code:: python
 
@@ -125,7 +141,7 @@ Methods
     >>> print(bullet + warning)
 ..
 
-`returns a string or a tuple`
+    returns a string or a tuple
 
 .. code:: python
 
@@ -133,8 +149,8 @@ Methods
 
 ..
 
-* print()
-    `Instance includes enhanced print() function for color output`
+print()
+    Instance includes enhanced print() function for color output
 
 .. code:: python
 
@@ -143,8 +159,8 @@ Methods
     >>> c.yellow.print("yellow print", end="")
 ..
 
-* pop()
-    `Remove unused attributes`
+`pop()`
+    Remove unused attributes
 
 .. code:: python
 
@@ -163,7 +179,7 @@ Methods
     }
 ..
 
-    `Or create new instances`
+    Or create new instances
 
 .. code:: python
 

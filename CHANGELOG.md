@@ -7,8 +7,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [v1.0.5](https://github.com/jshwi/object_colors/releases/tag/v1.0.5) ([compare](https://github.com/jshwi/object_colors/compare/v1.0.4...v1.0.5))
 
 ### Misc
-- [feat] Adds populate colors feature ([a801ee3](https://github.com/jshwi/object_colors/commit/a801ee3c1047325a4f3b9f78e2744ede980e4974)).
-- [refactor] Make private methods ([67d41c6](https://github.com/jshwi/object_colors/commit/67d41c6cfc35c9dbaa2a12039e3726ba5f611e0b)).
+- [feat] Add gh-pages deployment to travis.yml for automated remote docs build ([6f8e607](https://github.com/jshwi/object_colors/commit/6f8e607540c54692feaf34cac2074ee2ff3d171e)).
+- [feat] Adds populate colors feature ([c17f8cf](https://github.com/jshwi/object_colors/commit/c17f8cf2132a5896f02fc0007b441497fb2a8658)).
+- [refactor] Make private methods ([badcd19](https://github.com/jshwi/object_colors/commit/badcd193e45b5f9609d9f91c26a0222cf54043f6)).
 
 
 ## [v1.0.4](https://github.com/jshwi/object_colors/releases/tag/v1.0.4) ([compare](https://github.com/jshwi/object_colors/compare/v1.0.3...v1.0.4)) - 2019-11-09
