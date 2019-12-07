@@ -6,55 +6,48 @@ install:
   - python3 setup.py install
 script:
   - >
-    if [[ ! -f object_colors.py ]]; then
-      echo "This must be run from the gh_doc_automation project directory"
-      exit 3
-    fi
-  - cd docs
-  - make clean html EXAMPLES_PATTERN=ex_*
-  - cd ..
-  - cp README.rst docs/_build/html
-  - mv docs/_build/html ./
-  - git stash
-  - git checkout "$(git rev-list --max-parents=0 HEAD | tail -n 1)"
-  - git checkout -b gh-pages
-  - git config --global user.email "$GH_EMAIL"
-  - git config --global user.name "$GH_NAME"
-  - git rm -rf .
-  - >
-    declare -a leftover=("build"
-                         "dist"
-                         "docs"
-                         "*.egg*"
-                         "tests")
-    for left in "${leftover[@]}"; do
-        rm -rf "$left" || echo "$left not present"
-    done
-  - >
-    declare -a leftover=(".coverage"
-                         "*~"
-                         "pip-wheel-metadata"
-                         "__pycache__"
-                         "*.pyc"
-                         "*.pyo"
-                         "*.spec")
-    for left in "${leftover[@]}"; do
-        find . -name "$left" -exec rm -rf {} + || echo "$left not present"
-    done
-  - touch .nojekyll
-  - mv html/* ./
-  - rm -r html/
-  - >
     if [[ "$TRAVIS_BRANCH" =~ ^master$|^[0-9]+\.[0-9]+\.X$ ]]; then
-      git add .
-      git commit -m "[ci skip] Publish updated documentation"
-      git remote rm origin
-      git remote add origin https://"$GH_NAME":"$GH_TOKEN"@github.com/"$GH_NAME"/object_colors.git
-      git push origin gh-pages -f
-      git checkout master
-    else
-      echo "Documentation not for master - pushing skipped"
-    fi
+      cd docs
+      make clean html EXAMPLES_PATTERN=ex_*
+      cd ..
+      cp README.rst docs/_build/html
+      mv docs/_build/html ./
+      git stash
+      git checkout "$(git rev-list --max-parents=0 HEAD | tail -n 1)"
+      git checkout -b gh-pages
+      git config --global user.email "$GH_EMAIL"
+      git config --global user.name "$GH_NAME"
+      git rm -rf .
+      declare -a leftover=("build"
+                           "dist"
+                           "docs"
+                           "*.egg*"
+                           "tests")
+      for left in "${leftover[@]}"; do
+        rm -rf "$left" || echo "$left not present"
+      done
+      declare -a leftover=(".coverage"
+                           "*~"
+                           "pip-wheel-metadata"
+                           "__pycache__"
+                           "*.pyc"
+                           "*.pyo"
+                           "*.spec")
+      for left in "${leftover[@]}"; do
+        find . -name "$left" -exec rm -rf {} + || echo "$left not present"
+      done
+      touch .nojekyll
+      mv html/* ./
+      rm -r html/
+        git add .
+        git commit -m "[ci skip] Publish updated documentation"
+        git remote rm origin
+        git remote add origin https://"$GH_NAME":"$GH_TOKEN"@github.com/"$GH_NAME"/object_colors.git
+        git push origin gh-pages -f
+        git checkout master
+      else
+        echo "Documentation not for master - pushing skipped"
+      fi
   - python3 -m pytest --cov=object_colors tests
   - coverage xml
 after_success:

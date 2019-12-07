@@ -4,10 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [v1.0.5](https://github.com/jshwi/object_colors/releases/tag/v1.0.5) ([compare](https://github.com/jshwi/object_colors/compare/v1.0.4...v1.0.5))
+## [v1.0.5](https://github.com/jshwi/object_colors/releases/tag/v1.0.5) ([compare](https://github.com/jshwi/object_colors/compare/v1.0.4...v1.0.5)) - 2019-11-10
 
 ### Misc
-- [feat] Add gh-pages deployment to travis.yml for automated remote docs build ([6f8e607](https://github.com/jshwi/object_colors/commit/6f8e607540c54692feaf34cac2074ee2ff3d171e)).
+- [feat] Add gh-pages deployment to travis.yml for automated remote docs build ([1f46a04](https://github.com/jshwi/object_colors/commit/1f46a04e5fe21a22ffa71161db70caa65e9b6db5)).
 - [feat] Adds populate colors feature ([c17f8cf](https://github.com/jshwi/object_colors/commit/c17f8cf2132a5896f02fc0007b441497fb2a8658)).
 - [refactor] Make private methods ([badcd19](https://github.com/jshwi/object_colors/commit/badcd193e45b5f9609d9f91c26a0222cf54043f6)).
 

@@ -2,7 +2,7 @@ README
 ======
 `Pypi <https://pypi.org/project/object-colors/>`_ |
 `Read the Docs <https://object-colors.readthedocs.io/en/latest/>`_ |
-`Github Pages <https://jshwi.github.io/object_colors/build/html/index.html>`_
+`Github Pages <https://jshwi.github.io/object_colors/index.html>`_
 
 .. image:: https://travis-ci.org/jshwi/object_colors.svg?branch=master
     :target: https://travis-ci.org/jshwi/object_colors

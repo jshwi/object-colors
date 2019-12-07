@@ -227,7 +227,11 @@ class Color(object):
                         into escape codes
         :param kwargs:  More precise keyword arguments
         """
-        if "colors" in args:
+        populate = False
+        if "populate" in kwargs:
+            populate = kwargs["populate"]
+            del kwargs["populate"]
+        if populate:
             self.__populate_colors()
         kwargs = self.__kwargs_dict(kwargs)
         kwargs = self.__class_ints(kwargs)

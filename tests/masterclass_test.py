@@ -97,7 +97,7 @@ class TestMasterClass(object):
         )
 
     def test_populate_colors(self):
-        c = Color("colors")
+        c = Color(populate=True)
         assert (
             isinstance(c.black, Color)
             and isinstance(c.red, Color)
