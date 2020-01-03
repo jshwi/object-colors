@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
-from pytest import fixture
-
 from object_colors import Color
+from pytest import fixture
 
 
 @fixture

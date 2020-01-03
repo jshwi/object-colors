@@ -1,3 +1,4 @@
+_build
 /build
 .coverage
 /dist
@@ -9,3 +10,4 @@ pyproject.toml
 .pytest_cache
 .venv
 venv
+.vscode/
