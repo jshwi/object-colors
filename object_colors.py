@@ -183,53 +183,36 @@ class Color:
         # properly match them
         return key.lower() if ignore_case else key
 
-    def __sort_replacements(
-        self, replacements: Dict[str, str], ignore_case: bool
-    ) -> List[str]:
+    @staticmethod
+    def __sort_replacements(replacements: Dict[str, str]) -> List[str]:
         # place longer ones first to keep shorter substrings from
         # matching where the longer ones should take place
         # For instance given the replacements {'ab': 'AB', 'abc': 'ABC'}
         # against the string 'hey abc', it should produce 'hey ABC' and
         # not 'hey ABc'
-        replacements = {
-            self.__normalize_old(key, ignore_case): val
-            for key, val in replacements.items()
-        }
+        replacements = {key: val for key, val in replacements.items()}
         return sorted(replacements, key=len, reverse=True)
 
     @staticmethod
-    def __get_pattern(
-        rep_sorted: List[str], ignore_case: bool
-    ) -> Pattern[str]:
+    def __get_pattern(rep_sorted: List[str]) -> Pattern[str]:
         # if case insensitive, we need to normalize the old string so
         # that later a replacement can be found. For instance with
         # {"HEY": "lol"} we should match and find a replacement for
         # "hey", "HEY", "hEy", etc.
-        re_mode = re.IGNORECASE if ignore_case else 0
         rep_escaped = map(re.escape, rep_sorted)
-        return re.compile("|".join(rep_escaped), re_mode)
+        return re.compile("|".join(rep_escaped))
 
-    def __rep_sub(
-        self,
-        string: str,
-        replacements: Dict[str, str],
-        ignore_case: bool = False,
-    ) -> str:
+    def __rep_sub(self, string: str, replacements: Dict[str, str],) -> str:
         # *** courtesy of bgusach: gist at bgusach/multireplace.py ***
         # given a string and a replacement map, it returns the replaced
         # string.
-        rep_sorted = self.__sort_replacements(replacements, ignore_case)
+        rep_sorted = self.__sort_replacements(replacements)
         # Create a big OR regex that matches any of the substrings to
         # replace
-        pattern = self.__get_pattern(rep_sorted, ignore_case)
+        pattern = self.__get_pattern(rep_sorted)
         # For each match, look up the new string in the replacements,
         # being the key the normalized old string
-        return pattern.sub(
-            lambda match: replacements[
-                self.__normalize_old(match.group(0), ignore_case)
-            ],
-            string,
-        )
+        return pattern.sub(lambda match: replacements[match.group(0)], string)
 
     @staticmethod
     def __populate_passed(kwargs: Dict[str, bool]) -> bool:
@@ -296,17 +279,29 @@ class Color:
                 string_list.append(index_)
         return string_list
 
-    def __normalize_indices(self, item: str, string: str) -> str:
-        cases = [item.upper(), item.lower()]
-        for case in cases:
-            rep_string = f"{Color.start}{case}{Color.stop}"
-            string = self.__rep_sub(string, {case: rep_string})
-        return string
-
-    def __mark_indices(self, indices: List[str], string: str) -> str:
+    def __mark_indices(
+        self, indices: List[str], string: str, scatter: bool, ignore_case: bool
+    ) -> str:
+        reps = []
+        rep_strs = []
+        rep_str = None
+        edited = string
         for key in indices:
             for item in key:
-                string = self.__normalize_indices(item, string)
+                if ignore_case:
+                    cases = [item.upper(), item.lower()]
+                else:
+                    cases = [item]
+                marked = edited
+                for case in cases:
+                    rep_string = f"{Color.start}{case}{Color.stop}"
+                    edited = self.__rep_sub(marked, {case: rep_string})
+                if marked != edited:
+                    rep_strs.append(rep_string)
+                rep_str = "".join(rep_strs)
+        match = re.search(r"\b" + re.escape(rep_str) + r"\b", edited)
+        if scatter or match:
+            return edited
         return string
 
     def __color_indices(self, string: str) -> str:
@@ -336,9 +331,10 @@ class Color:
             compiled.append(word)
         return " ".join(compiled) if compiled else string
 
-    def __mark_words(self, key: str, string: str) -> str:
+    def __mark_words(self, key: str, string: str, ignore_case: bool) -> str:
+        re_mode = re.IGNORECASE if ignore_case else 0
         for keyword in key:
-            if re.search(r"\b" + re.escape(keyword) + r"\b", string):
+            if re.search(r"\b" + re.escape(keyword) + r"\b", string, re_mode):
                 rep_string = f"{Color.start}{keyword}{Color.stop}"
                 if rep_string not in string:
                     return self.__mark_word(string, keyword, rep_string)
@@ -358,13 +354,12 @@ class Color:
             resolved.append(word)
         return " ".join(resolved) if resolved else string
 
-    def __resolve_mode(self, key: str, string: str, ignore: bool) -> str:
-        if ignore:
-            indices = self.__get_indices(key)
-            marked = self.__mark_indices(indices, string)
-            return self.__color_indices(marked)
-        marked = self.__mark_words(key, string)
-        return self.__color_words(marked)
+    def __resolve_mode(
+        self, key: str, string: str, scatter: bool, ignore_case: bool
+    ) -> str:
+        indices = self.__get_indices(key)
+        marked = self.__mark_indices(indices, string, scatter, ignore_case)
+        return self.__color_indices(marked)
 
     def set(self, *args: Any, **kwargs: Any) -> None:
         """Call to change/update/add class values or add subclasses for
@@ -417,7 +412,11 @@ class Color:
         return tuple(arg_list)
 
     def get_key(
-        self, key: Union[str, List[str]], string: str, ignore: bool = False
+        self,
+        key: Union[str, List[str]],
+        string: str,
+        scatter: bool = False,
+        ignore_case: bool = False,
     ) -> str:
         """remove ansi codes so they don't clash with search items
         if the string is not already without ansi codes save it as the
@@ -426,17 +425,18 @@ class Color:
         color letters / words based on the ignore boolean passed
         recolor the string
 
-        :param string:  Parent string containing substrings
-        :param key:     word to search and color
-        :param ignore:  True will turn off case sensitive searching
-        :return:        String containing individual colored words
+        :param string:      Parent string containing substrings
+        :param key:         word to search and color
+        :param scatter:     True will turn off case sensitive searching
+        :return:            String containing individual colored words
+        :param ignore_case:
         """
         ansi_escape = re.compile(r"(\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~]))")
         words = self.__split_regex(string, ansi_escape)
         save_state = self.__separate_ansi(words, ansi_escape)
         string = save_state.pop("string") if "string" in save_state else string
         self.__make_subclass((), save_state)
-        string = self.__resolve_mode(key, string, ignore)
+        string = self.__resolve_mode(key, string, scatter, ignore_case)
         return self.helper.get(string)
 
     def print(self, *args: Union[str, int], **kwargs: Dict[str, str]) -> None:
