@@ -34,6 +34,121 @@ class Color:
         return [str(item) for item in self.__dict__]
 
     @staticmethod
+    def __get_nested(
+        key: str,
+        args: List[str],
+        kwargs: Dict[str, Union[str, Dict[str, str]]],
+    ) -> Dict[str, str]:
+        # Run through corresponding allowed keys against the length of
+        # the processed args list and assign ordered list indices to each
+        # key
+        # Kwargs will be Color’s kwargs argument for class instance
+        # subclass
+        ints = {}
+        for index_, sub_key in enumerate(Color.keys):
+            if 0 <= index_ < len(args):
+                ints.update({sub_key: args[index_]})
+            kwargs[key] = ints
+        return kwargs
+
+    @staticmethod
+    def __normalize_old(key: str, ignore_case: bool) -> str:
+        # when `ignore_case` is True make all words lower case to
+        # properly match them
+        return key.lower() if ignore_case else key
+
+    @staticmethod
+    def __replace_keyword(word: str, keyword: str, rep_string: str) -> str:
+        if word == keyword:
+            return rep_string
+        return word
+
+    def __mark_word(self, string: str, keyword: str, rep_string: str) -> str:
+        compiled = []
+        words = string.split(" ")
+        # split for split in splits if split != ""
+        for word in words:
+            word = self.__replace_keyword(word, keyword, rep_string)
+            compiled.append(word)
+        return " ".join(compiled) if compiled else string
+
+    def __mark_words(self, key: str, string: str, ignore_case: bool) -> str:
+        re_mode = re.IGNORECASE if ignore_case else 0
+        for keyword in key:
+            if re.search(r"\b" + re.escape(keyword) + r"\b", string, re_mode):
+                rep_string = f"{Color.start}{keyword}{Color.stop}"
+                if rep_string not in string:
+                    return self.__mark_word(string, keyword, rep_string)
+        return string
+
+    def __manipulate_word(self, word: str) -> str:
+        decoded = word[1:-1]
+        colored = self.__resolve_code(decoded, start=True, colored=False)
+        return f"{colored}{self.helper.get('', reset=None)}"
+
+    def __color_words(self, string: str) -> str:
+        resolved = []
+        words = string.split(" ")
+        for word in words:
+            if word and word[0] == Color.start:
+                word = self.__manipulate_word(word)
+            resolved.append(word)
+        return " ".join(resolved) if resolved else string
+
+    def __resolve_code(self, char: str, start: bool, colored: bool) -> str:
+        # get formatted enter and exit codes
+        char = self.__get_enter_code(char, start)
+        if char != Color.stop or not colored:
+            return char
+        return self.helper.get("", reset=None)
+
+    @staticmethod
+    def __split_regex(string: str, ansi_escape: Pattern[str]) -> List[str]:
+        # split string by ansi escape codes
+        splits = re.split(ansi_escape, string)
+        return [split for split in splits if split != ""]
+
+    @staticmethod
+    def __populate_codes(
+        split, save_state: Dict[str, Union[Dict[str, int], str]]
+    ):
+        # return a dictionary of ansi codes to be reapplied later
+        if split != Color.reset:
+            save_state["helper"].update(
+                {
+                    "text": int(split[5]),
+                    "effect": int(split[2]),
+                    "background": int(split[8]),
+                }
+            )
+        return save_state
+
+    def __separate_ansi(
+        self, splits: List[str], ansi_escape: Pattern[str]
+    ) -> Dict[str, Dict[str, Any]]:
+        # add ansi codes and string with codes removed to a dictionary
+        # to manipulate separately
+        save_state = {"helper": {}}
+        for split in splits:
+            if ansi_escape.match(split):
+                save_state = self.__populate_codes(split, save_state)
+            else:
+                save_state.update({"string": split})
+        return save_state
+
+    def __class_ints(self, kwargs: Dict[str, str]) -> Dict[str, str]:
+        # Resolves values which may not be entered as tuples, and
+        # therefore will confuse the class methods which are expecting
+        # args
+        for key, value in list(kwargs.items()):
+            if not isinstance(value, dict) and key not in Color.keys:
+                if not isinstance(value, tuple):
+                    value = (value,)
+                args = self.__process_args(value)
+                kwargs = self.__get_nested(key, args, kwargs)
+        return kwargs
+
+    @staticmethod
     def __opts(key: str) -> List[str]:
         # dictionary of values to represent ansi escape codes
         opts = {
@@ -85,24 +200,6 @@ class Color:
             else:
                 values.append(arg)
         return values
-
-    @staticmethod
-    def __get_nested(
-        key: str,
-        args: List[str],
-        kwargs: Dict[str, Union[str, Dict[str, str]]],
-    ) -> Dict[str, str]:
-        # Run through corresponding allowed keys against the length of
-        # the processed args list and assign ordered list indices to each
-        # key
-        # Kwargs will be Color’s kwargs argument for class instance
-        # subclass
-        ints = {}
-        for index_, sub_key in enumerate(Color.keys):
-            if 0 <= index_ < len(args):
-                ints.update({sub_key: args[index_]})
-            kwargs[key] = ints
-        return kwargs
 
     def __kwargs_dict(self, kwargs: Dict[str, str]) -> Dict[str, str]:
         # Set any gaps in kwargs with the existing class values (not
@@ -165,24 +262,6 @@ class Color:
             kwargs = self.__get_processed(args, kwargs)
             self.__dict__.update(kwargs)
 
-    def __class_ints(self, kwargs: Dict[str, str]) -> Dict[str, str]:
-        # Resolves values which may not be entered as tuples, and
-        # therefore will confuse the class methods which are expecting
-        # args
-        for key, value in list(kwargs.items()):
-            if not isinstance(value, dict) and key not in Color.keys:
-                if not isinstance(value, tuple):
-                    value = (value,)
-                args = self.__process_args(value)
-                kwargs = self.__get_nested(key, args, kwargs)
-        return kwargs
-
-    @staticmethod
-    def __normalize_old(key: str, ignore_case: bool) -> str:
-        # when `ignore_case` is True make all words lower case to
-        # properly match them
-        return key.lower() if ignore_case else key
-
     @staticmethod
     def __sort_replacements(replacements: Dict[str, str]) -> List[str]:
         # place longer ones first to keep shorter substrings from
@@ -223,52 +302,7 @@ class Color:
     def __get_enter_code(self, char: str, start: bool) -> str:
         # if `start` is True the preceding character to this letter
         # has indicated that this is to be colored
-        return self.get(char) if start else char
-
-    def __get_escape_code(self, char: str) -> str:
-        # if an reset code is to be written then write it with the
-        # preserved ansi codes to bring the color back to the original
-        # lines color
-        return self.helper.get("", reset=None) if char == Color.stop else char
-
-    def __resolve_code(self, char: str, start: bool) -> str:
-        # get formatted enter and exit codes
-        char = self.__get_enter_code(char, start)
-        return self.__get_escape_code(char)
-
-    @staticmethod
-    def __split_regex(string: str, ansi_escape: Pattern[str]) -> List[str]:
-        # split string by ansi escape codes
-        splits = re.split(ansi_escape, string)
-        return [split for split in splits if split != ""]
-
-    @staticmethod
-    def __populate_codes(
-        split, save_state: Dict[str, Union[Dict[str, int], str]]
-    ):
-        # return a dictionary of ansi codes to be reapplied later
-        if split != Color.reset:
-            save_state["helper"].update(
-                {
-                    "text": int(split[5]),
-                    "effect": int(split[2]),
-                    "background": int(split[8]),
-                }
-            )
-        return save_state
-
-    def __separate_ansi(
-        self, splits: List[str], ansi_escape: Pattern[str]
-    ) -> Dict[str, Dict[str, Any]]:
-        # add ansi codes and string with codes removed to a dictionary
-        # to manipulate separately
-        save_state = {"helper": {}}
-        for split in splits:
-            if ansi_escape.match(split):
-                save_state = self.__populate_codes(split, save_state)
-            else:
-                save_state.update({"string": split})
-        return save_state
+        return self.key_marker.get(char, reset=None) if start else char
 
     @staticmethod
     def __get_indices(key: str) -> List[str]:
@@ -279,87 +313,88 @@ class Color:
                 string_list.append(index_)
         return string_list
 
-    def __mark_indices(
-        self, indices: List[str], string: str, scatter: bool, ignore_case: bool
-    ) -> str:
-        reps = []
-        rep_strs = []
-        rep_str = None
-        edited = string
-        for key in indices:
-            for item in key:
-                if ignore_case:
-                    cases = [item.upper(), item.lower()]
-                else:
-                    cases = [item]
-                marked = edited
-                for case in cases:
-                    rep_string = f"{Color.start}{case}{Color.stop}"
-                    edited = self.__rep_sub(marked, {case: rep_string})
-                if marked != edited:
-                    rep_strs.append(rep_string)
-                rep_str = "".join(rep_strs)
-        match = re.search(r"\b" + re.escape(rep_str) + r"\b", edited)
-        if scatter or match:
-            return edited
-        return string
-
-    def __color_indices(self, string: str) -> str:
+    def __color_indices(self, string: str, colored: bool) -> str:
         chars = []
         start = False
         for char in string:
             if char != Color.start:
-                char = self.__resolve_code(char, start)
+                char = self.__resolve_code(char, start, colored)
+                if char == Color.stop:
+                    char = Color.reset
                 chars.append(char)
                 start = False
             else:
                 start = True
         return "".join(chars) if chars else string
 
-    @staticmethod
-    def __replace_keyword(word: str, keyword: str, rep_string: str) -> str:
-        if word == keyword:
-            return rep_string
-        return word
+    def __find_word(self, key, string, ignore):
+        split_string = string.split()
+        for sub in split_string:
+            var_sub = self.__normalize_old(sub, ignore)
+            if var_sub == key or sub == key:
+                return sub
+        return None
 
-    def __mark_word(self, string: str, keyword: str, rep_string: str) -> str:
-        compiled = []
-        words = string.split(" ")
-        # split for split in splits if split != ""
-        for word in words:
-            word = self.__replace_keyword(word, keyword, rep_string)
-            compiled.append(word)
-        return " ".join(compiled) if compiled else string
-
-    def __mark_words(self, key: str, string: str, ignore_case: bool) -> str:
-        re_mode = re.IGNORECASE if ignore_case else 0
-        for keyword in key:
-            if re.search(r"\b" + re.escape(keyword) + r"\b", string, re_mode):
-                rep_string = f"{Color.start}{keyword}{Color.stop}"
-                if rep_string not in string:
-                    return self.__mark_word(string, keyword, rep_string)
+    def __mark_string(self, case, indices, string, scatter, ignore):
+        match = False
+        if not scatter:
+            case_str = "".join(indices)
+            case = self.__find_word(case_str, string, ignore)
+            if case:
+                match = True
+            else:
+                case = case_str
+        if scatter or match:
+            rep_string = f"{Color.start}{case}{Color.stop}"
+            return self.__rep_sub(string, {case: rep_string})
         return string
 
-    def __manipulate_word(self, word: str) -> str:
-        decoded = word[1:-1]
-        colored = self.__resolve_code(decoded, start=True)
-        return f"{colored}{self.helper.get('', reset=None)}"
-
-    def __color_words(self, string: str) -> str:
-        resolved = []
-        words = string.split(" ")
-        for word in words:
-            if word and word[0] == Color.start:
-                word = self.__manipulate_word(word)
-            resolved.append(word)
-        return " ".join(resolved) if resolved else string
+    def __mark_indices(
+        self, indices: List[str], string: str, scatter: bool, ignore: bool
+    ) -> str:
+        for key in indices:
+            for item in key:
+                cases = [item.upper(), item.lower()] if ignore else [indices]
+                for case in cases:
+                    string = self.__mark_string(
+                        case, indices, string, scatter, ignore
+                    )
+        return string
 
     def __resolve_mode(
-        self, key: str, string: str, scatter: bool, ignore_case: bool
+        self,
+        key: str,
+        string: str,
+        scatter: bool,
+        ignore_case: bool,
+        colored: bool,
     ) -> str:
         indices = self.__get_indices(key)
         marked = self.__mark_indices(indices, string, scatter, ignore_case)
-        return self.__color_indices(marked)
+        return self.__color_indices(marked, colored)
+
+    def pop(self, select: str) -> Optional[Any]:
+        """Remove keypair from __dict__ and return to variable
+
+        :param select:  Key to remove
+        :return:        Class dict or None
+        """
+        for key in list(self.__dict__):
+            if select == key and key not in Color.keys:
+                popped = self.__dict__[key]
+                del self.__dict__[key]
+                return popped
+        return None
+
+    def print(self, *args: Union[str, int], **kwargs: Dict[str, str]) -> None:
+        """Enhanced print function for class and subclasses
+
+        :param args:    Variable number of strings can be entered if
+                        syntax allows
+                        Method behaves just like builtin print()
+        :param kwargs:  builtin print() kwargs
+        """
+        print(self.get(*args), **kwargs)
 
     def set(self, *args: Any, **kwargs: Any) -> None:
         """Call to change/update/add class values or add subclasses for
@@ -377,19 +412,6 @@ class Color:
         self.__class_kwargs(args, kwargs)
         if self.effect != 1:
             self.__switch_bold()
-
-    def pop(self, select: str) -> Optional[Any]:
-        """Remove keypair from __dict__ and return to variable
-
-        :param select:  Key to remove
-        :return:        Class dict or None
-        """
-        for key in list(self.__dict__):
-            if select == key and key not in Color.keys:
-                popped = self.__dict__[key]
-                del self.__dict__[key]
-                return popped
-        return None
 
     def get(
         self, *args: Union[str, int], reset: Optional[str] = reset
@@ -413,8 +435,9 @@ class Color:
 
     def get_key(
         self,
-        key: Union[str, List[str]],
         string: str,
+        key: Union[str, List[str]],
+        color: Union[int, str] = 1,
         scatter: bool = False,
         ignore_case: bool = False,
     ) -> str:
@@ -428,23 +451,25 @@ class Color:
         :param string:      Parent string containing substrings
         :param key:         word to search and color
         :param scatter:     True will turn off case sensitive searching
-        :return:            String containing individual colored words
         :param ignore_case:
+        :param color:
+        :return:            String containing individual colored words
         """
+        self.__make_subclass((), {"key_marker": {"text": color}})
         ansi_escape = re.compile(r"(\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~]))")
-        words = self.__split_regex(string, ansi_escape)
-        save_state = self.__separate_ansi(words, ansi_escape)
-        string = save_state.pop("string") if "string" in save_state else string
-        self.__make_subclass((), save_state)
-        string = self.__resolve_mode(key, string, scatter, ignore_case)
-        return self.helper.get(string)
-
-    def print(self, *args: Union[str, int], **kwargs: Dict[str, str]) -> None:
-        """Enhanced print function for class and subclasses
-
-        :param args:    Variable number of strings can be entered if
-                        syntax allows
-                        Method behaves just like builtin print()
-        :param kwargs:  builtin print() kwargs
-        """
-        print(self.get(*args), **kwargs)
+        colored = Color.esc in string
+        if colored:
+            words = self.__split_regex(string, ansi_escape)
+            save_state = self.__separate_ansi(words, ansi_escape)
+            string = (
+                save_state.pop("string") if "string" in save_state else string
+            )
+            self.__make_subclass((), save_state)
+        string = self.__resolve_mode(
+            key, string, scatter, ignore_case, colored
+        )
+        del self.__dict__["key_marker"]
+        if colored:
+            string = self.helper.get(string)
+            del self.__dict__["helper"]
+        return string
