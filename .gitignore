@@ -1,6 +1,7 @@
 _build
 /build
 .coverage
+dev_requirements.txt
 /dist
 *.egg*
 .idea
