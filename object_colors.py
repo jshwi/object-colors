@@ -313,8 +313,13 @@ class Color:
         match_word = []
         for word in words:
             if ignore_case:
-                return self.__match_ignore_case(word, key, match_word, case)
-            return self.__match_exact(word, case)
+                case, match = self.__match_ignore_case(
+                    word, key, match_word, case
+                )
+            else:
+                case, match = self.__match_exact(word, case)
+            if match:
+                return case, match
         return case, False
 
     @staticmethod
@@ -404,9 +409,11 @@ class Color:
             self.__make_subclass((), save_state)
             reset = self.helper.get("", reset=None)
         indices = self.__get_indices(key, scatter, ignore_case)
-        matched = self.__mark_match(key, string, indices, scatter, ignore_case)
-        converted = self.__convert_string(reset, matched)
-        return self.__consume_helper(converted) if colored else converted
+        string = self.__mark_match(
+            key, string, indices, scatter, ignore_case
+        )
+        string = self.__convert_string(reset, string)
+        return self.__consume_helper(string) if colored else string
 
     def get(
         self, *args: Union[str, int], reset: Optional[str] = reset

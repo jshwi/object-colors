@@ -10,12 +10,12 @@ def all_colors():
 
 
 @fixture
-def small_colored_string(all_colors, small_test_string):
-    return all_colors.green.get(small_test_string)
+def small_color_test_string(all_colors, small_no_color_test_string):
+    return all_colors.green.get(small_no_color_test_string)
 
 
 @fixture
-def small_test_string():
+def small_no_color_test_string():
     return "Cc: My Business <me@mybusiness.com>;"
 
 
@@ -25,9 +25,26 @@ def marked_word():
 
 
 @fixture
+def marked_word_color():
+    return (
+        "\u001b[0;32;40m\u001b[0;31;40mCc:\u001b[0;32;40m My Business "
+        "<me@mybusiness.com>;\u001b[0;0m"
+    )
+
+
+@fixture
 def all_cs_marked():
     return (
         "\u001b[0;31;40mC\u001b[0;0m\u001b[0;31;40mc\u001b[0;0m"
         "\u001b[0;31;40m:\u001b[0;0m My Business <me@mybusiness."
         "\u001b[0;31;40mc\u001b[0;0mom>;"
+    )
+
+
+@fixture
+def all_cs_marked_color():
+    return (
+        "\u001b[0;32;40m\u001b[0;31;40mC\u001b[0;32;40m\u001b[0;31;40mc\u001b[0;32;40m"
+        "\u001b[0;31;40m:\u001b[0;32;40m My Business <me@mybusiness."
+        "\u001b[0;31;40mc\u001b[0;32;40mom>;\u001b[0;0m"
     )

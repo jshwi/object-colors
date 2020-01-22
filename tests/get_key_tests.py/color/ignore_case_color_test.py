@@ -2,9 +2,12 @@
 from object_colors import Color
 
 
-class TestIgnoreCase:
-    def test_exact_word_in_string_ignore_case(
-            self, all_colors: Color, small_test_string: str, marked_word: str
+class TestIgnoreCaseColor:
+    def test_exact_word_in_string_ignore_case_color(
+        self,
+        all_colors: Color,
+        small_color_test_string,
+        marked_word_color: str,
     ) -> None:
         """Test uncolored string entered in Color.get_key() to make sure
         an individual word which matches a word in the string exactly
@@ -13,12 +16,15 @@ class TestIgnoreCase:
         Ensure no other items are colored
         """
         colored_keys = all_colors.red.get_key(
-            small_test_string, "Cc:", ignore_case=True
+            small_color_test_string, "Cc:", ignore_case=True
         )
-        assert colored_keys == marked_word
+        assert colored_keys == marked_word_color
 
-    def test_word_in_string_ignore_case(
-            self, all_colors: Color, small_test_string: str, marked_word: str
+    def test_word_in_string_ignore_case_color(
+        self,
+        all_colors: Color,
+        small_color_test_string,
+        marked_word_color: str,
     ) -> None:
         """Test uncolored string entered in Color.get_key() to make sure
         an individual word which does not match a word in the string
@@ -26,6 +32,6 @@ class TestIgnoreCase:
         ignore argument is given with "cc:" key entered
         """
         colored_keys = all_colors.red.get_key(
-            small_test_string, "cc:", ignore_case=True
+            small_color_test_string, "cc:", ignore_case=True
         )
-        assert colored_keys == marked_word
+        assert colored_keys == marked_word_color
