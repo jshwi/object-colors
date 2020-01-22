@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 from object_colors import Color
 
 
@@ -6,12 +6,8 @@ class TestIgnoreCaseAndScatterNoColor:
     def test_exact_letter_in_string(
         self, all_colors: Color, small_no_color_test_string, all_cs_marked: str
     ) -> None:
-        """Test uncolored string entered in Color.get_key() to make sure
-        it comes out the same way it went in if no scatter or ignore
-        argument is given with "c" key entered
-        """
         colored_keys = all_colors.red.get_key(
-            small_no_color_test_string, "c", ignore_case=True, scatter=True
+            small_no_color_test_string, "c", case=True, any_=True
         )
         assert colored_keys == (
             "\u001b[0;31;40mC\u001b[0;0m\u001b[0;31;40mc\u001b[0;0m: "
@@ -26,26 +22,15 @@ class TestIgnoreCaseAndScatterNoColor:
         marked_word: str,
         all_cs_marked: str,
     ) -> None:
-        """Test uncolored string entered in Color.get_key() to make sure
-        an individual word which matches a word in the string exactly
-        comes out colored if no scatter or ignore argument is given with
-        "Cc:" key entered
-        Ensure no other items are colored
-        """
         colored_keys = all_colors.red.get_key(
-            small_no_color_test_string, "Cc:", ignore_case=True, scatter=True
+            small_no_color_test_string, "Cc:", case=True, any_=True
         )
         assert colored_keys == all_cs_marked
 
     def test_word_in_string(
         self, all_colors: Color, small_no_color_test_string, all_cs_marked: str
     ) -> None:
-        """Test uncolored string entered in Color.get_key() to make sure
-        an individual word which does not match a word in the string
-        exactly comes out the same way it came in if no scatter or
-        ignore argument is given with "cc:" key entered
-        """
         colored_keys = all_colors.red.get_key(
-            small_no_color_test_string, "cc:", ignore_case=True, scatter=True
+            small_no_color_test_string, "cc:", case=True, any_=True
         )
         assert colored_keys == all_cs_marked

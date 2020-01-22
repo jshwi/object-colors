@@ -33,6 +33,14 @@ def marked_word_color():
 
 
 @fixture
+def marked_second_word():
+    return (
+        "Cc: \u001b[0;31;40mMy\u001b[0;0m Business "
+        "<me@mybusiness.com>;"
+    )
+
+
+@fixture
 def all_cs_marked():
     return (
         "\u001b[0;31;40mC\u001b[0;0m\u001b[0;31;40mc\u001b[0;0m"

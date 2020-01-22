@@ -5,7 +5,6 @@ from object_colors import Color
 def test_color_string(
     small_no_color_test_string, small_color_test_string
 ) -> None:
-    """Tests if strings are correctly colored"""
     assert small_color_test_string == (
         f"\u001b[0;32;40m{small_no_color_test_string}\u001b[0;0m"
     )

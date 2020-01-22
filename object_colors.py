@@ -7,7 +7,7 @@ A simple to use class module designed to stylise output with minimal
 setup and instantiation
 """
 import re
-from typing import Union, Any, Optional, Tuple, Dict, List, Pattern
+from typing import Union, Any, Optional, Tuple, Dict, List
 
 
 class Color:
@@ -19,7 +19,6 @@ class Color:
     esc = "\u001b"
     reset = esc + "[0;0m"
     keys = ["text", "effect", "background"]
-    start, stop = "`", "~"
 
     def __init__(self, *args: Union[str, int], **kwargs: Any) -> None:
         self.text = 7
@@ -151,12 +150,6 @@ class Color:
         return None
 
     @staticmethod
-    def __normalize_old(key: str, ignore_case: bool) -> str:
-        # when `ignore_case` is True make all words lower case to
-        # properly match them
-        return key.lower() if ignore_case else key
-
-    @staticmethod
     def __opts(key: str) -> List[str]:
         # dictionary of values to represent ansi escape codes
         opts = {
@@ -220,200 +213,100 @@ class Color:
                 sub = True
         return sub
 
-    @staticmethod
-    def __separate_key(key: str) -> List[str]:
-        # separate the key given into individual letters so that:
-        #   - if ignore_case is given as an argument upper and lower
-        #     letters can be searched without changing the stdout to
-        #     lower cases
-        #   - scatter can easily be given as an argument no matter what
-        #     the search parameters given
-        indices = []
-        for item in key:
-            for index_ in item:
-                indices.append(index_)
-        return indices
-
-    @staticmethod
-    def __ignore_case_indices(indices: List[str]) -> List[str]:
-        # if ignore_case is True then normalize all strings into lower
-        # case to test against a string.lower() variable
-        for count, index in enumerate(indices):
-            indices[count] = index.lower()
-        return indices
-
-    @staticmethod
-    def __string_regex(string: str, case: str) -> str:
-        # e.g. ["C", "c", ":"], ["Cc:"], ["cc:"]
-        # case == "<ansi red>C<reset>" etc...
-        rep_string = f"{Color.start}{case}{Color.stop}"
-
-        # replacements = {"C": "<ansi red>C<reset>"
-        replacements = {case: rep_string}
-        rep_sorted = sorted(replacements, key=len, reverse=True)
-        rep_escaped = map(re.escape, rep_sorted)
-        pattern = re.compile("|".join(rep_escaped))
-        return pattern.sub(
-            lambda match_: replacements[match_.group(0)], string
-        )
-
-    def __consume_helper(self, string: str) -> str:
-        string = self.helper.get(string)
-        del self.__dict__["helper"]
-        return string
-
-    def __convert_string(self, reset: str, string: str) -> str:
-        chars = []
-        start = False
-        for char in string:
-            if char == Color.start:
-                start = True
-            else:
-                if start:
-                    char = self.get(char, reset=None)
-                    start = False
-                if char == Color.stop:
-                    chars.append(reset)
-                    continue
-                chars.append(char)
-        return "".join(chars) if chars else string
-
-    @staticmethod
-    def __get_case_indices(index_values: List[str]) -> List[str]:
-        indices = []
-        for key in index_values:
-            for item in key:
-                indices.append(item)
-                if item.isalnum():
-                    indices.append(item.swapcase())
-        return indices
-
-    @staticmethod
-    def __match_ignore_case(
-        word: str, key: str, match_word: List[str], case: str
-    ) -> Tuple[Any, bool]:
-        for letter in word:
-            for index_ in key:
-                if letter in (index_, index_.swapcase()):
-                    match_word.append(letter)
-                    break
-        if "".join(match_word) == word:
-            return word, True
-        return case, False
-
-    def __match_exact(self, word: str, case: str) -> Tuple[Any, bool]:
-        var_sub = self.__normalize_old(word, False)
-        if case in (var_sub, word):
-            return word, True
-        return case, False
-
-    def __get_match(
-        self, key: str, words: List[str], case: str, ignore_case: bool
-    ) -> Tuple[Any, bool]:
-        match_word = []
-        for word in words:
-            if ignore_case:
-                case, match = self.__match_ignore_case(
-                    word, key, match_word, case
-                )
-            else:
-                case, match = self.__match_exact(word, case)
-            if match:
-                return case, match
-        return case, False
-
-    @staticmethod
-    def __preserve(
-        ansi_escape: Pattern[str], word: str, save_state: Dict[str, Any]
-    ) -> Dict[str, Any]:
-        if ansi_escape.match(word):
-            if word != Color.reset:
-                save_state["helper"].update(
-                    {
-                        "text": int(word[5]),
-                        "effect": int(word[2]),
-                        "background": int(word[8]),
-                    }
-                )
-        else:
-            save_state.update({"string": word})
-        return save_state
-
-    def __mark_match(
-        self,
-        key: str,
-        string: str,
-        indices: List[str],
-        scatter: bool,
-        ignore_case: bool,
-    ):
-        for case in indices:
-            match = False
-            if not scatter:
-                case = "".join(indices)
-                split_string = string.split()
-                case, match = self.__get_match(
-                    key, split_string, case, ignore_case
-                )
-            if scatter or match:
-                string = self.__string_regex(string, case)
-        return string
-
-    def __preserve_string_color(self, string: str) -> Dict[str, Any]:
-        save_state = {"helper": {}}
+    def __save_state(self, string: str) -> str:
+        state = {"helper": {}}
         ansi_esc = re.compile(r"(\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~]))")
-        splits = re.split(ansi_esc, string)
-        filtered = [split for split in splits if split != ""]
-        for word in filtered:
-            save_state = self.__preserve(ansi_esc, word, save_state)
-        return save_state
+        words = re.split(ansi_esc, string)
+        filter_ = [word for word in words if word != ""]
+        for word in filter_:
+            if ansi_esc.match(word):
+                if word != Color.reset:
+                    state["helper"].update(
+                        {
+                            "text": int(word[5]),
+                            "effect": int(word[2]),
+                            "background": int(word[8]),
+                        }
+                    )
+            else:
+                state.update({"string": word})
+        if state["string"]:
+            string = state.pop("string")
+            self.__make_subclass((), state)
+        return string
 
-    def __get_indices(
-        self, key: str, scatter: bool, ignore_case: bool
-    ) -> List[str]:
-        indices = self.__separate_key(key)
-        if ignore_case:
-            indices = self.__get_case_indices(indices)
-        if scatter:
-            indices = list(dict.fromkeys(indices))
-        return indices
+    @staticmethod
+    def __get_index(key, any_: bool, case: bool) -> List[str]:
+        idx = []
+        key = list(key)
+        for key in key:
+            for letter in key:
+                idx.append(letter)
+                if case and letter.isalnum():
+                    idx.append(letter.swapcase())
+        if any_:
+            return list(dict.fromkeys(idx))
+        return idx
 
-    def get_key(
-        self,
-        string: str,
-        key: Union[str, List[str]],
-        scatter: bool = False,
-        ignore_case: bool = False,
+    @staticmethod
+    def __scatter_positions(
+        ours: str, letter: str, pos: List[int], count: int
+    ) -> List[int]:
+        for theirs in letter:
+            if ours == theirs:
+                pos.append(count)
+        return pos
+
+    def __get_key_positions(
+        self, str_: str, idx: List[str], any_: bool, pos: List[str]
+    ) -> List[int]:
+        word = []
+        for count in range(len(str_)):
+            letter = str_[count]
+            for ours in idx:
+                if any_:
+                    pos = self.__scatter_positions(ours, letter, pos, count)
+                else:
+                    if ours == letter:
+                        word.append(letter)
+                    theirs = "".join(word)
+                    # match full word and then start again
+                    if ours == theirs:
+                        pos.append(0)
+                        word.clear()
+            word.append(letter)
+        return pos
+
+    def __color_keys(
+        self, key: str, str_: str, pos: List[int], reset: str, any_: bool
     ) -> str:
-        """remove ansi codes so they don't clash with search items
-        if the string is not already without ansi codes save it as the
-        bare string created during separation of ansi codes
-        make the `self.helper` subclass from preserved ansi codes
-        color letters / words based on the ignore boolean passed
-        recolor the string
+        freeze = 0
+        compile_ = []
+        len_key = len(key) if not any_ else 1
+        single = len_key == 1
+        applied = False
+        for count in range(len(str_)):
+            letter = str_[count]
+            if pos and count == pos[0]:
+                freeze = count - 1
+                letter = self.get(letter, reset=None)
+                applied = True
+                pos.pop(0)
+            added = freeze + len_key
+            if (count == added or single) and applied:
+                letter += reset
+                applied = False
+            compile_.append(letter)
+        return "".join(compile_)
 
-        :param string:      Parent string containing substrings
-        :param key:         word to search and color
-        :param scatter:     True will turn off case sensitive searching
-        :param ignore_case:
-        :return:            String containing individual colored words
-        """
-        if Color.start in key or Color.stop in key:
-            return string
-        reset = Color.reset
-        colored = Color.esc in string
-        if colored:
-            save_state = self.__preserve_string_color(string)
-            if save_state["string"]:
-                string = save_state.pop("string")
-            self.__make_subclass((), save_state)
-            reset = self.helper.get("", reset=None)
-        indices = self.__get_indices(key, scatter, ignore_case)
-        string = self.__mark_match(
-            key, string, indices, scatter, ignore_case
-        )
-        string = self.__convert_string(reset, string)
-        return self.__consume_helper(string) if colored else string
+    @staticmethod
+    def __extract_args(*args: str) -> Union[str, List[str]]:
+        keys = []
+        for arg in args:
+            if len(args) > 1:
+                keys.append(arg)
+            return arg
+        return keys
 
     def get(
         self, *args: Union[str, int], reset: Optional[str] = reset
@@ -434,6 +327,29 @@ class Color:
         for arg in args:
             arg_list.append(setting + arg + reset)
         return tuple(arg_list)
+
+    def get_key(
+        self,
+        str_: str,
+        *keys: str,
+        any_: bool = False,
+        case: bool = False,
+    ) -> str:
+        reset = Color.reset
+        color = Color.esc in str_
+        if color:
+            str_ = self.__save_state(str_)
+            reset = self.helper.get("", reset=None)
+        pos = []
+        for key in keys:
+            if any_ or case:
+                key = self.__get_index(key, any_, case)
+            pos = self.__get_key_positions(str_, key, any_, pos)
+            str_ = self.__color_keys(key, str_, pos, reset, any_)
+        if color:
+            str_ = self.helper.get(str_)
+            del self.__dict__["helper"]
+        return str_
 
     def print(self, *args: Union[str, int], **kwargs: Dict[str, str]) -> None:
         """Enhanced print function for class and subclasses
