@@ -118,37 +118,6 @@ class Color:
         # if, otherwise return its default, False
         return kwargs.pop("populate") if "populate" in kwargs else False
 
-    def set(self, *args: Any, **kwargs: Any) -> None:
-        """Call to change/update/add class values or add subclasses for
-        new text, effects and backgrounds
-
-        :param args:    Integer escape codes or strings to be converted
-                        into escape codes
-        :param kwargs:  More precise keyword arguments
-        """
-        passed = self.__populate_passed(kwargs)
-        if passed:
-            self.__populate_colors()
-        dict_ = self.__kwargs_dict(kwargs)
-        dict_ints = self.__class_ints(dict_)
-        args = self.__process_args(args)
-        self.__class_kwargs(args, dict_ints)
-        if self.effect != 1:
-            self.__switch_bold()
-
-    def pop(self, select: str) -> Optional[Any]:
-        """Remove keypair from __dict__ and return to variable
-
-        :param select:  Key to remove
-        :return:        Class dict or None
-        """
-        for key in list(self.__dict__):
-            if select == key and key not in Color.keys:
-                popped = self.__dict__[key]
-                del self.__dict__[key]
-                return popped
-        return None
-
     @staticmethod
     def __opts(key: str) -> List[str]:
         # dictionary of values to represent ansi escape codes
@@ -236,9 +205,9 @@ class Color:
         return string
 
     @staticmethod
-    def __get_index(key, any_: bool, case: bool) -> List[str]:
+    def __get_index(keys, any_: bool, case: bool) -> List[str]:
         idx = []
-        key = list(key)
+        key = list(keys)
         for key in key:
             for letter in key:
                 idx.append(letter)
@@ -249,32 +218,16 @@ class Color:
         return idx
 
     @staticmethod
-    def __scatter_positions(
-        ours: str, letter: str, pos: List[int], count: int
-    ) -> List[int]:
-        for theirs in letter:
-            if ours == theirs:
-                pos.append(count)
-        return pos
-
     def __get_key_positions(
-        self, str_: str, idx: List[str], any_: bool, pos: List[str]
+        str_: str, key: str, pos: List[int], case: bool
     ) -> List[int]:
-        word = []
-        for count in range(len(str_)):
-            letter = str_[count]
-            for ours in idx:
-                if any_:
-                    pos = self.__scatter_positions(ours, letter, pos, count)
-                else:
-                    if ours == letter:
-                        word.append(letter)
-                    theirs = "".join(word)
-                    # match full word and then start again
-                    if ours == theirs:
-                        pos.append(0)
-                        word.clear()
-            word.append(letter)
+        if case:
+            str_ = str_.lower()
+            key = key.lower()
+        if f" {key} " in f" {str_} ":
+            places = [p for p in range(len(str_)) if str_.find(key, p) == p]
+            for place in places:
+                pos.append(place)
         return pos
 
     def __color_keys(
@@ -285,7 +238,7 @@ class Color:
         len_key = len(key) if not any_ else 1
         single = len_key == 1
         applied = False
-        for count in range(len(str_)):
+        for count, _ in enumerate(str_):
             letter = str_[count]
             if pos and count == pos[0]:
                 freeze = count - 1
@@ -300,13 +253,45 @@ class Color:
         return "".join(compile_)
 
     @staticmethod
-    def __extract_args(*args: str) -> Union[str, List[str]]:
-        keys = []
-        for arg in args:
-            if len(args) > 1:
-                keys.append(arg)
-            return arg
-        return keys
+    def __scatter_pos(str_: str, idx: List[str], pos: List[int]) -> List[int]:
+        for count, _ in enumerate(str_):
+            letter = str_[count]
+            for ours in idx:
+                for theirs in letter:
+                    if ours == theirs:
+                        pos.append(count)
+        return pos
+
+    def set(self, *args: Any, **kwargs: Any) -> None:
+        """Call to change/update/add class values or add subclasses for
+        new text, effects and backgrounds
+
+        :param args:    Integer escape codes or strings to be converted
+                        into escape codes
+        :param kwargs:  More precise keyword arguments
+        """
+        passed = self.__populate_passed(kwargs)
+        if passed:
+            self.__populate_colors()
+        dict_ = self.__kwargs_dict(kwargs)
+        dict_ints = self.__class_ints(dict_)
+        args = self.__process_args(args)
+        self.__class_kwargs(args, dict_ints)
+        if self.effect != 1:
+            self.__switch_bold()
+
+    def pop(self, select: str) -> Optional[Any]:
+        """Remove keypair from __dict__ and return to variable
+
+        :param select:  Key to remove
+        :return:        Class dict or None
+        """
+        for key in list(self.__dict__):
+            if select == key and key not in Color.keys:
+                popped = self.__dict__[key]
+                del self.__dict__[key]
+                return popped
+        return None
 
     def get(
         self, *args: Union[str, int], reset: Optional[str] = reset
@@ -329,22 +314,31 @@ class Color:
         return tuple(arg_list)
 
     def get_key(
-        self,
-        str_: str,
-        *keys: str,
-        any_: bool = False,
-        case: bool = False,
+        self, str_: str, *keys: str, any_: bool = False, case: bool = False,
     ) -> str:
+        """With the string as the first argument and one or more keys
+        following, color the key within the word and leave the reset
+        untouched
+        Ansi escaped strings may be entered
+
+        :param str_:    String containing the key to color
+        :param keys:    Key(s) within string to color
+        :param any_:    Color key in any assortment
+        :param case:    Ignore upper and lower cases
+        :return:        String as it was with selected key colored
+        """
+        pos = []
         reset = Color.reset
         color = Color.esc in str_
         if color:
             str_ = self.__save_state(str_)
             reset = self.helper.get("", reset=None)
-        pos = []
         for key in keys:
-            if any_ or case:
-                key = self.__get_index(key, any_, case)
-            pos = self.__get_key_positions(str_, key, any_, pos)
+            if any_:
+                idx = self.__get_index(key, any_, case)
+                pos = self.__scatter_pos(str_, idx, pos)
+            else:
+                pos = self.__get_key_positions(str_, key, pos, case)
             str_ = self.__color_keys(key, str_, pos, reset, any_)
         if color:
             str_ = self.helper.get(str_)
