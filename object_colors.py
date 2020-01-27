@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
-
 """object-colors
-     A Python Color Dictionary
+The Python Color Dictionary
 
 A simple to use class module designed to stylise output with minimal
 setup and instantiation
@@ -172,7 +171,8 @@ class Color:
     def __make_subclass(
         self, args: Tuple, kwargs: Dict[str, Dict[str, Any]]
     ) -> bool:
-        # Returned list and dict will replace the arg and kwarg parameters
+        # Returned list and dict will replace the arg and kwarg
+        # parameters
         sub = False
         for key, value in list(kwargs.items()):
             if isinstance(value, dict):
@@ -182,10 +182,11 @@ class Color:
                 sub = True
         return sub
 
-    def __save_state(self, string: str) -> str:
+    @staticmethod
+    def __make_state_obj(str_: str):
         state = {"helper": {}}
         ansi_esc = re.compile(r"(\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~]))")
-        words = re.split(ansi_esc, string)
+        words = re.split(ansi_esc, str_)
         filter_ = [word for word in words if word != ""]
         for word in filter_:
             if ansi_esc.match(word):
@@ -199,29 +200,35 @@ class Color:
                     )
             else:
                 state.update({"string": word})
+        return state
+
+    def __instantiate_state(self, str_: str) -> str:
+        # separate ansi code from string, creating a Color subclass from
+        # the pre-existing color, available in self, and returning the
+        # bare string
+        state = self.__make_state_obj(str_)
         if state["string"]:
-            string = state.pop("string")
+            str_ = state.pop("string")
             self.__make_subclass((), state)
-        return string
+        return str_
 
     @staticmethod
-    def __get_index(keys, any_: bool, case: bool) -> List[str]:
+    def __get_index(key: str, switches: Dict[str, bool]) -> List[str]:
+        # separate all characters into individual indices
         idx = []
-        key = list(keys)
-        for key in key:
-            for letter in key:
-                idx.append(letter)
-                if case and letter.isalnum():
-                    idx.append(letter.swapcase())
-        if any_:
-            return list(dict.fromkeys(idx))
-        return idx
+        key = list(key)
+        for letter in key:
+            idx.append(letter)
+            if switches["case"] and letter.isalnum():
+                idx.append(letter.swapcase())
+        return list(dict.fromkeys(idx))
 
     @staticmethod
     def __get_key_positions(
-        str_: str, key: str, pos: List[int], case: bool
+        str_: str, key: str, pos: List[int], switches: Dict[str, bool]
     ) -> List[int]:
-        if case:
+        # get position of searched term as an integer within string
+        if switches["case"]:
             str_ = str_.lower()
             key = key.lower()
         if f" {key} " in f" {str_} ":
@@ -231,11 +238,11 @@ class Color:
         return pos
 
     def __color_keys(
-        self, key: str, str_: str, pos: List[int], reset: str, any_: bool
+        self, str_: str, pos: List[int], reset: str, len_key: int
     ) -> str:
+        # color the searched keys bases on their index within the string
         freeze = 0
         compile_ = []
-        len_key = len(key) if not any_ else 1
         single = len_key == 1
         applied = False
         for count, _ in enumerate(str_):
@@ -254,6 +261,7 @@ class Color:
 
     @staticmethod
     def __scatter_pos(str_: str, idx: List[str], pos: List[int]) -> List[int]:
+        # get the scattered position of searched keys within string
         for count, _ in enumerate(str_):
             letter = str_[count]
             for ours in idx:
@@ -261,6 +269,32 @@ class Color:
                     if ours == theirs:
                         pos.append(count)
         return pos
+
+    def __resolve_ansi_code(
+        self, keys: Tuple[str], str_: str, switches: Dict[str, bool]
+    ):
+        str_ = self.__instantiate_state(str_)
+        reset = self.helper.get("", reset=None)
+        str_ = self.__manipulate_string(keys, str_, reset, switches)
+        str_ = self.helper.get(str_)
+        del self.__dict__["helper"]
+        return str_
+
+    def __mode_position(
+        self, key: str, str_: str, pos: List[int], switches: Dict[str, bool]
+    ):
+        if switches["any"]:
+            idx = self.__get_index(key, switches)
+            return self.__scatter_pos(str_, idx, pos)
+        return self.__get_key_positions(str_, key, pos, switches)
+
+    def __manipulate_string(self, keys, str_, reset, switches):
+        pos = []
+        for key in keys:
+            pos = self.__mode_position(key, str_, pos, switches)
+            len_key = len(key) if not switches["any"] else 1
+            str_ = self.__color_keys(str_, pos, reset, len_key)
+        return str_
 
     def set(self, *args: Any, **kwargs: Any) -> None:
         """Call to change/update/add class values or add subclasses for
@@ -327,23 +361,10 @@ class Color:
         :param case:    Ignore upper and lower cases
         :return:        String as it was with selected key colored
         """
-        pos = []
-        reset = Color.reset
-        color = Color.esc in str_
-        if color:
-            str_ = self.__save_state(str_)
-            reset = self.helper.get("", reset=None)
-        for key in keys:
-            if any_:
-                idx = self.__get_index(key, any_, case)
-                pos = self.__scatter_pos(str_, idx, pos)
-            else:
-                pos = self.__get_key_positions(str_, key, pos, case)
-            str_ = self.__color_keys(key, str_, pos, reset, any_)
-        if color:
-            str_ = self.helper.get(str_)
-            del self.__dict__["helper"]
-        return str_
+        switches = {"any": any_, "case": case}
+        if Color.esc in str_:
+            return self.__resolve_ansi_code(keys, str_, switches)
+        return self.__manipulate_string(keys, str_, Color.reset, switches)
 
     def print(self, *args: Union[str, int], **kwargs: Dict[str, str]) -> None:
         """Enhanced print function for class and subclasses

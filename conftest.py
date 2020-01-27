@@ -34,10 +34,7 @@ def marked_word_color():
 
 @fixture
 def marked_second_word():
-    return (
-        "Cc: \u001b[0;31;40mMy\u001b[0;0m Business "
-        "<me@mybusiness.com>;"
-    )
+    return "Cc: \u001b[0;31;40mMy\u001b[0;0m Business " "<me@mybusiness.com>;"
 
 
 @fixture
@@ -52,7 +49,26 @@ def all_cs_marked():
 @fixture
 def all_cs_marked_color():
     return (
-        "\u001b[0;32;40m\u001b[0;31;40mC\u001b[0;32;40m\u001b[0;31;40mc\u001b[0;32;40m"
+        "\u001b[0;32;40m\u001b[0;31;40mC\u001b[0;32;40m\u001b[0;31;40mc"
+        "\u001b[0;32;40m"
         "\u001b[0;31;40m:\u001b[0;32;40m My Business <me@mybusiness."
         "\u001b[0;31;40mc\u001b[0;32;40mom>;\u001b[0;0m"
+    )
+
+
+@fixture
+def dupes():
+    return (
+        "This is a string that says one several times. It says one in this "
+        "sentence. And one in this sentence. This sentence also has one in it. "
+        "Lastly this sentence will also say one"
+    )
+
+
+@fixture
+def colored_dupes():
+    return (
+        "\u001b[0;32;40mThis is a string that says one several times. It says "
+        "one in this sentence. And one in this sentence. This sentence also "
+        "has one in it. Lastly this sentence will also say one\u001b[0;0m"
     )
