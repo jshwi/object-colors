@@ -2,12 +2,8 @@
 from object_colors import Color
 
 
-def test_color_string(
-    small_no_color_test_string, small_color_test_string
-) -> None:
-    assert small_color_test_string == (
-        f"\u001b[0;32;40m{small_no_color_test_string}\u001b[0;0m"
-    )
+def test_color_string(str_, color_str) -> None:
+    assert color_str == (f"\u001b[0;32;40m{str_}\u001b[0;0m")
 
 
 def test__getattr__():

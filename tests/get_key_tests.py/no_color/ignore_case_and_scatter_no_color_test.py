@@ -1,36 +1,48 @@
 #!/usr/bin/env python3
+
 from object_colors import Color
 
 
-class TestIgnoreCaseAndScatterNoColor:
+class TestIgnoreCaseAndScatter:
     def test_exact_letter_in_string(
-        self, all_colors: Color, small_no_color_test_string, all_cs_marked: str
+        self,
+        colors: Color,
+        str_,
+        color_str: str,
+        all_cs: str,
+        exact_idx: str,
+        exact_idx_color: str,
     ) -> None:
-        colored_keys = all_colors.red.get_key(
-            small_no_color_test_string, "c", case=True, any_=True
-        )
-        assert colored_keys == (
-            "\u001b[0;31;40mC\u001b[0;0m\u001b[0;31;40mc\u001b[0;0m: "
-            "My Business <me@mybusiness."
-            "\u001b[0;31;40mc\u001b[0;0mom>;"
-        )
+        keys = colors.red.get_key(str_, "c", case=True, any_=True)
+        color_keys = colors.red.get_key(color_str, "c", case=True, any_=True)
+        assert keys == exact_idx
+        assert color_keys == exact_idx_color
 
     def test_exact_word_in_string(
         self,
-        all_colors: Color,
-        small_no_color_test_string,
-        marked_word: str,
-        all_cs_marked: str,
+        colors: Color,
+        str_: str,
+        marked: str,
+        all_cs: str,
+        color_str: str,
+        all_cs_color: str,
     ) -> None:
-        colored_keys = all_colors.red.get_key(
-            small_no_color_test_string, "Cc:", case=True, any_=True
-        )
-        assert colored_keys == all_cs_marked
+        keys = colors.red.get_key(str_, "Cc:", case=True, any_=True)
+        color_keys = colors.red.get_key(color_str, "Cc:", case=True, any_=True)
+        assert keys == all_cs
+        assert color_keys == all_cs_color
 
     def test_word_in_string(
-        self, all_colors: Color, small_no_color_test_string, all_cs_marked: str
+        self,
+        colors: Color,
+        str_: str,
+        color_str: str,
+        all_cs: str,
+        all_cs_color: str,
     ) -> None:
-        colored_keys = all_colors.red.get_key(
-            small_no_color_test_string, "cc:", case=True, any_=True
+        keys = colors.red.get_key(str_, "cc:", case=True, any_=True)
+        assert keys == all_cs
+        colored_keys = colors.red.get_key(
+            color_str, "cc:", case=True, any_=True
         )
-        assert colored_keys == all_cs_marked
+        assert colored_keys == all_cs_color

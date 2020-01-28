@@ -4,46 +4,57 @@ from object_colors import Color
 
 class TestNoArgsColor:
     def test_exact_letter_in_colored_string_color(
-        self, all_colors: Color, small_color_test_string: str
+        self, colors: Color, color_str: str, str_: str
     ) -> None:
-        colored_keys = all_colors.red.get_key(small_color_test_string, "c")
-        assert colored_keys == small_color_test_string
+        keys = colors.red.get_key(str_, "c")
+        assert keys == color_str
+        colored_keys = colors.red.get_key(color_str, "c")
+        assert colored_keys == color_str
 
     def test_exact_word_in_string_color(
-        self, all_colors: Color, small_color_test_string: str
+        self,
+        colors: Color,
+        color_str: str,
+        marked_color: str,
+        str_: str,
+        color_keys: str,
     ) -> None:
-        colored_keys = all_colors.red.get_key(small_color_test_string, "Cc:")
-        assert colored_keys == (
-            "\u001b[0;32;40m\u001b[0;31;40mCc:\u001b[0;32;40m My Business "
-            "<me@mybusiness.com>;\u001b[0;0m"
-        )
+        keys = colors.red.get_key(str_, "Cc:")
+        assert keys == marked_color
+        colored_keys = colors.red.get_key(color_str, "Cc:")
+        assert colored_keys == marked_color
 
     def test_exact_second_word_in_string_color(
-        self, all_colors: Color, small_color_test_string: str
+        self,
+        colors: Color,
+        color_str: str,
+        marked_second_color: str,
+        str_: str,
+        marked_second: str,
     ) -> None:
         """verify indices are working (at least for some)"""
-        colored_keys = all_colors.red.get_key(small_color_test_string, "My")
-        assert colored_keys == (
-            "\u001b[0;32;40mCc: \u001b[0;31;40mMy\u001b[0;32;40m Business "
-            "<me@mybusiness.com>;\u001b[0;0m"
-        )
+        keys = colors.red.get_key(str_, "My")
+        assert keys == marked_second
+        colored_keys = colors.red.get_key(color_str, "My")
+        assert colored_keys == marked_second_color
 
     def test_dupe_words_no_color(
-        self, all_colors: Color, colored_dupes: str
+        self,
+        colors: Color,
+        colored_dupes: str,
+        dupe_marked_color,
+        dupes,
+        dupe_marked,
     ) -> None:
-        colored_keys = all_colors.red.get_key(colored_dupes, "one")
-        assert colored_keys == (
-            "\u001b[0;32;40mThis is a string that says "
-            "\u001b[0;31;40mone\u001b[0;32;40m several times. "
-            "It says \u001b[0;31;40mone\u001b[0;32;40m in this "
-            "sentence. And \u001b[0;31;40mone\u001b[0;32;40m in this sentence. "
-            "This sentence also has \u001b[0;31;40mone\u001b[0;32;40m in "
-            "it. Lastly this sentence will also say "
-            "\u001b[0;31;40mone\u001b[0;32;40m\u001b[0;0m"
-        )
+        keys = colors.red.get_key(dupes, "one")
+        assert keys == dupe_marked
+        colored_keys = colors.red.get_key(colored_dupes, "one")
+        assert colored_keys == dupe_marked_color
 
     def test_word_in_string_color(
-        self, all_colors: Color, small_color_test_string: str
+        self, colors: Color, color_str: str, str_: str
     ) -> None:
-        colored_keys = all_colors.red.get_key(small_color_test_string, "cc:")
-        assert colored_keys == small_color_test_string
+        keys = colors.red.get_key(str_, "cc:")
+        assert keys == str_
+        colored_keys = colors.red.get_key(color_str, "cc:")
+        assert colored_keys == color_str
