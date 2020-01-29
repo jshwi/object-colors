@@ -1,7 +1,7 @@
 __author__ = "Stephen Whitlock"
 __copyright__ = "Copyright 2019, Stephen Whitlock"
 __license__ = "MIT"
-__version__ = "1.0.6"
+__version__ = "1.0.7"
 __maintainer__ = "Stephen Whitlock"
 __email__ = "stephen@jshwisolutions.com"
 __status__ = "Production"
