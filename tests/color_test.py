@@ -78,3 +78,9 @@ def test_color_print(capsys):
 def test_int_dict():
     color = Color(orange=1)
     assert color.text == 7
+
+
+def test_rainbow(str_, capsys):
+    color = Color(populate=True)
+    rb = color.rainbow(str_)
+    print(rb)

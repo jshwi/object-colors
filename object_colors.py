@@ -6,6 +6,7 @@ A simple to use class module designed to stylise output with minimal
 setup and instantiation
 """
 import re
+from random import randint
 from typing import Union, Any, Optional, Tuple, Dict, List, Pattern
 
 
@@ -101,16 +102,16 @@ class Color:
         return args
 
     def __class_kwargs(
-            self,
-            args: Union[tuple, list],
-            kwargs: Union[Dict[str, str], Dict[str, Dict[str, Any]]],
+        self,
+        args: Union[tuple, list],
+        kwargs: Union[Dict[str, str], Dict[str, Dict[str, Any]]],
     ) -> None:
         if not self.__make_subclass(args, kwargs):
             kwargs = self.__get_processed(args, kwargs)
             self.__dict__.update(kwargs)
 
     def __get_processed(
-            self, args: Tuple[Any], kwargs: Dict[str, str]
+        self, args: Tuple[Any], kwargs: Dict[str, str]
     ) -> Dict[str, str]:
         # Organise args and kwargs into a parsable dictionary
         for index_, key in enumerate(Color.keys):
@@ -121,14 +122,14 @@ class Color:
         return kwargs
 
     def __set_class(
-            self, key: str, value: Dict[str, Any], args: Tuple[str]
+        self, key: str, value: Dict[str, Any], args: Tuple[str]
     ) -> None:
         value = self.__get_processed(args, value)
         color = Color(*args, **value)
         setattr(self, key, color)
 
     def __make_subclass(
-            self, args: Tuple, kwargs: Dict[str, Dict[str, Any]]
+        self, args: Tuple, kwargs: Dict[str, Dict[str, Any]]
     ) -> bool:
         # Returned list and dict will replace the arg and kwarg
         # parameters
@@ -151,7 +152,7 @@ class Color:
             self.__switch_bold()
 
     def __args_tuple(
-            self, args: Tuple[Union[str, int]], reset: str
+        self, args: Tuple[Union[str, int]], reset: str
     ) -> Tuple[Union[str, int]]:
         args = list(args)
         for count, arg in enumerate(args):
@@ -179,7 +180,7 @@ class Color:
 
     @staticmethod
     def __reverse_codes(
-            word: str, helper: Dict[str, Union[str, int]]
+        word: str, helper: Dict[str, Union[str, int]]
     ) -> Dict[str, Union[str, int]]:
         codes = {"text": 5, "effect": 2, "background": 8}
         for key, value in codes.items():
@@ -187,10 +188,10 @@ class Color:
         return helper
 
     def __populate_state_obj(
-            self,
-            word: str,
-            state: Dict[str, Union[str, Dict[str, str]]],
-            ansi_esc: Pattern[str],
+        self,
+        word: str,
+        state: Dict[str, Union[str, Dict[str, str]]],
+        ansi_esc: Pattern[str],
     ) -> Dict[str, Union[str, Dict[str, str]]]:
         if ansi_esc.match(word):
             if word != Color.reset:
@@ -200,7 +201,7 @@ class Color:
         return state
 
     def __make_state_obj(
-            self, str_: str
+        self, str_: str
     ) -> Dict[str, Union[str, Dict[str, str]]]:
         ansi_esc = re.compile(r"(\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~]))")
         words = re.split(ansi_esc, str_)
@@ -225,10 +226,10 @@ class Color:
 
     @staticmethod
     def __alternate_opts(
-            key: str,
-            kwargs: Dict[str, Union[str, int]],
-            opts: List[str],
-            default: str,
+        key: str,
+        kwargs: Dict[str, Union[str, int]],
+        opts: List[str],
+        default: str,
     ) -> Dict[str, Union[str, int]]:
         # will assign the default value to kwargs if invalid value is
         # provided otherwise if keypair is string - but valid - value
@@ -255,7 +256,7 @@ class Color:
         return str_
 
     def __resolve_ansi_code(
-            self, keys: Tuple[str], str_: str, switches: Dict[str, bool]
+        self, keys: Tuple[str], str_: str, switches: Dict[str, bool]
     ) -> str:
         str_ = self.__instantiate_state(str_)
         reset = self.helper.get("", reset=None)
@@ -277,7 +278,7 @@ class Color:
 
     @staticmethod
     def __get_key_positions(
-            str_: str, key: str, pos: List[int], switches: Dict[str, bool]
+        str_: str, key: str, pos: List[int], switches: Dict[str, bool]
     ) -> List[int]:
         # get position of searched term as an integer within string
         if switches["case"]:
@@ -290,7 +291,7 @@ class Color:
         return pos
 
     def __mode_position(
-            self, key: str, str_: str, pos: List[int], switches: Dict[str, bool]
+        self, key: str, str_: str, pos: List[int], switches: Dict[str, bool]
     ) -> List[int]:
         if switches["any"]:
             idx = self.__get_index(key, switches)
@@ -298,10 +299,10 @@ class Color:
         return self.__get_key_positions(str_, key, pos, switches)
 
     def __color_index(
-            self,
-            obj: Dict[str, Union[str, int, bool, List[str]]],
-            str_: str,
-            count: int,
+        self,
+        obj: Dict[str, Union[str, int, bool, List[str]]],
+        str_: str,
+        count: int,
     ) -> Dict[str, Union[str, int, bool, List[str]]]:
         whitespace = 1
         freeze = count - whitespace
@@ -314,10 +315,10 @@ class Color:
 
     @staticmethod
     def __reset_index(
-            obj: Dict[str, Union[str, int, bool]],
-            reset: str,
-            len_key: int,
-            count: int,
+        obj: Dict[str, Union[str, int, bool]],
+        reset: str,
+        len_key: int,
+        count: int,
     ) -> Dict[str, Union[str, int, bool]]:
         # index of string has reached position of search key
         # add the length of the search key to the frozen count
@@ -331,7 +332,7 @@ class Color:
         return obj
 
     def __color_keys(
-            self, str_: str, pos: List[int], reset: str, len_key: int
+        self, str_: str, pos: List[int], reset: str, len_key: int
     ) -> str:
         # color the searched keys bases on their index within the string
         compile_ = []
@@ -344,11 +345,11 @@ class Color:
         return "".join(compile_)
 
     def __manipulate_string(
-            self,
-            keys: Tuple[str],
-            str_: str,
-            reset: str,
-            switches: Dict[str, bool],
+        self,
+        keys: Tuple[str],
+        str_: str,
+        reset: str,
+        switches: Dict[str, bool],
     ) -> str:
         pos = []
         for key in keys:
@@ -356,6 +357,26 @@ class Color:
             len_key = len(key) if not switches["any"] else 1
             str_ = self.__color_keys(str_, pos, reset, len_key)
         return str_
+
+    def __get_rainbow_obj(self) -> Dict[str, Union[List[type], List[int]]]:
+        colors = {"code": [], "classes": []}
+        for key, value in self.__dict__.items():
+            if not isinstance(value, int) and key not in ("bold", "black"):
+                colors["classes"].append(value)
+                colors["code"].append(value.text)
+        colors["code"] = list(dict.fromkeys(colors["code"]))
+        return colors
+
+    @staticmethod
+    def __rainbow_str(str_, colors):
+        full_str = []
+        for count, _ in enumerate(str_):
+            code = randint(colors["code"][0], colors["code"][-1])
+            for class_ in colors["classes"]:
+                if class_.text == code:
+                    idx = class_.get(str_[count])
+                    full_str.append(idx)
+        return "".join(full_str)
 
     def set(self, *args: Any, **kwargs: Any) -> None:
         """Call to change/update/add class values or add subclasses for
@@ -383,7 +404,7 @@ class Color:
         return None
 
     def get(
-            self, *args: Union[str, int], reset: Optional[str] = reset
+        self, *args: Union[str, int], reset: Optional[str] = reset
     ) -> Union[str, Tuple[Union[str, Any], ...]]:
         """String can be returned as variable(s) for assorted color
         printing or can be printed directly by calling self.print()
@@ -398,7 +419,7 @@ class Color:
         return self.__color_str(args[0], reset)
 
     def get_key(
-            self, str_: str, *keys: str, any_: bool = False, case: bool = False,
+        self, str_: str, *keys: str, any_: bool = False, case: bool = False,
     ) -> str:
         """With the string as the first argument - and one or more
         searches following - add color to matched substring
@@ -416,10 +437,45 @@ class Color:
             return self.__resolve_ansi_code(keys, str_, switches)
         return self.__manipulate_string(keys, str_, Color.reset, switches)
 
-    def print(self, *args: Union[str, int], **kwargs: Dict[str, str]) -> None:
+    def rainbow(self, str_):
+        """Return string colored with a random assortment of all colors
+        instantiated in class instance
+
+        :param str_:    String to color
+        :return:        Colored string
+        """
+        colors = self.__get_rainbow_obj()
+        return self.__rainbow_str(str_, colors)
+
+    def print(
+        self, *args: Union[str, int], rainbow=False, **kwargs: Dict[str, str],
+    ) -> None:
         """Enhanced print function for class and subclasses
 
         :param args:    Arbitrary number of strings or integers
+        :param rainbow:
         :param kwargs:  builtin print() kwargs
         """
-        print(self.get(*args), **kwargs)
+        if rainbow:
+            str_ = self.get_key(*args)
+        else:
+            str_ = self.get(*args)
+        print(str_, **kwargs)
+
+    def print_key(
+        self,
+        str_: str,
+        *keys: str,
+        any_: bool = False,
+        case: bool = False,
+        **kwargs,
+    ) -> None:
+        """Enhanced print function for class and subclasses
+
+        :param str_:
+        :param case:
+        :param any_:
+        :param kwargs:  builtin print() kwargs
+        """
+        str_ = self.get_key(str_, *keys, any_=any_, case=case)
+        print(str_, **kwargs)
