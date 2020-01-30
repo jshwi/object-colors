@@ -145,10 +145,7 @@ def scatter_cs_color(green, red, reset):
 
 @fixture
 def scatter_cs_exact(green, red, reset):
-    return (
-        f"C{red}c{reset}: My Business <me@mybusiness.{red}c"
-        f"{reset}om>;"
-    )
+    return f"C{red}c{reset}: My Business <me@mybusiness.{red}c" f"{reset}om>;"
 
 
 @fixture
@@ -189,4 +186,4 @@ def reset():
 
 @fixture
 def color_keys(colors, str_):
-    return colors.red.get_key(str_, "c", case=True, any_=True)
+    return colors.red.get_key(str_, "c", ignore_case=True, scatter=True)

@@ -11,9 +11,9 @@ class TestScatter:
         scatter_cs_exact_color,
         scatter_cs_exact,
     ) -> None:
-        keys = colors.red.get_key(str_, "c", any_=True)
+        keys = colors.red.get_key(str_, "c", scatter=True)
         assert keys == scatter_cs_exact
-        colored_keys = colors.red.get_key(color_str, "c", any_=True)
+        colored_keys = colors.red.get_key(color_str, "c", scatter=True)
         assert colored_keys == scatter_cs_exact_color
 
     def test_exact_word_in_string(
@@ -25,9 +25,9 @@ class TestScatter:
         str_: str,
         scatter_cs: str,
     ) -> None:
-        keys = colors.red.get_key(str_, "Cc:", any_=True)
+        keys = colors.red.get_key(str_, "Cc:", scatter=True)
         assert keys == scatter_cs
-        colored_keys = colors.red.get_key(color_str, "Cc:", any_=True)
+        colored_keys = colors.red.get_key(color_str, "Cc:", scatter=True)
         assert colored_keys == scatter_cs_color
 
     def test_word_in_string(
@@ -38,7 +38,7 @@ class TestScatter:
         all_cs_no_caps_color,
         str_: str,
     ) -> None:
-        keys = colors.red.get_key(str_, "cc:", any_=True)
+        keys = colors.red.get_key(str_, "cc:", scatter=True)
         assert keys == all_cs_no_caps
-        colored_keys = colors.red.get_key(color_str, "cc:", any_=True)
+        colored_keys = colors.red.get_key(color_str, "cc:", scatter=True)
         assert colored_keys == all_cs_no_caps_color

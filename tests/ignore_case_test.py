@@ -11,9 +11,9 @@ class TestIgnoreCase:
         marked: str,
         str_: str,
     ) -> None:
-        keys = colors.red.get_key(str_, "Cc:", case=True)
+        keys = colors.red.get_key(str_, "Cc:", ignore_case=True)
         assert keys == marked
-        colored_keys = colors.red.get_key(color_str, "Cc:", case=True)
+        colored_keys = colors.red.get_key(color_str, "Cc:", ignore_case=True)
         assert colored_keys == marked_color
 
     def test_word_in_string_ignore_case(
@@ -24,7 +24,7 @@ class TestIgnoreCase:
         str_: str,
         marked: str,
     ) -> None:
-        keys = colors.red.get_key(str_, "cc:", case=True)
+        keys = colors.red.get_key(str_, "cc:", ignore_case=True)
         assert keys == marked
-        colored_keys = colors.red.get_key(color_str, "cc:", case=True)
+        colored_keys = colors.red.get_key(color_str, "cc:", ignore_case=True)
         assert colored_keys == marked_color

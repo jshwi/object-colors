@@ -10,14 +10,16 @@ class TestIgnoreCaseAndScatter:
         exact_idx_color: str,
         all_cs_color: str,
     ) -> None:
-        colored_keys = colors.red.get_key(color_str, "c", case=True, any_=True)
+        colored_keys = colors.red.get_key(
+            color_str, "c", ignore_case=True, scatter=True
+        )
         assert colored_keys == exact_idx_color
 
     def test_exact_word_in_string(
         self, colors: Color, color_str: str, marked: str, all_cs_color: str,
     ) -> None:
         colored_keys = colors.red.get_key(
-            color_str, "Cc:", case=True, any_=True
+            color_str, "Cc:", ignore_case=True, scatter=True
         )
         assert colored_keys == all_cs_color
 
@@ -25,6 +27,6 @@ class TestIgnoreCaseAndScatter:
         self, colors: Color, color_str: str, all_cs_color: str,
     ) -> None:
         colored_keys = colors.red.get_key(
-            color_str, "cc:", case=True, any_=True
+            color_str, "cc:", ignore_case=True, scatter=True
         )
         assert colored_keys == all_cs_color
