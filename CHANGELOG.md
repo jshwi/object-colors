@@ -4,6 +4,36 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v1.0.8](https://github.com/jshwi/object_colors/releases/tag/v1.0.8) ([compare](https://github.com/jshwi/object_colors/compare/v1.0.7...v1.0.8))
+
+### Misc
+- [feat] Adds method to get multicoloured strings ([99da3ab](https://github.com/jshwi/object_colors/commit/99da3ab606b807625362aca8066a84e9d649e9f4)).
+- [feat] Adds much more in-depth documentation ([be1932d](https://github.com/jshwi/object_colors/commit/be1932da8c2c9d074c19ea944ddd114dea912a35)).
+- [refactor] Easier to read indentation ([80dc3b2](https://github.com/jshwi/object_colors/commit/80dc3b2db180ceab3eb33213b514e50901051ddf)).
+
+
+## [v1.0.7](https://github.com/jshwi/object_colors/releases/tag/v1.0.7) ([compare](https://github.com/jshwi/object_colors/compare/v1.0.6...v1.0.7)) - 2020-01-31
+
+### Misc
+- [feat] "Ignore_case" fully functional ([93a6cab](https://github.com/jshwi/object_colors/commit/93a6cab329ecc2f959385905712a5bd890ba9e83)).
+- [feat] Adds ignore-case / scatter search ([40c283d](https://github.com/jshwi/object_colors/commit/40c283dae03814bef15365fd1becbd7329ef4d6d)).
+- [feat] Adds Individual word coloring ([0f17e08](https://github.com/jshwi/object_colors/commit/0f17e08e35ebdf4f96330992f0e9c69ad1b870e2)).
+- [feat] All characters (including tildes / backslashes) searchable ([5482e57](https://github.com/jshwi/object_colors/commit/5482e57c9bc598becad0d246bcbb61628b9777e5)).
+- [refactor] Big restructure ([9b09fd8](https://github.com/jshwi/object_colors/commit/9b09fd8c25a731ca137d77dd0ae053effb73530e)).
+- [refactor] Removes get_nested() method (now useless) ([1aa10ef](https://github.com/jshwi/object_colors/commit/1aa10ef7e29b9e95c2b2c6f67758a8f7d970c462)).
+- [teat] Add new tests ([54d1947](https://github.com/jshwi/object_colors/commit/54d1947520aae9e46e531993e9e54183eaf83a2a)).
+- [test] Additional tests ([9acff3e](https://github.com/jshwi/object_colors/commit/9acff3ea1dc7f4385a45fbbfbe48be075d0200f2)).
+- [test] All tests pass ([4b1a492](https://github.com/jshwi/object_colors/commit/4b1a4921e93fca0d413435e5fba826da4fc82675)).
+- [test] Removed broken tests looking for wrong result ([0e0ef15](https://github.com/jshwi/object_colors/commit/0e0ef15ab601b6a4ad6ab1f9fe416661616b9943)).
+- [test] Spaced words pass ([3466a93](https://github.com/jshwi/object_colors/commit/3466a93d5bc5aab281cac2821bcc4febb9d58967)).
+
+
+## [v1.0.6](https://github.com/jshwi/object_colors/releases/tag/v1.0.6) ([compare](https://github.com/jshwi/object_colors/compare/v1.0.5...v1.0.6)) - 2019-12-07
+
+### Misc
+- [feat] Change populate colors arg: "colors" -> populate=True ([96bb243](https://github.com/jshwi/object_colors/commit/96bb24391ae14b2c2fa73d5aa0d15beb472f6b72)).
+
+
 ## [v1.0.5](https://github.com/jshwi/object_colors/releases/tag/v1.0.5) ([compare](https://github.com/jshwi/object_colors/compare/v1.0.4...v1.0.5)) - 2019-11-10
 
 ### Misc
