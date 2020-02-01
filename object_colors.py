@@ -13,48 +13,90 @@ from typing import Union, Any, Optional, Tuple, Dict, List, Pattern
 
 
 class Color:
-    """Instantiate object with attributes to use
+    """
+        - Instantiate object with attributes to use...
 
-        >>> color = Color(text="green")
+            >>> color = Color(text="green")
 
-        >>> # return manipulated string
-        >>> str_ = "Sample string"
-        >>> str_ = color.get(str_)
-        >>> substr_ = color.get_key(str_, "Sample")
+            >>> str_ = "Sample string"
 
-    or set attributes after instantiation
+            >>> color_str = color.get(str_)
+            >>> print(color_str)
+            ... "\u001b[0;32;40mSample string\u001b[0;0m"
 
-        >>> color.set(subclass={"text": "red"})
+        - ...or set attributes after instantiation
 
-    pop objects from Color() __dict__
-        >>> subclass = Color.pop("subclass")
+            >>> color.set(subclass={"text": "red"})
 
-    print colored strings
-        >>> color.print(str_)
-        >>> color.print_key(str_, "string")
+            >>> substr = color.subclass.get_key(str_, "Sample")
+            >>> print(substr)
+            ... "\u001b[0;31;40mSample\u001b[0;0m string"
 
-    set class attributes in object instance
+            >>> green_substr = color.subclass.get_key(
+            ...     color_str, "Sample"
+            ... )
+            >>> print(green_substr)
+            ... (
+            ...     "\u001b[0;32;40m"
+            ...     "\u001b[0;31;40mSample\u001b[0;32;40m string"
+            ...     "\u001b[0;0m"
+            ... )
 
-        >>> # different ways to get the same result
-        >>> color.set(text="blue", effect="bold", background="red")
-        >>> color.set("blue", "bold", "red")
-        >>> color.set(4, 1, 1)
-        >>> color.set(411)
+        - Pop objects from `color.__dict__`
 
-    set attributes in object instance's subclasses
+            >>> subclass = color.pop("subclass")
 
-        >>> color.set(red={"text": "red", "effect": "bold"})
-        >>> color.red.print("Red string")
-        ...
-        >>> color.set(blue={"text": "blue", "effect": "bold"})
-        >>> color.blue.print("blue string")
-        ...
-        >>> # populate instance with subclasses for all colors
-        >>> all_colors = Color(populate=True)
-        >>> all_colors.red.print("Red string")
-        >>> all_colors.blue.print("blue string")
-        >>> all_colors.green.print("green string")
-        >>> # etc...
+            >>> substr = subclass.get_key(str_, "Sample")
+            >>> print(substr)
+            ... "\u001b[0;31;40mSample\u001b[0;0m string"
+
+        - Print colored strings directly
+
+            >>> color.print(str_)
+            ... "\u001b[0;32;40mSample string\u001b[0;0m"
+
+            >>> color.print_key(str_, "string")
+            ... "\u001b[0;32;40mSample\u001b[0;0m string"
+
+        - Set attributes in instance with flexible arguments
+
+            >>> # keywords
+            >>> color.set(text="blue", effect="bold", background="red")
+
+            >>> # args (string)
+            >>> color.set("blue", "bold", "red")
+
+            >>> # args (tuple)
+            >>> color.set(4, 1, 1)
+
+            >>> # args (integer)
+            >>> color.set(411)
+
+        - Set attributes in object instance's subclasses
+
+            >>> color.set(red={"text": "red", "effect": "bold"})
+            >>> color.red.print("Red string")
+            ... "\u001b[1;31;40mRed string\u001b[0;0m"
+
+            >>> color.set(blue={"text": "blue", "effect": "bold"})
+            >>> color.blue.print("Blue string")
+            ... "\u001b[1;34;40mBlue string\u001b[0;0m"
+
+        - Populate instance with subclasses for all colors
+
+            >>> color.populate_colors()
+
+            >>> color.green.print("Green string")
+            ... "\u001b[0;32;40mGreen string\u001b[0;0m"
+
+            >>> color.cyan.print("Cyan string")
+            ... "\u001b[0;36;40mCyan string\u001b[0;0m"
+            >>> # etc...
+
+        - Easily switch between bold text
+
+            >>> color.purple.bold.print("Bold purple string")
+            ... "\u001b[1;35;40mBold purple string\u001b[0;0m"
 
     """
 
@@ -103,14 +145,6 @@ class Color:
         return arg
 
     @staticmethod
-    def __populate_passed(kwargs: Dict[str, bool]) -> bool:
-        # if `populate` passed as argument, whether True or False return
-        # if, otherwise return its default, False
-        if "populate" in kwargs:
-            return kwargs.pop("populate")
-        return False
-
-    @staticmethod
     def __get_opts(key: str) -> List[str]:
         # get list of values to represent ansi escape codes whether
         # colors are needed or effects are needed
@@ -128,14 +162,6 @@ class Color:
             "pos": pos,
             "added": 0,
         }
-
-    def __populate_colors(self, kwargs: Dict[str, bool]) -> None:
-        # This will create a subclass for every available color when
-        # colors" is called whilst instantiating self
-        if self.__populate_passed(kwargs):
-            for color in self.__get_opts("colors"):
-                kwargs = {color: {"text": color}}
-                self.__make_subclass((), kwargs)
 
     def __populate_defaults(self, kwargs: Dict[str, str]) -> Dict[str, str]:
         # Set any gaps in kwargs with the existing class values
@@ -598,31 +624,26 @@ class Color:
 
         :param args:    Colors or effects as integers or strings
 
-                        colors:
-                          position:
-                            - text:         1
-                            - background:   3
+                        Without keywords args are positional like so:
 
-                          values:
-                            - black:        0
-                            - red:          1
-                            - green:        2
-                            - yellow:       3
-                            - blue:         4
-                            - purple:       5
-                            - cyan:         6
-                            - white:        7
+                            >>> Color("text", "effect", "background")
+
+                        colors:
+                          - black:        0
+                          - red:          1
+                          - green:        2
+                          - yellow:       3
+                          - blue:         4
+                          - purple:       5
+                          - cyan:         6
+                          - white:        7
 
                         effects:
-                          position:
-                            - effect:       2
-
-                          values:
-                            - None:         0
-                            - bold:         1
-                            - bright:       2
-                            - underline:    3
-                            - negative:     4
+                          - None:         0
+                          - bold:         1
+                          - bright:       2
+                          - underline:    3
+                          - negative:     4
 
                         e.g.
                             >>> color = Color()
@@ -636,19 +657,17 @@ class Color:
 
                         e.g.
                             >>> color = Color()
-                            ...
+
                             >>> # instance attributes
                             >>> color.set(
                             ...     text="green",
                             ...     effect="bold",
                             ...     background="red"
                             ... )
-                            ...
+
                             >>> # subclasses -  set like those for
                             >>> # original class only keyword arguments
                             >>> # are expressed as dictionary
-
-                        e.g.
                             >>> color.set(
                             ...     sub_color={
                             ...         "text": "green",
@@ -658,7 +677,6 @@ class Color:
                             ... )
 
         """
-        self.__populate_colors(kwargs)
         kwargs = self.__populate_defaults(kwargs)
         args = self.__process_args(args)
         self.__set_class_attrs(args, kwargs)
@@ -766,6 +784,12 @@ class Color:
         """
         colors = self.__get_multi_obj()
         return self.__get_multi_str(str_, colors)
+
+    def populate_colors(self) -> None:
+        """This will create a subclass for every available color"""
+        for color in self.__get_opts("colors"):
+            kwargs = {color: {"text": color}}
+            self.__make_subclass((), kwargs)
 
     def print(
             self, *args: Union[str, int], multi=False, **kwargs: Dict[str, str],

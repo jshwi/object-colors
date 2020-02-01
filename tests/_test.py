@@ -11,13 +11,13 @@ def test__getattr__():
     hasattr(color, "__self__") and color.__self__ is color.get
 
 
-def test__dir__(capsys):
-    color = Color(populate=True)
+def test__dir__(color, capsys):
     instances = color.__dir__()
     assert instances == [
         "text",
         "effect",
         "background",
+        "bold",
         "black",
         "red",
         "green",
@@ -26,12 +26,10 @@ def test__dir__(capsys):
         "purple",
         "cyan",
         "white",
-        "bold",
     ]
 
 
-def test_pop_result():
-    color = Color(populate=True)
+def test_pop_result(color):
     assert hasattr(color, "red")
     red = color.pop("red")
     assert "red" not in color.__dict__
@@ -58,8 +56,7 @@ def test_str_ints():
     assert color.effect == 1
 
 
-def test_tuple_return():
-    color = Color(populate=True)
+def test_tuple_return(color):
     tup = color.red.get("t", "u", "p")
     assert tup == (
         "\u001b[0;31;40mt\u001b[0;0m",
@@ -68,8 +65,7 @@ def test_tuple_return():
     )
 
 
-def test_color_print(capsys):
-    color = Color(populate=True)
+def test_color_print(color, capsys):
     color.red.print("This stdout is red")
     captured = capsys.readouterr()
     assert captured.out == "\u001b[0;31;40mThis stdout is red\u001b[0;0m\n"
@@ -80,7 +76,6 @@ def test_int_dict():
     assert color.text == 7
 
 
-def test_rainbow(str_, capsys):
-    color = Color(populate=True)
+def test_rainbow(color, str_, capsys):
     rb = color.multicolor(str_)
     print(rb)

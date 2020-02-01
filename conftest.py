@@ -5,13 +5,15 @@ from object_colors import Color
 
 
 @fixture
-def colors():
-    return Color(populate=True)
+def color():
+    populated = Color()
+    populated.populate_colors()
+    return populated
 
 
 @fixture
-def color_str(colors, str_):
-    return colors.green.get(str_)
+def color_str(color, str_):
+    return color.green.get(str_)
 
 
 @fixture
@@ -185,5 +187,5 @@ def reset():
 
 
 @fixture
-def color_keys(colors, str_):
-    return colors.red.get_key(str_, "c", ignore_case=True, scatter=True)
+def color_keys(color, str_):
+    return color.red.get_key(str_, "c", ignore_case=True, scatter=True)

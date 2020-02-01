@@ -13,7 +13,8 @@ extensions = [
     'sphinx.ext.todo',
     'sphinx.ext.viewcode',
     'sphinx.ext.autodoc',
-    'sphinx.ext.imgmath'
+    'sphinx.ext.imgmath',
+
 ]
 todo_include_todos = True
 pygments_style = 'monokai'
