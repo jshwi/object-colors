@@ -43,9 +43,9 @@ class TestNoArgs:
             self,
             color: Color,
             colored_dupes: str,
-            dupe_marked_color,
-            dupes,
-            dupe_marked,
+            dupe_marked_color: str,
+            dupes: str,
+            dupe_marked: str,
     ) -> None:
         keys = color.red.get_key(dupes, "one")
         assert keys == dupe_marked
@@ -138,8 +138,8 @@ class TestScatter:
             color: Color,
             color_str: str,
             str_: str,
-            scatter_cs_exact_color,
-            scatter_cs_exact,
+            scatter_cs_exact_color: str,
+            scatter_cs_exact: str,
     ) -> None:
         keys = color.red.get_key(str_, "c", scatter=True)
         assert keys == scatter_cs_exact

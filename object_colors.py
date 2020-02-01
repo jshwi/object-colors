@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import re
 from random import randint
-from typing import Union, Any, Optional, Tuple, Dict, List, Pattern
+from typing import Union, Any, Optional, Tuple, Dict, List
 
 
 class Color:
@@ -100,8 +100,6 @@ class Color:
 
     """
 
-    __code = "\u001b"
-    __reset = f"{__code}[0;0m"
     __keys = ["text", "effect", "background"]
     __opts = {
         "colors": [
@@ -116,6 +114,10 @@ class Color:
         ],
         "effect": ["none", "bold", "bright", "underline", "negative"],
     }
+
+    code = "\u001b"
+    reset = f"{code}[0;0m"
+    ansi_escape = re.compile(r"(\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~]))")
 
     def __init__(self, *args: Union[str, int], **kwargs: Any) -> None:
         self.text = 7
@@ -153,7 +155,7 @@ class Color:
         return Color.__opts["colors"]
 
     @staticmethod
-    def __str_obj(pos: List[int]) -> Dict[str, Union[str, int, bool]]:
+    def __str_object(pos: List[int]) -> Dict[str, Union[str, int, bool]]:
         # dictionary of values to resolve index of substrings to color
         return {
             "freeze": 0,
@@ -199,7 +201,7 @@ class Color:
         # check whether keywords are good to go or need to be resolved
         # first
         for index_, key in enumerate(Color.__keys):
-            kwargs = self.__within_range(index_, args, kwargs, key)
+            kwargs = self.__kwargs_in_range(index_, args, kwargs, key)
             kwargs = self.__resolve_kwargs(key, kwargs)
         return kwargs
 
@@ -224,7 +226,7 @@ class Color:
                 return True
         return False
 
-    def __get_bold_obj(self) -> Dict[str, Dict[str, Union[str, Any]]]:
+    def __get_bold_object(self) -> Dict[str, Dict[str, Union[str, Any]]]:
         # return dictionary containing values necessary to convert
         # non-bold instance into corresponding bold instance and
         # vice-versa
@@ -240,7 +242,7 @@ class Color:
         # Instantiate bold class object if bold is not set for more
         # flexible usage and less setting up when using this module to
         # manipulate particular colored strings
-        kwargs = self.__get_bold_obj()
+        kwargs = self.__get_bold_object()
         self.__make_subclass((), kwargs)
 
     def __bold_switch(self) -> None:
@@ -250,28 +252,28 @@ class Color:
         if self.effect != 1:
             self.__set_bold_attr()
 
-    def __color_tuple(
+    def __get_colored_tuple(
             self, args: Tuple[Union[str, int]], reset: str
     ) -> Tuple[Union[str, int]]:
         args = list(args)
         # replace tuples containing strings with corresponding colored
         # strings
         for count, arg in enumerate(args):
-            args[count] = self.__color_str(arg, reset)
+            args[count] = self.__get_colored_str(arg, reset)
         return tuple(args)
 
-    def __color_setting(self) -> str:
+    def __color_settings(self) -> str:
         # get the colored string with ansi-escape code settings added
-        return f"{Color.__code}[{self.effect};3{self.text};4{self.background}m"
+        return f"{Color.code}[{self.effect};3{self.text};4{self.background}m"
 
-    def __color_str(self, str_: str, reset: str) -> str:
+    def __get_colored_str(self, str_: str, reset: str) -> str:
         # set desired reset code and return colored string
         reset = reset if reset else ""
-        setting = self.__color_setting()
+        setting = self.__color_settings()
         return f"{setting}{str_}{reset}"
 
     @staticmethod
-    def __add_swapped_index(
+    def __get_swapped_index(
             switches: Dict[str, bool], letter: str, idx: List[str]
     ) -> List[str]:
         # add additional swapped case of string index for scatter mode
@@ -290,7 +292,7 @@ class Color:
         key = list(key)
         for letter in key:
             idx.append(letter)
-            idx = self.__add_swapped_index(switches, letter, idx)
+            idx = self.__get_swapped_index(switches, letter, idx)
         return list(dict.fromkeys(idx))
 
     @staticmethod
@@ -305,50 +307,35 @@ class Color:
             helper.update({key: int(word[value])})
         return helper
 
-    def __populate_state_obj(
+    def __populate_state_object(
             self,
             word: str,
-            state: Dict[str, Union[str, Dict[str, str]]],
-            ansi_esc: Pattern[str],
+            name_: str,
+            state: Dict[str, Union[Dict[str, str], List[str]]],
     ) -> Dict[str, Union[str, Dict[str, str]]]:
         # separate ansi codes from string and return a dict of both to
         # be used individually later
-        if ansi_esc.match(word):
-            if word != Color.__reset:
-                state["helper"] = self.__extract_codes(word, {})
+        if Color.ansi_escape.match(word):
+            if word != Color.reset:
+                codes = self.__extract_codes(word, {})
+                state[name_].update(codes)
         else:
-            state.update({"string": word})
+            state["str_"].append(word)
         return state
 
-    @staticmethod
-    def __separate_ansi(str_: str, ansi_escape: Pattern[str]) -> List[str]:
-        # split string up by ansi escape codes and return list of all
-        # sections of the string
-        words = re.split(ansi_escape, str_)
-        return [word for word in words if word != ""]
-
-    def __get_state_obj(
-            self, words: List[str], ansi_escape: Pattern[str]
+    def __get_state_object(
+            self, words: List[str], name_: str
     ) -> Dict[str, Union[str, Dict[str, str]]]:
-        state = {"helper": {}}
         # iterate string split up by ansi escape codes to populate
         # object to organise them
+        state = {name_: {}, "str_": []}
         for word in words:
-            state = self.__populate_state_obj(word, state, ansi_escape)
+            state = self.__populate_state_object(word, name_, state)
+        state["str_"] = "".join(state["str_"])
         return state
 
-    def __make_state_obj(
-            self, str_: str
-    ) -> Dict[str, Union[str, Dict[str, str]]]:
-        # split ansi codes and string and populate the object
-        # representing the string and its color before they were
-        # separated to restore its state later
-        ansi_escape = re.compile(r"(\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~]))")
-        words = self.__separate_ansi(str_, ansi_escape)
-        return self.__get_state_obj(words, ansi_escape)
-
     @staticmethod
-    def __within_range(
+    def __kwargs_in_range(
             index_: int, args: Tuple[Any], kwargs: Dict[str, int], key: str
     ) -> Dict[str, int]:
         # the index is good to use if the value is not None and is less
@@ -358,7 +345,7 @@ class Color:
         return kwargs
 
     @staticmethod
-    def __unusable_keywords(
+    def __keywords_not_ready(
             key: str, kwargs: Dict[str, Any], opts: List[str]
     ) -> bool:
         # determine whether keyword arguments provided aren't valid
@@ -370,7 +357,7 @@ class Color:
         return True
 
     @staticmethod
-    def __alternate_opts(
+    def __resolve_alternate_opts(
             key: str,
             kwargs: Dict[str, Union[str, int]],
             opts: List[str],
@@ -392,19 +379,9 @@ class Color:
         # which convert kwargs from alternative values to integer codes
         default = 7 if key == "text" else 0
         opts = self.__get_opts(key)
-        if self.__unusable_keywords(key, kwargs, opts):
-            kwargs = self.__alternate_opts(key, kwargs, opts, default)
+        if self.__keywords_not_ready(key, kwargs, opts):
+            kwargs = self.__resolve_alternate_opts(key, kwargs, opts, default)
         return kwargs
-
-    def __instantiate_state(self, str_: str) -> str:
-        # separate ansi code from string, creating a Color subclass from
-        # the pre-existing color, available in self, and return the
-        # bare string
-        state = self.__make_state_obj(str_)
-        if state["string"]:
-            str_ = state.pop("string")
-            self.__make_subclass((), state)
-        return str_
 
     def __resolve_ansi_code(
             self, keys: Tuple[str], str_: str, switches: Dict[str, bool]
@@ -416,9 +393,9 @@ class Color:
         # color the keywords entered as *args
         # surround the string with its original color
         # remove the helper function and return colored string
-        str_ = self.__instantiate_state(str_)
+        str_ = self.set_str(str_)
         reset = self.helper.get("", reset=None)
-        str_ = self.__manipulate_string(keys, str_, reset, switches)
+        str_ = self.__process_str(keys, str_, reset, switches)
         str_ = self.helper.get(str_)
         del self.__dict__["helper"]
         return str_
@@ -447,7 +424,7 @@ class Color:
             pos = self.__iterate_theirs(letter, ours, pos, count)
         return pos
 
-    def __scatter_pos(
+    def __get_scattered_positions(
             self, str_: str, idx: List[str], pos: List[int]
     ) -> List[int]:
         # get the scattered position of searched keys within string
@@ -456,7 +433,7 @@ class Color:
         return pos
 
     @staticmethod
-    def __normalize_strings(
+    def __normalize_strs(
             key: str, str_: str, switches: Dict[str, bool]
     ) -> Dict[str, str]:
         # ignore case of the searched string by searching lowercase
@@ -467,7 +444,9 @@ class Color:
         return strs
 
     @staticmethod
-    def __add_multiple_pos(key: str, str_: str, pos: List[int]) -> List[int]:
+    def __get_multiple_positions(
+            key: str, str_: str, pos: List[int]
+    ) -> List[int]:
         # generator will be needed if there are multiple positions of a
         # single substring
         places = [p for p in range(len(str_)) if str_.find(key, p) == p]
@@ -475,33 +454,43 @@ class Color:
             pos.append(place)
         return pos
 
-    def __find_key(self, strs: Dict[str, str], pos: List[int]) -> List[int]:
+    def __find_key_positions(
+            self, strs: Dict[str, str], pos: List[int]
+    ) -> List[int]:
         # find the position of keywords(s) and return list of results
         key = strs["key"]
         str_ = strs["str_"]
         if f" {key} " in f" {str_} ":
-            pos = self.__add_multiple_pos(key, str_, pos)
+            pos = self.__get_multiple_positions(key, str_, pos)
         return pos
 
     def __get_key_positions(
-            self, str_: str, key: str, pos: List[int], switches: Dict[str, bool]
+            self,
+            str_: str,
+            key: str,
+            pos: List[int],
+            switches: Dict[str, bool]
     ) -> List[int]:
         # get position(s) of searched term as an integer within string
-        strs = self.__normalize_strings(key, str_, switches)
-        return self.__find_key(strs, pos)
+        strs = self.__normalize_strs(key, str_, switches)
+        return self.__find_key_positions(strs, pos)
 
-    def __mode_position(
-            self, key: str, str_: str, pos: List[int], switches: Dict[str, bool]
+    def __normalize_position(
+            self,
+            key: str,
+            str_: str,
+            pos: List[int],
+            switches: Dict[str, bool]
     ) -> List[int]:
         # return list of search positions for scattered keys if
         # `scatter` is True or return colored full words if False
         if switches["any"]:
             idx = self.__get_str_indices(key, switches)
-            return self.__scatter_pos(str_, idx, pos)
+            return self.__get_scattered_positions(str_, idx, pos)
         return self.__get_key_positions(str_, key, pos, switches)
 
     @staticmethod
-    def __update_str_obj(
+    def __update_str_object(
             freeze: int,
             letter: str,
             obj: Dict[str, Union[int, str, bool, List[str]]]
@@ -512,7 +501,7 @@ class Color:
         obj["pos"].pop(0)
         return obj
 
-    def __color_index(
+    def __process_index(
             self,
             obj: Dict[str, Union[str, int, bool, List[str]]],
             str_: str,
@@ -523,7 +512,7 @@ class Color:
         obj["letter"] = str_[count]
         letter = self.get(obj["letter"], reset=None)
         if obj["pos"] and count == obj["pos"][0]:
-            obj = self.__update_str_obj(freeze, letter, obj)
+            obj = self.__update_str_object(freeze, letter, obj)
         return obj
 
     @staticmethod
@@ -543,20 +532,20 @@ class Color:
             obj.update({"letter": obj["letter"] + reset, "applied": False})
         return obj
 
-    def __color_keys(
+    def __process_keys(
             self, str_: str, pos: List[int], reset: str, len_key: int
     ) -> str:
         # color the searched keys bases on their index within the string
         compile_ = []
-        obj = self.__str_obj(pos)
+        obj = self.__str_object(pos)
         for count, _ in enumerate(str_):
-            obj = self.__color_index(obj, str_, count)
+            obj = self.__process_index(obj, str_, count)
             obj = self.__reset_index(obj, reset, len_key, count)
             letter = obj["letter"]
             compile_.append(letter)
         return "".join(compile_)
 
-    def __manipulate_string(
+    def __process_str(
             self,
             keys: Tuple[str],
             str_: str,
@@ -566,13 +555,13 @@ class Color:
         # process arguments provided to color the string accordingly
         pos = []
         for key in keys:
-            pos = self.__mode_position(key, str_, pos, switches)
+            pos = self.__normalize_position(key, str_, pos, switches)
             len_key = len(key) if not switches["any"] else 1
-            str_ = self.__color_keys(str_, pos, reset, len_key)
+            str_ = self.__process_keys(str_, pos, reset, len_key)
         return str_
 
     @staticmethod
-    def __is_class(
+    def __collect_values(
             value: Union[int, Color],
             key: str,
             colors: Dict[str, List[Union[Color, int]]],
@@ -584,19 +573,23 @@ class Color:
             colors["code"].append(value.text)
         return colors
 
-    def __get_multi_obj(self) -> Dict[str, Union[str, list]]:
+    def __get_multi_object(self) -> Dict[str, Union[str, list]]:
         # get an object consisting of available color codes to be
         # randomized and available subclasses to match against
         # randomized codes
         colors = {"code": [], "classes": []}
         for key, value in self.__dict__.items():
-            colors = self.__is_class(value, key, colors)
+            colors = self.__collect_values(value, key, colors)
         colors["code"] = list(dict.fromkeys(colors["code"]))
         return colors
 
     @staticmethod
-    def __valid_code(
-            class_: Color, code: int, str_: str, count: int, full_str: List[str]
+    def __validate_code(
+            class_: Color,
+            code: int,
+            str_: str,
+            count: int,
+            full_str: List[str]
     ) -> List[str]:
         # match the ansi escape code against randomized number to be
         # used to color string index
@@ -611,16 +604,86 @@ class Color:
         # compile and return the string colored by a randomized
         # assortment of colors present with the available subclasses
         full_str = []
-        code = randint(colors["code"][0], colors["code"][-1])
+        if not colors["code"]:
+            return str_
         for count, _ in enumerate(str_):
+            code = randint(colors["code"][0], colors["code"][-1])
             for class_ in colors["classes"]:
-                full_str = self.__valid_code(
+                full_str = self.__validate_code(
                     class_, code, str_, count, full_str
                 )
         return "".join(full_str)
 
+    @staticmethod
+    def get_list(str_: str) -> List[str]:
+        """Split string up by ansi escape codes and return list of all
+        sections of the string
+
+        :param str_:    String containing ansi escape codes
+        :return:        List of ordered escape codes and substrings
+        """
+        words = re.split(Color.ansi_escape, str_)
+        return [word for word in words if word != ""]
+
+    def set_str(self, str_: str, name_: str = "helper") -> str:
+        """Separate ansi code from string, creating a Color subclass
+        from the pre-existing color, available in self, and return the
+        bare string
+
+        :param str_:    String containing ansi escape codes to
+                        instantiate class from its codes
+        :param name_:   Name of subclass
+        :return:        String stripped of ansi codes
+        """
+        state = self.get_object(str_, name_)
+        if state["str_"]:
+            str_ = state.pop("str_")
+            self.__make_subclass((), state)
+        return str_
+
+    def get_object(
+            self, str_: str, name_: str = "helper"
+    ) -> Dict[str, Union[str, Dict[str, str]]]:
+        """Split ansi codes and string and populate the object
+        representing the string and its color before they were
+        separated to restore its state later
+
+        .. todo::
+            - Make this work for multicolor which consists of more than
+              just one code
+            - Currently the only code captured will be the first one
+            - This will also include changes to self.get_key() which
+              will need to iterate through several items in object and
+              put them back in the right place
+
+
+        :param str_:    String containing ansi escape codes
+        :param name_:   Name of the subclass to be created
+        :return:        Dictionary containing separated escape codes and
+                        str
+        """
+        words = self.get_list(str_)
+        return self.__get_state_object(words, name_)
+
     def set(self, *args: Any, **kwargs: Any) -> None:
         """Call to set new instance values
+
+        colors:
+          - black:        0
+          - red:          1
+          - green:        2
+          - yellow:       3
+          - blue:         4
+          - purple:       5
+          - cyan:         6
+          - white:        7
+
+        effects:
+          - None:         0
+          - bold:         1
+          - bright:       2
+          - underline:    3
+          - negative:     4
 
         :param args:    Colors or effects as integers or strings
 
@@ -628,26 +691,8 @@ class Color:
 
                             >>> Color("text", "effect", "background")
 
-                        colors:
-                          - black:        0
-                          - red:          1
-                          - green:        2
-                          - yellow:       3
-                          - blue:         4
-                          - purple:       5
-                          - cyan:         6
-                          - white:        7
-
-                        effects:
-                          - None:         0
-                          - bold:         1
-                          - bright:       2
-                          - underline:    3
-                          - negative:     4
-
-                        e.g.
-                            >>> color = Color()
-                            >>> color.set(2, 1, 1)
+                        >>> color = Color()
+                        >>> color.set(2, 1, 1)
 
                           - text:       green
                           - effect:     bold
@@ -655,26 +700,25 @@ class Color:
 
         :param kwargs:  More precise keyword arguments
 
-                        e.g.
-                            >>> color = Color()
+                        >>> color = Color()
 
-                            >>> # instance attributes
-                            >>> color.set(
-                            ...     text="green",
-                            ...     effect="bold",
-                            ...     background="red"
-                            ... )
+                        >>> # instance attributes
+                        >>> color.set(
+                        ...     text="green",
+                        ...     effect="bold",
+                        ...     background="red"
+                        ... )
 
-                            >>> # subclasses -  set like those for
-                            >>> # original class only keyword arguments
-                            >>> # are expressed as dictionary
-                            >>> color.set(
-                            ...     sub_color={
-                            ...         "text": "green",
-                            ...         "effect": "bold",
-                            ...         "background": "red"
-                            ...     }
-                            ... )
+                        >>> # subclasses -  set like those for
+                        >>> # original class only keyword arguments
+                        >>> # are expressed as dictionary
+                        >>> color.set(
+                        ...     sub_color={
+                        ...         "text": "green",
+                        ...         "effect": "bold",
+                        ...         "background": "red"
+                        ...     }
+                        ... )
 
         """
         kwargs = self.__populate_defaults(kwargs)
@@ -684,11 +728,11 @@ class Color:
 
     def pop(self, str_: str) -> Optional[Any]:
         """Retrieve attr present with class instance
-            e.g.
-                >>> color = Color(subclass={"text": "red"})
-                >>> red = color.pop("subclass")
-                >>> print(red.__dict__)
-                ... {'text': 1, 'effect': 0, 'background': 0}
+
+            >>> color = Color(subclass={"text": "red"})
+            >>> red = color.pop("subclass")
+            >>> print(red.__dict__)
+            ... {'text': 1, 'effect': 0, 'background': 0}
 
         :param str_:    Key to remove
         :return:        Class dict or None
@@ -699,7 +743,7 @@ class Color:
         return None
 
     def get(
-            self, *args: Union[str, int], reset: Optional[str] = __reset
+            self, *args: Union[str, int], reset: Optional[str] = reset
     ) -> Union[str, Tuple[Union[str, Any], ...]]:
         """Return colored string
 
@@ -716,8 +760,8 @@ class Color:
         :return:        Colored string
         """
         if len(args) > 1:
-            return self.__color_tuple(args, reset)
-        return self.__color_str(args[0], reset)
+            return self.__get_colored_tuple(args, reset)
+        return self.__get_colored_str(args[0], reset)
 
     def get_key(
             self,
@@ -754,9 +798,9 @@ class Color:
         :return:            String with selected key(s) colored
         """
         switches = {"any": scatter, "case": ignore_case}
-        if Color.__code in str_:
+        if Color.code in str_:
             return self.__resolve_ansi_code(search, str_, switches)
-        return self.__manipulate_string(search, str_, Color.__reset, switches)
+        return self.__process_str(search, str_, Color.reset, switches)
 
     def multicolor(self, str_: str) -> str:
         """Return string colored with an assortment of all colors
@@ -782,7 +826,7 @@ class Color:
         :param str_:    String to color
         :return:        Colored string
         """
-        colors = self.__get_multi_obj()
+        colors = self.__get_multi_object()
         return self.__get_multi_str(str_, colors)
 
     def populate_colors(self) -> None:
@@ -794,7 +838,7 @@ class Color:
     def print(
             self, *args: Union[str, int], multi=False, **kwargs: Dict[str, str],
     ) -> None:
-        """print colored strings straight to stdout
+        """Print colored strings straight to stdout
         builtin print() kwargs valid keyword arguments
 
             >>> color = Color("red", "bold", "green")
@@ -819,7 +863,7 @@ class Color:
             ignore_case: bool = False,
             **kwargs: bool,
     ) -> None:
-        """color search key-words
+        """Search for and then color key-words
 
             >>> color = Color(1)
             >>> color.print_key("str to color", "str")
