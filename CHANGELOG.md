@@ -9,7 +9,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Misc
 - [feat] Adds method to get multicoloured strings ([99da3ab](https://github.com/jshwi/object_colors/commit/99da3ab606b807625362aca8066a84e9d649e9f4)).
 - [feat] Adds much more in-depth documentation ([be1932d](https://github.com/jshwi/object_colors/commit/be1932da8c2c9d074c19ea944ddd114dea912a35)).
-- [refactor] Easier to read indentation ([80dc3b2](https://github.com/jshwi/object_colors/commit/80dc3b2db180ceab3eb33213b514e50901051ddf)).
+- [feat] Make some methods & variables public for more manual configuration ([b9d8669](https://github.com/jshwi/object_colors/commit/b9d8669a030f1e44b7761f04f8ff8f717fb35ef9)).
+- [refactor] Easier to read indentation ([e7d1cb3](https://github.com/jshwi/object_colors/commit/e7d1cb36239f2c62a8881ceb6fccc838fc5caf76)).
+- [test] Implement doctest ([15886ba](https://github.com/jshwi/object_colors/commit/15886ba337a949cb8d6131357a84bcfabc86a5d4)).
+- [update] README.rst ([1e408d3](https://github.com/jshwi/object_colors/commit/1e408d3d4e139c769b4b4224541e960651c09c3d)).
 
 
 ## [v1.0.7](https://github.com/jshwi/object_colors/releases/tag/v1.0.7) ([compare](https://github.com/jshwi/object_colors/compare/v1.0.6...v1.0.7)) - 2020-01-31

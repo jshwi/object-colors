@@ -1,9 +1,10 @@
-_build
 /build
+_build
 .coverage
 dev_requirements.txt
 /dist
 *.egg*
+favicon_io.zip
 .idea
 .pre-commit-config.yaml
 __pycache__

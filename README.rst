@@ -75,6 +75,7 @@ Setup
 ..
 
 .. code-block:: python
+
     >>> # instance attributes
     >>> color.set(
     ...     text="green",
@@ -105,20 +106,18 @@ Setup
     >>> color = Color()
     >>> color.populate_colors()
     >>> print(color.__dict__)
-    ... {
-    ...     'text': 7,
-    ...     'effect': 0,
-    ...     'background': 0,
-    ...     'black': <object_colors.Color object at 0x7f3302cf4b10>,
-    ...     'red': <object_colors.Color object at 0x7f3303aa5d10>,
-    ...     'green': <object_colors.Color object at 0x7f33037a7710>,
-    ...     'yellow': <object_colors.Color object at 0x7f3302bd4710>,
-    ...     'blue': <object_colors.Color object at 0x7f3302bd4d50>,
-    ...     'purple': <object_colors.Color object at 0x7f3302ce0910>,
-    ...     'cyan': <object_colors.Color object at 0x7f33037ddc10>,
-    ...     'white': <object_colors.Color object at 0x7f33005e4c10>,
-    ...     'bold': <object_colors.Color object at 0x7f3303b09a90>
-    ... }
+    'text': 7,
+    'effect': 0,
+    'background': 0,
+    'black': <object_colors.Color object at 0x7f3302cf4b10>,
+    'red': <object_colors.Color object at 0x7f3303aa5d10>,
+    'green': <object_colors.Color object at 0x7f33037a7710>,
+    'yellow': <object_colors.Color object at 0x7f3302bd4710>,
+    'blue': <object_colors.Color object at 0x7f3302bd4d50>,
+    'purple': <object_colors.Color object at 0x7f3302ce0910>,
+    'cyan': <object_colors.Color object at 0x7f33037ddc10>,
+    'white': <object_colors.Color object at 0x7f33005e4c10>,
+    'bold': <object_colors.Color object at 0x7f3303b09a90>
 ..
 
     This can be further enhanced with the Color.bold object, initialized when bold has not been activated
@@ -142,7 +141,7 @@ Methods
     >>> color.set("red", "bold", "blue")
     >>> color.set(114)
     >>> print(c.__dict__)
-    ... {'text': 1, 'effect': 1, 'background': 4}
+    {'text': 1, 'effect': 1, 'background': 4}
 ..
 
 .. code-block:: python
@@ -151,19 +150,17 @@ Methods
     >>> # value
     >>> color.set(red={"text": "red"}, yellow={"text": "yellow"})
     >>> print(c.__dict__)
-    ... {
-    ...     'text': 1,
-    ...     'effect': 0,
-    ...     'background': 4,
-    ...     'red': <object_colors.Color object at 0x0000020C10D06080>,
-    ...     'yellow': <object_colors.Color object at 0x0000020C10D06B00>
-    ... }
+    'text': 1,
+    'effect': 0,
+    'background': 4,
+    'red': <object_colors.Color object at 0x0000020C10D06080>,
+    'yellow': <object_colors.Color object at 0x0000020C10D06B00>
 ..
 
 .. code-block:: python
 
     >>> print(color.yellow.__dict__)
-    ... {'text': 3, 'effect': 1, 'background': 0}
+    {'text': 3, 'effect': 1, 'background': 0}
 ..
 
 - get():
@@ -175,7 +172,7 @@ Methods
     >>> bullet = color.red.get("[!] ")
     >>> warning = color.yellow("Warning")
     >>> print(bullet + warning)
-    ... "\u001b[0;31;40m[!]\u001b[0;0m\u001b[0;33;40mWarning\u001b[0;0m"
+    "\u001b[0;31;40m[!]\u001b[0;0m\u001b[0;33;40mWarning\u001b[0;0m"
 ..
 
 .. code-block:: python
@@ -201,13 +198,11 @@ Methods
     >>> # remove unused attributes
     >>> color.pop("bold_red")
     >>> print(color.__dict__)
-    ... {
-    ...     'text': 1,
-    ...     'effect': 1,
-    ...     'background': 4,
-    ...     'red': <object_colors.Color object at 0x0000020C10D06080>,
-    ...     'yellow': <object_colors.Color object at 0x0000020C10D06B00>
-    ... }
+    'text': 1,
+    'effect': 1,
+    'background': 4,
+    'red': <object_colors.Color object at 0x0000020C10D06080>,
+    'yellow': <object_colors.Color object at 0x0000020C10D06B00>
 ..
 
 .. code-block:: python
@@ -215,18 +210,16 @@ Methods
     >>> # or create new instances
     >>> red = color.pop("red")
     >>> print(color.__dict__)
-    ... {
-    ...     'text': 1,
-    ...     'effect': 1,
-    ...     'background': 4,
-    ...     'yellow': <object_colors.Color object at 0x0000020C10D06B00>
-    ... }
+    'text': 1,
+    'effect': 1,
+    'background': 4,
+    'yellow': <object_colors.Color object at 0x0000020C10D06B00>
 ..
 
 .. code-block:: python
 
     >>> print(red.__dict__)
-    ... {'text': 1, 'effect': 0, 'background': 0}
+    {'text': 1, 'effect': 0, 'background': 0}
 ..
 
 .. code-block:: python

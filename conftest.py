@@ -98,6 +98,22 @@ def all_cs_no_caps_color(red: str, green: str, reset: str) -> str:
 
 
 @fixture
+def all_cs_no_caps_blue(blue: str, reset: str) -> str:
+    return (
+        f"C{blue}c{reset}{blue}:{reset} My "
+        f"Business <me@mybusiness.{blue}c{reset}om>;"
+    )
+
+
+@fixture
+def all_cs_no_caps_blue_color(blue: str, green: str, reset: str) -> str:
+    return (
+        f"{green}C{blue}c{green}{blue}:{green} My "
+        f"Business <me@mybusiness.{blue}c{green}om>;{reset}"
+    )
+
+
+@fixture
 def exact_idx(red: str, reset: str) -> str:
     return (
         f"{red}C{reset}{red}c{reset}: My Business "
@@ -148,6 +164,22 @@ def scatter_cs_color(green: str, red: str, reset: str) -> str:
 
 
 @fixture
+def scatter_cs_blue(green: str, blue: str, reset: str) -> str:
+    return (
+        f"{blue}C{reset}{blue}c{reset}{blue}:{reset} My Business "
+        f"<me@mybusiness.{blue}c{reset}om>;"
+    )
+
+
+@fixture
+def scatter_cs_blue_color(green: str, blue: str, reset: str) -> str:
+    return (
+        f"{green}{blue}C{green}{blue}c{green}{blue}:{green} My Business "
+        f"<me@mybusiness.{blue}c{green}om>;{reset}"
+    )
+
+
+@fixture
 def scatter_cs_exact(green: str, red: str, reset: str) -> str:
     return f"C{red}c{reset}: My Business <me@mybusiness.{red}c" f"{reset}om>;"
 
@@ -181,6 +213,11 @@ def green() -> str:
 @fixture
 def red() -> str:
     return "\u001b[0;31;40m"
+
+
+@fixture
+def blue() -> str:
+    return "\u001b[0;34;40m"
 
 
 @fixture
@@ -230,3 +267,41 @@ def instances(colors) -> List[str]:
 @fixture
 def for_multiple_colors():
     return "Testing for multiple colors"
+
+
+@fixture
+def codes():
+    return [
+        "0;31;40m",
+        "0;32;40m",
+        "0;33;40m",
+        "0;34;40m",
+        "0;35;40m",
+        "0;36;40m",
+        "0;37;40m"
+    ]
+
+
+@fixture
+def long_str():
+    return (
+        "Beautiful is better than ugly."
+        "Explicit is better than implicit."
+        "Simple is better than complex."
+        "Complex is better than complicated."
+        "Flat is better than nested."
+        "Sparse is better than dense."
+        "Readability counts."
+        "Special cases aren't special enough to break the rules."
+        "Although practicality beats purity."
+        "Errors should never pass silently."
+        "Unless explicitly silenced."
+        "In the face of ambiguity, refuse the temptation to guess."
+        "There should be one-- and preferably only one --obvious way to do it."
+        "Although that way may not be obvious at first unless you're Dutch."
+        "Now is better than never."
+        "Although never is often better than *right* now."
+        "If the implementation is hard to explain, it's a bad idea."
+        "If the implementation is easy to explain, it may be a good idea."
+        "Namespaces are one honking great idea -- let's do more of those!"
+    )

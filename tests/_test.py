@@ -34,13 +34,6 @@ class Test:
         assert color.effect == 1
         assert color.background == 2
 
-    def test_color_print(
-            self, color: Color, red: str, capsys: fixture, reset: str
-    ) -> None:
-        color.red.print("This stdout is red")
-        captured = capsys.readouterr()
-        assert captured.out == f"{red}This stdout is red{reset}\n"
-
     def test_int_dict(self) -> None:
         color = Color(orange=1)
         assert color.text == 7

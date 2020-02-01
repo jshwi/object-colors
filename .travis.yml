@@ -9,6 +9,7 @@ script:
     if [[ "$TRAVIS_BRANCH" =~ ^master$|^[0-9]+\.[0-9]+\.X$ ]]; then
       cd docs
       make clean html EXAMPLES_PATTERN=ex_*
+      make doctest
       cd ..
       cp README.rst docs/_build/html
       mv docs/_build/html ./
