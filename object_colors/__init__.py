@@ -829,23 +829,3 @@ class Color:
             str_ = self.get(*args)
 
         print(str_, **kwargs)
-
-    def print_key(
-        self, str_, *args, scatter=False, ignore_case=False, **kwargs
-    ):
-        """Search for and then color key-words
-
-        >>> color = Color(1)
-        >>> color.print_key("str to color", "str")
-        \u001b[0;31;40mstr\u001b[0;0m to color
-
-        :param str_:        String to be printed
-        :param args:        Words to be colored
-        :param ignore_case: Ignore case if True
-        :param scatter:     Search letters and not just words if True
-        :param kwargs:      builtin print() kwargs
-        """
-        str_ = self.get_key(
-            str_, *args, scatter=scatter, ignore_case=ignore_case
-        )
-        print(str_, **kwargs)

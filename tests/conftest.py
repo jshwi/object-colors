@@ -67,46 +67,6 @@ def dupe_marked(green, red, reset):
 
 
 @fixture
-def all_cs_color(red, green, reset):
-    return (
-        f"{green}{red}C{green}{red}c{green}{red}:{green} My "
-        f"Business <me@mybusiness.{red}c{green}om>;{reset}"
-    )
-
-
-@fixture
-def all_cs_no_caps(red, reset):
-    return (
-        f"C{red}c{reset}{red}:{reset} My "
-        f"Business <me@mybusiness.{red}c{reset}om>;"
-    )
-
-
-@fixture
-def all_cs_no_caps_color(red, green, reset):
-    return (
-        f"{green}C{red}c{green}{red}:{green} My "
-        f"Business <me@mybusiness.{red}c{green}om>;{reset}"
-    )
-
-
-@fixture
-def all_cs_no_caps_blue(blue, reset):
-    return (
-        f"C{blue}c{reset}{blue}:{reset} My "
-        f"Business <me@mybusiness.{blue}c{reset}om>;"
-    )
-
-
-@fixture
-def all_cs_no_caps_blue_color(blue, green, reset):
-    return (
-        f"{green}C{blue}c{green}{blue}:{green} My "
-        f"Business <me@mybusiness.{blue}c{green}om>;{reset}"
-    )
-
-
-@fixture
 def exact_idx_color(green, red, reset):
     return (
         f"{green}{red}C{green}{red}c{green}: My Business "
@@ -133,51 +93,6 @@ def colored_dupes():
 
 
 @fixture
-def scatter_cs(green, red, reset):
-    return (
-        f"{red}C{reset}{red}c{reset}{red}:{reset} My Business "
-        f"<me@mybusiness.{red}c{reset}om>;"
-    )
-
-
-@fixture
-def scatter_cs_color(green, red, reset):
-    return (
-        f"{green}{red}C{green}{red}c{green}{red}:{green} My Business "
-        f"<me@mybusiness.{red}c{green}om>;{reset}"
-    )
-
-
-@fixture
-def scatter_cs_blue(green, blue, reset):
-    return (
-        f"{blue}C{reset}{blue}c{reset}{blue}:{reset} My Business "
-        f"<me@mybusiness.{blue}c{reset}om>;"
-    )
-
-
-@fixture
-def scatter_cs_blue_color(green, blue, reset):
-    return (
-        f"{green}{blue}C{green}{blue}c{green}{blue}:{green} My Business "
-        f"<me@mybusiness.{blue}c{green}om>;{reset}"
-    )
-
-
-@fixture
-def scatter_cs_exact(green, red, reset):
-    return f"C{red}c{reset}: My Business <me@mybusiness.{red}c" f"{reset}om>;"
-
-
-@fixture
-def scatter_cs_exact_color(green, red, reset):
-    return (
-        f"{green}C{red}c{green}: My Business "
-        f"<me@mybusiness.{red}c{green}om>;{reset}"
-    )
-
-
-@fixture
 def spaced_words(green, red, reset):
     return f"{red}Cc:{reset} My {red}Business{reset} <me@mybusiness.com>;"
 
@@ -198,11 +113,6 @@ def green():
 @fixture
 def red():
     return "\u001b[0;31;40m"
-
-
-@fixture
-def blue():
-    return "\u001b[0;34;40m"
 
 
 @fixture
