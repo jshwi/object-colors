@@ -54,7 +54,7 @@ EXACT_INDEX_COLOR = (
     f"{GREEN}{RED}C{GREEN}{RED}c{GREEN}: My Business "
     f"<me@mybusiness.{RED}c{GREEN}om>;{RESET}"
 )
-INSTANCES = ["text", "effect", "background", "bold"] + COLORS.copy()
+INSTANCES = ["fore", "effect", "back", "bold"] + COLORS.copy()
 LONG_STRING = (
     "Beautiful is better than ugly."
     "Explicit is better than implicit."

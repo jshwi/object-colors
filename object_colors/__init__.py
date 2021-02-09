@@ -16,7 +16,7 @@ __version__ = "1.0.8"
 class Color:
     """Color object."""
 
-    keys = ["text", "effect", "background"]
+    keys = ["fore", "effect", "back"]
     opts = {
         "colors": [
             "black",
@@ -36,9 +36,9 @@ class Color:
     colorama.init()
 
     def __init__(self, *args, **kwargs):
-        self.text = 7
+        self.fore = 7
         self.effect = 0
-        self.background = 0
+        self.back = 0
         self.set(*args, **kwargs)
 
     def __getattr__(self, item):
@@ -56,13 +56,13 @@ class Color:
         # object to avoid TypeErrors
         if not isinstance(value, int) and key not in ("bold", "black"):
             colors["classes"].append(value)
-            colors["code"].append(value.text)
+            colors["code"].append(value.fore)
 
         return colors
 
     def _dummy_subclass(self):
         # populate class with white subclass
-        kwargs = {"white": {"text": 7}}
+        kwargs = {"white": {"fore": 7}}
         self._make_subclass((), kwargs)
         return self.__dict__["white"]
 
@@ -73,7 +73,7 @@ class Color:
         if "white" not in colors["classes"]:
             white = self._dummy_subclass()
             colors["classes"].append(white)
-            colors["code"].append(white.text)
+            colors["code"].append(white.fore)
 
         return colors
 
@@ -94,7 +94,7 @@ class Color:
         # match the ansi escape code against randomized number to be
         # used to color string index
         for class_ in colors["classes"]:
-            if class_.text == code:
+            if class_.fore == code:
                 idx = class_.get(letter)
                 full_str.append(idx)
                 break
@@ -128,7 +128,7 @@ class Color:
 
     def _color_settings(self):
         # get the colored string with ansi-escape code settings added
-        return f"{Color.code}[{self.effect};3{self.text};4{self.background}m"
+        return f"{Color.code}[{self.effect};3{self.fore};4{self.back}m"
 
     def _get_colored_str(self, _str, reset):
         # set desired reset code and return colored string
@@ -141,7 +141,7 @@ class Color:
         # ints represent the ansi code index within the string
         # This function looks to retrieve an ansi code - rather than
         # create one - to be used again later in the `helper` subclass
-        codes = {"text": 5, "effect": 2, "background": 8}
+        codes = {"fore": 5, "effect": 2, "back": 8}
         for key, value in codes.items():
             helper.update({key: int(word[value])})
 
@@ -363,7 +363,7 @@ class Color:
     def _resolve_arg_type(arg):
         # if codes are entered all together e.g.
         # >>> color = Color(112)
-        # {"text": "red", "effect": "bold", "background": "green"}
+        # {"fore": "red", "effect": "bold", "back": "green"}
         # then separate them to be used as individual arguments
         # otherwise return as is
         if isinstance(arg, int):
@@ -373,7 +373,7 @@ class Color:
         return arg
 
     def _process_args(self, args):
-        # e.g. instead of text="red", effect="bold", background="blue"
+        # e.g. instead of fore="red", effect="bold", back="blue"
         # 114 would get the same result
         args = list(args)
         for count, arg in enumerate(args):
@@ -417,7 +417,7 @@ class Color:
     def _resolve_kwargs(self, key, kwargs):
         # if kwargs are not able to be used as they are then run methods
         # which convert kwargs from alternative values to integer codes
-        default = 7 if key == "text" else 0
+        default = 7 if key == "fore" else 0
         opts = self._get_opts(key)
         if self._keywords_not_ready(key, kwargs, opts):
             kwargs = self._resolve_alternate_opts(key, kwargs, opts, default)
@@ -467,9 +467,9 @@ class Color:
         # manipulate particular colored strings
         bold = {
             "bold": {
-                "text": self.__dict__["text"],
+                "fore": self.__dict__["fore"],
                 "effect": "bold",
-                "background": self.__dict__["background"],
+                "back": self.__dict__["back"],
             }
         }
         self._make_subclass((), bold)
@@ -484,7 +484,7 @@ class Color:
     def populate_colors(self):
         """This will create a subclass for every available color"""
         for color in self._get_opts("colors"):
-            kwargs = {color: {"text": color}}
+            kwargs = {color: {"fore": color}}
             self._make_subclass((), kwargs)
 
     def set(self, *args, **kwargs):

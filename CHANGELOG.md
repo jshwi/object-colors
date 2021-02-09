@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Adds ``colorama`` for ``Windows`` systems
 
+### Changed
+- Renames: `` text`` -> ``fore``,  ``background`` -> ``back``
+
 [v1.0.8](https://github.com/jshwi/object_colors/releases/tag/v1.0.8)  - 2020-02-02
 ------------------------------------------------------------------------
 ### Added

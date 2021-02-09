@@ -22,210 +22,127 @@ object-colors
     :target: https://github.com/psf/black
     :alt: black
 
-Installation
+Object-oriented library for stylizing terminal output
+
+**Installation**
 
 .. code-block:: console
 
-    pip install object-colors
+    $ pip install object-colors
+..
 
-Setup
+**Options**
+
+    *Args can be provided as strings or as indices corresponding to their index in an ANSI escape sequence*
+
+    *The following would yield the same result*
+
+.. code-block:: python
+
+    >>> from object_colors import Color
+    >>> c = Color(effect="bold", fore="red", back="green")
+    >>> print(vars(c))
+    {'fore': 1, 'effect': 1, 'back': 2}
+    >>> c = Color(effect=1, fore=1, back=2)
+    >>> print(vars(c))
+    {'fore': 1, 'effect': 1, 'back': 2}
+..
+
+    *The above options are part of the below mapping*
+
+- colors:
+
+  - black:        0
+  - red:          1
+  - green:        2
+  - yellow:       3
+  - blue:         4
+  - purple:       5
+  - cyan:         6
+  - white:        7
+
+- effects:
+
+  - None:         0
+  - bold:         1
+  - bright:       2
+  - underline:    3
+  - negative:     4
+
+**Usage**
+
+    *create new objects with ``set``*
 
 .. code-block:: python
 
     >>> from object_colors import Color
     >>> c = Color()
+    >>> c.set(fore="green", effect="bold", back="red")
+    >>> print(vars(c))
+    {'fore': 2, 'effect': 1, 'back': 1, 'bold': <object_colors.Color object at 0x7f11e209c8b0>}
+    >>> c.set(bold_green={"fore": "green", "effect": "bold"})
+    >>> print(vars(c))
+    {'fore': 2, 'effect': 1, 'back': 1, 'bold': <object_colors.Color object at 0x7f11e20cbe80>, 'bold_green': <object_colors.Color object at 0x7f11e20cbe20>}
 ..
 
-    Without keywords args are positional like so:
+    *Return values using ``get``*
 
-.. code-block:: python
-
-    >>> from object_colors import Color
-    >>> Color("text", "effect", "background")
-
-..
-
-    - colors:
-
-      - black:        0
-      - red:          1
-      - green:        2
-      - yellow:       3
-      - blue:         4
-      - purple:       5
-      - cyan:         6
-      - white:        7
-
-    - effects:
-
-      - None:         0
-      - bold:         1
-      - bright:       2
-      - underline:    3
-      - negative:     4
-
+    *Return ``str`` or ``tuple`` using ``get``*
 
 .. code-block:: python
 
     >>> from object_colors import Color
     >>> c = Color()
-    >>> c.set(2, 1, 1)
+    >>> c.set(red={"fore": "red"})
+    >>> c.set(yellow={"fore": "yellow"})
+    >>> print(c.red.get("*") + " " + c.yellow.get("Warning"))
+    '\u001b[0;31;40m*\u001b[0;0m \u001b[0;33;40mWarning\u001b[0;0m'
+    >>> x, y, z = c.red.get("x", "y", "z")
+    >>> print(x, y, z)
+    '\u001b[0;31;40mx\u001b[0;0m \u001b[0;31;40my\u001b[0;0m \u001b[0;31;40mz\u001b[0;0m'
 ..
 
-    - text:       green
-    - effect:     bold
-    - background: red
+    *Print the result using ``print``*
 
 .. code-block:: python
 
     >>> from object_colors import Color
-    >>> c = Color()
-    >>> # instance attributes
-    >>> c.set(
-    ...     text="green",
-    ...     effect="bold",
-    ...     background="red"
-    ... )
+    >>> c = Color(fore="cyan", effect="bold")
+    >>> c.print("bold cyan")
+    '\u001b[1;36;40mbold cyan\u001b[0;0m'
 ..
 
-.. code-block:: python
-
-    >>> from object_colors import Color
-    >>> c = Color()
-    >>> # subclasses -  set like those for
-    >>> # original class only keyword arguments
-    >>> # are expressed as dictionary
-    >>> c.set(
-    ...     sub_color={
-    ...         "text": "green",
-    ...         "effect": "bold",
-    ...         "background": "red"
-    ...     }
-    ... )
-..
-
-    For most versatile usage simply instantiate the class with the populate_colors() method
-    This will populate the instance with a subclass for every key in the "colors" object
+    *Load all colors using ``populate_colors``*
 
 .. code-block:: python
 
     >>> from object_colors import Color
     >>> c = Color()
     >>> c.populate_colors()
-    >>> print(c.__dict__)
-    {'text': 7, 'effect': 0, 'background': 0, 'bold': <object_colors.Color object at 0x7f3303b09a90>, 'black': <object_colors.Color object at 0x7f3302cf4b10>, 'red': <object_colors.Color object at 0x7f3303aa5d10>, 'green': <object_colors.Color object at 0x7f33037a7710>, 'yellow': <object_colors.Color object at 0x7f3302bd4710>, 'blue': <object_colors.Color object at 0x7f3302bd4d50>, 'purple': <object_colors.Color object at 0x7f3302ce0910>, 'cyan': <object_colors.Color object at 0x7f33037ddc10>, 'white': <object_colors.Color object at 0x7f33005e4c10>}
+    >>> c.red.print("red")
+    '\u001b[0;31;40mred\u001b[0;0m'
+    >>> c.green.print("green")
+    '\u001b[0;32;40mgreen\u001b[0;0m'
+    >>> c.yellow.print("yellow")
+    '\u001b[0;33;40myellow\u001b[0;0m'
 ..
 
-    This can be further enhanced with the Color.bold object, initialized when bold has not been activated
+    *Create new instances with ``pop``*
 
 .. code-block:: python
 
     >>> from object_colors import Color
     >>> c = Color()
-    >>> c.set(red={"text": "red"})
-    >>> c.red.print("not bold")
-    '\u001b[0;31;40mnot bold\u001b[0;0m'
-    >>> c.red.bold.print("bold")
-    '\u001b[1;31;40mbold\u001b[0;0m'
-..
-
-    All colors, effects and objects can be manipulated however the user pleases, provided a keyword is not used outside its purpose
-
-Methods
-
-- set():
-
-.. code-block:: python
-
-    >>> from object_colors import Color
-    >>> c = Color()
-    >>> # Set values with keyword arguments
-    >>> c.set(text="red", effect="bold", background="blue")
-    >>> c.set("red", "bold", "blue")
-    >>> c.set(114)
-    >>> print(c.__dict__)
-    {'text': 1, 'effect': 1, 'background': 4, 'bold': <object_colors.Color object at 0x7f3303b09a90>}
-..
-
-.. code-block:: python
-
-    >>> from object_colors import Color
-    >>> c = Color()
-    >>> # Set a new class with a keyword (any key) followed by a dict
-    >>> # value
-    >>> c.set(red={"text": "red"})
-    >>> c.set(yellow={"text": "yellow"})
-    >>> print(c.__dict__)
-    {'text': 7, 'effect': 0, 'background': 0, 'bold': <object_colors.Color object at 0x7f3303b09a90>, 'red': <object_colors.Color object at 0x0000020C10D06080>, 'yellow': <object_colors.Color object at 0x0000020C10D06B00>}
-..
-
-.. code-block:: python
-
-    >>> from object_colors import Color
-    >>> c = Color()
-    >>> c.set(yellow={"text": "yellow"})
-    >>> print(c.yellow.__dict__)
-    {'text': 3, 'effect': 0, 'background': 0, 'bold': <object_colors.Color object at 0x7f3303b09a90>}
-..
-
-- get():
-
-.. code-block:: python
-
-    >>> from object_colors import Color
-    >>> c = Color()
-    >>> # store values
-    >>> # useful for multicolored printing
-    >>> c.set(red={"text": "red"})
-    >>> c.set(yellow={"text": "yellow"})
-    >>> bullet = c.red.get("[!] ")
-    >>> warning = c.yellow.get("Warning")
-    >>> print(bullet + warning)
-    '\u001b[0;31;40m[!] \u001b[0;0m\u001b[0;33;40mWarning\u001b[0;0m'
-..
-
-.. code-block:: python
-
-    >>> from object_colors import Color
-    >>> c = Color()
-    >>> c.set(red={"text": "red"})
-    >>> # returns a string or a tuple
-    >>> a, b, c = c.red.get("a", "b", "c")
-..
-
-- print():
-
-.. code-block:: python
-
-    >>> from object_colors import Color
-    >>> c = Color()
-    >>> c.set(red={"text": "red"})
-    >>> c.set(yellow={"text": "yellow"})
-    >>> # Instance includes enhanced print() function for color output
-    >>> c.print("no color print")
-    '\u001b[0;37;40mno color print\u001b[0;0m'
-    >>> c.red.print("red print", flush=True)
-    '\u001b[0;31;40mred print\u001b[0;0m'
-    >>> c.yellow.print("yellow print", end="")
-    '\u001b[0;33;40myellow print\u001b[0;0m'
-..
-
-- pop():
-
-.. code-block:: python
-
-    >>> from object_colors import Color
-    >>> c = Color()
-    >>> c.set(red={"text": "red"})
-    >>> c.set(yellow={"text": "yellow"})
-    >>> # remove unused attributes
+    >>> c.populate_colors()
+    >>> c.set(bold_red={"fore": "red", "effect": "bold"})
+    >>> print(vars(c))
+    {'fore': 7, 'effect': 0, 'back': 0, 'bold': <object_colors.Color object at 0x7fd1c410c970>, 'black': <object_colors.Color object at 0x7fd1c41ab580>, 'red': <object_colors.Color object at 0x7fd1c425cc10>, 'green': <object_colors.Color object at 0x7fd1c410cdf0>, 'yellow': <object_colors.Color object at 0x7fd1c410cd30>, 'blue': <object_colors.Color object at 0x7fd1c410cc40>, 'purple': <object_colors.Color object at 0x7fd1c410cca0>, 'cyan': <object_colors.Color object at 0x7fd1c410c9d0>, 'white': <object_colors.Color object at 0x7fd1c410ccd0>, 'bold_red': <object_colors.Color object at 0x7fd1c42b12b0>}
     >>> c.pop("bold_red")
-    >>> print(c.__dict__)
-    {'text': 7, 'effect': 0, 'background': 0, 'bold': <object_colors.Color object at 0x7f3303b09a90>, 'red': <object_colors.Color object at 0x0000020C10D06080>, 'yellow': <object_colors.Color object at 0x0000020C10D06B00>}
-    >>> # or create new instances
+    >>> print(vars(c))
+    {'fore': 7, 'effect': 0, 'back': 0, 'bold': <object_colors.Color object at 0x7fd1c410c970>, 'black': <object_colors.Color object at 0x7fd1c41ab580>, 'red': <object_colors.Color object at 0x7fd1c425cc10>, 'green': <object_colors.Color object at 0x7fd1c410cdf0>, 'yellow': <object_colors.Color object at 0x7fd1c410cd30>, 'blue': <object_colors.Color object at 0x7fd1c410cc40>, 'purple': <object_colors.Color object at 0x7fd1c410cca0>, 'cyan': <object_colors.Color object at 0x7fd1c410c9d0>, 'white': <object_colors.Color object at 0x7fd1c410ccd0>}
     >>> red = c.pop("red")
-    >>> print(c.__dict__)
-    {'text': 7, 'effect': 0, 'background': 0, 'bold': <object_colors.Color object at 0x7f3303b09a90>, 'yellow': <object_colors.Color object at 0x0000020C10D06B00>}
-    >>> print(red.__dict__)
-    {'text': 1, 'effect': 0, 'background': 0, 'bold': <object_colors.Color object at 0x7f3303b09a90>}
+    >>> print(vars(c))
+    {'fore': 7, 'effect': 0, 'back': 0, 'bold': <object_colors.Color object at 0x7fd1c410c970>, 'black': <object_colors.Color object at 0x7fd1c41ab580>, 'green': <object_colors.Color object at 0x7fd1c410cdf0>, 'yellow': <object_colors.Color object at 0x7fd1c410cd30>, 'blue': <object_colors.Color object at 0x7fd1c410cc40>, 'purple': <object_colors.Color object at 0x7fd1c410cca0>, 'cyan': <object_colors.Color object at 0x7fd1c410c9d0>, 'white': <object_colors.Color object at 0x7fd1c410ccd0>}
+    >>> red.print("popped red")
+    '\u001b[0;31;40mpopped red\u001b[0;0m'
 ..
