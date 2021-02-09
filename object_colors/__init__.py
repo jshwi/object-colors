@@ -14,103 +14,7 @@ __version__ = "1.0.8"
 
 
 class Color:
-    """
-    Instantiate object with attributes to use...
-
-    >>> from object_colors import Color
-
-    >>> str_ = "Sample string"
-
-    >>> color = Color(text="green")
-
-    >>> color_str = color.get(str_)
-    >>> print(color_str)
-    \u001b[0;32;40mSample string\u001b[0;0m
-
-    ...or set attributes after instantiation
-
-    >>> color.set(subclass={"text": "red"})
-
-    >>> substr = color.subclass.get_key(str_, "Sample")
-    >>> print(substr)
-    \u001b[0;31;40mSample\u001b[0;0m string
-
-    >>> green_substr = color.subclass.get_key(color_str, "Sample")
-    >>> print(green_substr)  # doctest +ELLIPSIS
-    \u001b[0;32;40m\u001b[0;31;40mSample\u001b[0;32;40m string\u001b[...
-
-
-    Pop objects from `color.__dict__`
-
-    >>> subclass = color.pop("subclass")
-
-    >>> substr = subclass.get_key(str_, "Sample")
-    >>> print(substr)
-    \u001b[0;31;40mSample\u001b[0;0m string
-
-    Print colored strings directly
-
-    >>> color.print(str_)
-    \u001b[0;32;40mSample string\u001b[0;0m
-
-    >>> color.print_key(str_, "string")
-    Sample \u001b[0;32;40mstring\u001b[0;0m
-
-    Set attributes in instance with flexible arguments
-
-    >>> # keywords
-    >>> color.set(text="blue", effect="bold", background="red")
-    >>> print(color.__dict__)  # doctest +ELLIPSIS
-    {'text': 4, 'effect': 1, 'background': 1, 'bold': <object_colors...}
-
-    >>> # args (string)
-    >>> color.set("blue", "bold", "red")
-    >>> print(color.__dict__)  # doctest +ELLIPSIS
-    {'text': 4, 'effect': 1, 'background': 1, 'bold': <object_colors...}
-
-    >>> # args (tuple)
-    >>> color.set(4, 1, 1)
-    >>> print(color.__dict__)  # doctest +ELLIPSIS
-    {'text': 4, 'effect': 1, 'background': 1, 'bold': <object_colors...}
-
-    >>> # args (integer)
-    >>> color.set(411)
-    >>> print(color.__dict__)  # doctest +ELLIPSIS
-    {'text': 4, 'effect': 1, 'background': 1, 'bold': <object_colors...}
-
-    Set attributes in object instance's subclasses
-
-    >>> color.set(red={"text": "red", "effect": "bold"})
-    >>> color.red.print("Red string")
-    \u001b[1;31;40mRed string\u001b[0;0m
-
-    >>> color.set(blue={"text": "blue", "effect": "bold"})
-    >>> color.blue.print("Blue string")
-    \u001b[1;34;40mBlue string\u001b[0;0m
-
-    Populate instance with subclasses for all colors
-
-    >>> color.populate_colors()
-
-    >>> color.green.print("Green string")
-    \u001b[0;32;40mGreen string\u001b[0;0m
-
-    >>> color.cyan.print("Cyan string")
-    \u001b[0;36;40mCyan string\u001b[0;0m
-    >>> # etc...
-
-    Easily switch between bold text
-
-    >>> color.purple.bold.print("Bold purple string")
-    \u001b[1;35;40mBold purple string\u001b[0;0m
-
-    :cvar code:         Ansi escape code
-    :type code:         str
-    :cvar reset:        Default reset code to switch off color for str
-    :type reset:        str
-    :cvar ansi_escape:  Regex for finding ansi escape codes in strings
-    :type ansi_escape:  Pattern[str]
-    """
+    """Color object."""
 
     __keys = ["text", "effect", "background"]
     opts = {
@@ -576,15 +480,8 @@ class Color:
         if self.effect != 1:
             self.__set_bold_attr()
 
-    # noinspection PyShadowingNames,PyUnresolvedReferences
     def populate_colors(self):
-        """This will create a subclass for every available color
-
-        >>> color = Color()
-        >>> color.populate_colors()
-        >>> print(color.__dict__)  # doctest +ELLIPSIS
-        {'text': 7, 'effect': 0, 'background': 0, 'bold': <object_co...}
-        """
+        """This will create a subclass for every available color"""
         for color in self.__get_opts("colors"):
             kwargs = {color: {"text": color}}
             self.__make_subclass((), kwargs)
@@ -592,63 +489,8 @@ class Color:
     def set(self, *args, **kwargs):
         """Call to set new instance values
 
-        colors:
-          - black:        0
-          - red:          1
-          - green:        2
-          - yellow:       3
-          - blue:         4
-          - purple:       5
-          - cyan:         6
-          - white:        7
-
-        effects:
-          - None:         0
-          - bold:         1
-          - bright:       2
-          - underline:    3
-          - negative:     4
-
         :param args:    Colors or effects as integers or strings
-
-                        Without keywords args are positional like so:
-
-                        >>> color = Color("text", "effect", "background")
-
-                        >>> color.set(2, 1, 1)
-                        >>> print(color.__dict__)  # doctest +ELLIPSIS
-                        {'text': 2, 'effect': 1, 'background': 1, 'b...}
-
-                          - text:       green
-                          - effect:     bold
-                          - background: red
-
         :param kwargs:  More precise keyword arguments
-
-                        >>> color = Color()
-
-                        >>> # instance attributes
-                        >>> color.set(
-                        ...     text="green",
-                        ...     effect="bold",
-                        ...     background="red"
-                        ... )
-                        >>> print(color.__dict__)  # doctest +ELLIPSIS
-                        {'text': 2, 'effect': 1, 'background': 1, 'b...}
-
-                        >>> # subclasses -  set like those for
-                        >>> # original class only keyword arguments
-                        >>> # are expressed as dictionary
-                        >>> color.set(
-                        ...     sub_color={
-                        ...         "text": "green",
-                        ...         "effect": "bold",
-                        ...         "background": "red"
-                        ...     }
-                        ... )
-                        >>> print(color.sub_color.__dict__)
-                        {'text': 2, 'effect': 1, 'background': 1}
-
         """
         kwargs = self.__populate_defaults(kwargs)
         args = self.__process_args(args)
@@ -657,13 +499,6 @@ class Color:
 
     def get(self, *args, reset: Optional[str] = reset):
         """Return colored string
-
-        >>> color = Color(
-        ...     text="red", effect="bold", background="green"
-        ... )
-        >>> str_ = color.get("red, bold, green background")
-        >>> print(str_)
-        \u001b[1;31;42mred, bold, green background\u001b[0;0m
 
         :param args:    Manipulate string(s)
         :param reset:   Variable reset code i.e. standard reset to white
@@ -675,23 +510,9 @@ class Color:
 
         return self.__get_colored_str(args[0], reset)
 
-    # noinspection PyShadowingNames
     def get_key(self, str_, *search, scatter=False, ignore_case=False):
         """With the string as the first argument - and one or more
         searches following - add color to corresponding matched keys
-
-        >>> color = Color(text="red")
-
-        >>> str_ = color.get_key("str to color", "str")
-        >>> print(str_)
-        \u001b[0;31;40mstr\u001b[0;0m to color
-
-        (Ansi escaped strings may be entered)
-
-        >>> str_ = "\u001b[0;32;40mstr to color\u001b[0;0m"
-        >>> str_ = color.get_key(str_, "str")
-        >>> print(str_)  # doctest +ELLIPSIS
-        \u001b[0;32;40m\u001b[0;31;40mstr\u001b[0;32;40m to color...
 
         :param str_:        String containing the key(s) to color
         :param search:      Key(s) within string to color
@@ -708,39 +529,6 @@ class Color:
     def multicolor(self, str_):
         """Return string colored with an assortment of all colors
         instantiated in subclass instances
-
-        >>> # only white will be used
-        >>> color = Color(text="green")
-        >>> none = color.multicolor("multicolored string")
-        >>> print(none)
-        multicolored string
-
-        >>> # only green and white will be used
-        >>> color.set(green={"text": "green"})
-        >>> green_and_none = color.multicolor("multicolored string")
-        >>> assert "0;32;40m" in green_and_none
-
-        >>> # only green, red and white will be used
-        >>> codes = ["0;31;40m", "0;32;40m"]
-        >>> color.set(red={"text": "red"})
-        >>> green_red_none = color.multicolor("multicolored string")
-        >>> for code in codes:
-        ...     assert code in green_red_none
-
-        >>> # all colors will be used
-        >>> codes = [
-        ...     "0;31;40m",
-        ...     "0;32;40m",
-        ...     "0;33;40m"
-        ...     "0;34;40m",
-        ...     "0;35;40m",
-        ...     "0;36;40m",
-        ...     "0;37;40m"
-        ... ]
-        >>> populate = Color()
-        >>> populate.populate_colors()
-        >>> all_colors = populate.multicolor("multicolored string")
-
 
         :param str_:    String to color
         :return:        Colored string
@@ -768,11 +556,6 @@ class Color:
     def pop(self, str_):
         """Retrieve attr present with class instance
 
-        >>> color = Color(subclass={"text": "red"})
-        >>> red = color.pop("subclass")
-        >>> print(red.__dict__)  # doctest +ELLIPSIS
-        {'text': 1, 'effect': 0, 'background': 0, 'bold': <objec...}
-
         :param str_:    Key to remove
         :return:        Class dict or None
         """
@@ -786,14 +569,6 @@ class Color:
         """Split ansi codes and string and populate the object
         representing the string and its color before they were
         separated to restore its state later
-
-        .. todo::
-            - Make this work for multicolor which consists of more than
-              just one code
-            - Currently the only code captured will be the first one
-            - This will also include changes to self.get_key() which
-              will need to iterate through several items in object and
-              put them back in the right place
 
         :param str_:    String containing ansi escape codes
         :param name_:   Name of the subclass to be created
@@ -817,10 +592,6 @@ class Color:
     def print(self, *args, multi=False, **kwargs):
         """Print colored strings straight to stdout
         builtin print() kwargs valid keyword arguments
-
-        >>> color = Color("red", "bold", "green")
-        >>> color.print("red, bold, green background")
-        \u001b[1;31;42mred, bold, green background\u001b[0;0m
 
         :param args:    Arbitrary number of strings or integers
         :param multi:   Boolean value to return multicolored string
