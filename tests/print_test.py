@@ -1,13 +1,10 @@
 #!/usr/bin/env python3
-from pytest import fixture
 
 from object_colors import Color
 
 
 class TestPrint:
-    def test_color_print(
-        self, color: Color, red: str, capsys: fixture, reset: str
-    ) -> None:
+    def test_color_print(self, color, red, capsys, reset):
         color.red.print("This stdout is red")
         captured = capsys.readouterr()
         assert captured.out == f"{red}This stdout is red{reset}\n"

@@ -1,13 +1,10 @@
 #!/usr/bin/env python3
-from typing import List
 
 from object_colors import Color
 
 
 class TestMultiColor:
-    def test_multi_values(
-        self, color: Color, colors: List[str], long_str: str
-    ) -> None:
+    def test_multi_values(self, color, colors, long_str):
         rb = color.multicolor(long_str)
         ansis = color.get_list(rb)
         for ansi in ansis:

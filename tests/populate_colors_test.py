@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
-from typing import List
 
 from object_colors import Color
 
 
 class TestPopulateColors:
-    def test_populated(self, colors: List[str]):
+    def test_populated(self, colors):
         color = Color()
         color.populate_colors()
         contents = color.__dict__
