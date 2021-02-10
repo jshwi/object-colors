@@ -2,7 +2,6 @@
 
 
 class TestGet:
-
     def test_tuple_return(self, color):
         tup = color.red.get("t", "u", "p")
         assert tup == (

@@ -5,9 +5,8 @@ from object_colors import Color
 
 
 class TestPrint:
-
     def test_color_print(
-            self, color: Color, red: str, capsys: fixture, reset: str
+        self, color: Color, red: str, capsys: fixture, reset: str
     ) -> None:
         color.red.print("This stdout is red")
         captured = capsys.readouterr()

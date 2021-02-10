@@ -3,7 +3,6 @@ from object_colors import Color
 
 
 class TestPop:
-
     def test_pop_result(self, color):
         assert hasattr(color, "red")
         red = color.pop("red")

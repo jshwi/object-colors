@@ -7,7 +7,6 @@ from object_colors import Color
 
 
 class Test:
-
     def test_color_string(self, str_, green, color_str, reset) -> None:
         assert color_str == f"{green}{str_}{reset}"
 
@@ -17,7 +16,7 @@ class Test:
             assert hasattr(color, attr)
 
     def test__dir__(
-            self, color: Color, instances: List[str], capsys: fixture
+        self, color: Color, instances: List[str], capsys: fixture
     ) -> None:
         color_instances = color.__dir__()
         assert color_instances == instances

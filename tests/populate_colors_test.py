@@ -5,7 +5,6 @@ from object_colors import Color
 
 
 class TestPopulateColors:
-
     def test_populated(self, colors: List[str]):
         color = Color()
         color.populate_colors()

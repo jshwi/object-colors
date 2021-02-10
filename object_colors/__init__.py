@@ -156,6 +156,7 @@ class Color:
         if not isinstance(value, int) and key not in ("bold", "black"):
             colors["classes"].append(value)
             colors["code"].append(value.text)
+
         return colors
 
     def __dummy_subclass(self) -> Color:
@@ -175,6 +176,7 @@ class Color:
             white = self.__dummy_subclass()
             colors["classes"].append(white)
             colors["code"].append(white.text)
+
         return colors
 
     def __get_multi_object(self) -> Dict[str, Union[str, list]]:
@@ -202,6 +204,7 @@ class Color:
                 idx = class_.get(letter)
                 full_str.append(idx)
                 break
+
         return full_str
 
     def __get_multi_str(
@@ -212,12 +215,14 @@ class Color:
         full_str = []
         if len(colors["classes"]) == 1:
             return str_
+
         max_ = len(colors["code"]) - 1
         for count, _ in enumerate(str_):
             letter = str_[count]
             idx = randint(0, max_)
             code = colors["code"][idx]
             full_str = self.__validate_code(colors, code, letter, full_str)
+
         return "".join(full_str)
 
     def __get_colored_tuple(
@@ -228,6 +233,7 @@ class Color:
         # strings
         for count, arg in enumerate(args):
             args[count] = self.__get_colored_str(arg, reset)
+
         return tuple(args)
 
     def __color_settings(self) -> str:
@@ -250,6 +256,7 @@ class Color:
         codes = {"text": 5, "effect": 2, "background": 8}
         for key, value in codes.items():
             helper.update({key: int(word[value])})
+
         return helper
 
     def __populate_state_object(
@@ -266,6 +273,7 @@ class Color:
                 state[name_].update(codes)
         else:
             state["str_"].append(word)
+
         return state
 
     def __get_state_object(
@@ -276,6 +284,7 @@ class Color:
         state = {name_: {}, "str_": []}
         for word in words:
             state = self.__populate_state_object(word, name_, state)
+
         state["str_"] = "".join(state["str_"])
         return state
 
@@ -285,6 +294,7 @@ class Color:
         # colors are needed or effects are needed
         if key in Color.__opts:
             return Color.__opts[key]
+
         return Color.__opts["colors"]
 
     def __resolve_ansi_code(
@@ -313,6 +323,7 @@ class Color:
         # is also active
         if switches["case"] and letter.isalnum():
             idx.append(letter.swapcase())
+
         return idx
 
     def __get_str_indices(
@@ -325,6 +336,7 @@ class Color:
         for letter in key:
             idx.append(letter)
             idx = self.__get_swapped_index(switches, letter, idx)
+
         return list(dict.fromkeys(idx))
 
     @staticmethod
@@ -336,6 +348,7 @@ class Color:
         strs = {"str_": str_, "key": key}
         if switches["case"]:
             strs.update({"str_": str_.lower(), "key": key.lower()})
+
         return strs
 
     @staticmethod
@@ -347,6 +360,7 @@ class Color:
         places = [p for p in range(len(str_)) if str_.find(key, p) == p]
         for place in places:
             pos.append(place)
+
         return pos
 
     def __find_key_positions(
@@ -357,6 +371,7 @@ class Color:
         str_ = strs["str_"]
         if f" {key} " in f" {str_} ":
             pos = self.__get_multiple_positions(key, str_, pos)
+
         return pos
 
     @staticmethod
@@ -370,6 +385,7 @@ class Color:
         for theirs in letter:
             if ours == theirs:
                 pos.append(count)
+
         return pos
 
     def __iterate_ours(
@@ -381,6 +397,7 @@ class Color:
         letter = str_[count]
         for ours in idx:
             pos = self.__iterate_theirs(letter, ours, pos, count)
+
         return pos
 
     def __get_scattered_positions(
@@ -389,6 +406,7 @@ class Color:
         # get the scattered position of searched keys within string
         for count, _ in enumerate(str_):
             pos = self.__iterate_ours(idx, str_, pos, count)
+
         return pos
 
     @staticmethod
@@ -418,6 +436,7 @@ class Color:
         if switches["any"]:
             idx = self.__get_str_indices(key, switches)
             return self.__get_scattered_positions(str_, idx, pos)
+
         return self.__get_key_positions(str_, key, pos, switches)
 
     @staticmethod
@@ -443,6 +462,7 @@ class Color:
         letter = self.get(obj["letter"], reset=None)
         if obj["pos"] and count == obj["pos"][0]:
             obj = self.__update_str_object(freeze, letter, obj)
+
         return obj
 
     @staticmethod
@@ -460,6 +480,7 @@ class Color:
         obj["added"] = len_key + obj["freeze"]
         if (count == obj["added"] or len_key == 1) and obj["applied"]:
             obj.update({"letter": obj["letter"] + reset, "applied": False})
+
         return obj
 
     def __process_keys(
@@ -473,6 +494,7 @@ class Color:
             obj = self.__reset_index(obj, reset, len_key, count)
             letter = obj["letter"]
             compile_.append(letter)
+
         return "".join(compile_)
 
     def __process_str(
@@ -488,6 +510,7 @@ class Color:
             pos = self.__normalize_position(key, str_, pos, switches)
             len_key = len(key) if not switches["any"] else 1
             str_ = self.__process_keys(str_, pos, reset, len_key)
+
         return str_
 
     def __populate_defaults(self, kwargs: Dict[str, str]) -> Dict[str, str]:
@@ -496,6 +519,7 @@ class Color:
         for key in self.__dict__:
             if key in Color.__keys and key not in kwargs:
                 kwargs[key] = self.__dict__[key]
+
         return kwargs
 
     @staticmethod
@@ -508,6 +532,7 @@ class Color:
         if isinstance(arg, int):
             for item in list(str(arg)):
                 return int(item)
+
         return arg
 
     def __process_args(self, args: Tuple[Any]) -> List[str]:
@@ -516,6 +541,7 @@ class Color:
         args = list(args)
         for count, arg in enumerate(args):
             args[count] = self.__resolve_arg_type(arg)
+
         return args
 
     @staticmethod
@@ -526,6 +552,7 @@ class Color:
         # than the length of the arguments given
         if 0 <= index_ < len(args):
             kwargs.update({key: args[index_]})
+
         return kwargs
 
     @staticmethod
@@ -538,6 +565,7 @@ class Color:
         # return positive value if kwargs will need to be resolved
         if key in kwargs:
             return not isinstance(kwargs[key], int) or kwargs[key] > len(opts)
+
         return True
 
     @staticmethod
@@ -552,8 +580,10 @@ class Color:
         # will be converted to integer
         if key not in kwargs or key in kwargs and kwargs[key] not in opts:
             kwargs.update({key: default})
+
         elif kwargs[key] in opts:
             kwargs.update({key: opts.index(kwargs[key])})
+
         return kwargs
 
     def __resolve_kwargs(
@@ -567,6 +597,7 @@ class Color:
         opts = self.__get_opts(key)
         if self.__keywords_not_ready(key, kwargs, opts):
             kwargs = self.__resolve_alternate_opts(key, kwargs, opts, default)
+
         return kwargs
 
     def __get_processed(
@@ -580,6 +611,7 @@ class Color:
         for index_, key in enumerate(Color.__keys):
             kwargs = self.__kwargs_in_range(index_, args, kwargs, key)
             kwargs = self.__resolve_kwargs(key, kwargs)
+
         return kwargs
 
     def __set_subclass(
@@ -601,6 +633,7 @@ class Color:
             if isinstance(value, dict):
                 self.__set_subclass(key, value, args)
                 return True
+
         return False
 
     def __set_class_attrs(
@@ -732,6 +765,7 @@ class Color:
         """
         if len(args) > 1:
             return self.__get_colored_tuple(args, reset)
+
         return self.__get_colored_str(args[0], reset)
 
     # noinspection PyShadowingNames
@@ -767,6 +801,7 @@ class Color:
         switches = {"any": scatter, "case": ignore_case}
         if Color.code in str_:
             return self.__resolve_ansi_code(search, str_, switches)
+
         return self.__process_str(search, str_, Color.reset, switches)
 
     def multicolor(self, str_: str) -> str:
@@ -826,6 +861,7 @@ class Color:
         if state["str_"]:
             str_ = state.pop("str_")
             self.__make_subclass((), state)
+
         return str_
 
     def pop(self, str_: str) -> Optional[Any]:
@@ -842,6 +878,7 @@ class Color:
         for key in list(self.__dict__):
             if str_ == key and key not in Color.__keys:
                 return self.__dict__.pop(key)
+
         return None
 
     def get_object(
@@ -899,6 +936,7 @@ class Color:
             str_ = self.multicolor(*args)
         else:
             str_ = self.get(*args)
+
         print(str_, **kwargs)
 
     def print_key(

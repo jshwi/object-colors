@@ -241,7 +241,7 @@ def attrs() -> List[str]:
         "print_key",
         "pop",
         "multicolor",
-        "populate_colors"
+        "populate_colors",
     ]
 
 
@@ -278,7 +278,7 @@ def codes():
         "0;34;40m",
         "0;35;40m",
         "0;36;40m",
-        "0;37;40m"
+        "0;37;40m",
     ]
 
 
