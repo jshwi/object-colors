@@ -30,7 +30,7 @@ def test__dir__(populated_colors):
     """
     color_instances = populated_colors.__dir__()
     assert color_instances == INSTANCES
-    color = Color("red", "bold", "green")
+    color = Color(fore="red", effect="bold", back="green")
     assert color.fore == 1
     assert color.effect == 1
     assert color.back == 2
@@ -40,25 +40,10 @@ def test_str_args():
     """Test for the correct ANSI codes for color, effect, and
     background.
     """
-    color = Color("red", "bold", "green")
+    color = Color(fore="red", effect="bold", back="green")
     assert color.fore == 1
     assert color.effect == 1
     assert color.back == 2
-
-
-def test_str_ints():
-    """Test the correct ANSI code integers are produced."""
-    color = Color(1, 1, 2)
-    assert color.fore == 1
-    assert color.effect == 1
-    assert color.back == 2
-
-
-def test_int_dict():
-    """Test for a non-existing color and assert it will default to
-    white instead of raising an error."""
-    color = Color(orange=1)
-    assert color.fore == 7
 
 
 def test_tuple_return(populated_colors):
@@ -99,5 +84,5 @@ def test_repr(capsys):
     print(color)
     captured = capsys.readouterr()
     assert captured.out.strip() == (
-        "Color(fore=7, effect=0, back=0, bold=Color(fore=7, effect=1, back=0))"
+        "Color(effect=0, fore=7, back=0, bold=Color(effect=1, fore=7, back=0))"
     )

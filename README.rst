@@ -42,32 +42,35 @@ Object-oriented library for stylizing terminal output
     >>> from object_colors import Color
     >>> c = Color(effect="bold", fore="red", back="green")
     >>> print(c)
-    Color(fore=1, effect=1, back=2)
+    Color(effect=1, fore=1, back=2)
     >>> c = Color(effect=1, fore=1, back=2)
     >>> print(c)
-    Color(fore=1, effect=1, back=2)
+    Color(effect=1, fore=1, back=2)
 ..
 
     *The above options are part of the below mapping*
 
-- colors:
+.. code-block:: python
 
-  - black:        0
-  - red:          1
-  - green:        2
-  - yellow:       3
-  - blue:         4
-  - magenta:      5
-  - cyan:         6
-  - white:        7
-
-- effects:
-
-  - None:         0
-  - bold:         1
-  - bright:       2
-  - underline:    3
-  - negative:     4
+    >>> from object_colors import Color
+    >>> for i, c in enumerate(Color.colors):
+    ...     print(i, c)
+    0 black
+    1 red
+    2 green
+    3 yellow
+    4 blue
+    5 magenta
+    6 cyan
+    7 white
+    >>> for i, e in enumerate(Color.effects):
+    ...     print(i, e)
+    0 none
+    1 bold
+    2 bright
+    3 underline
+    4 negative
+..
 
 **Usage**
 
@@ -79,10 +82,10 @@ Object-oriented library for stylizing terminal output
     >>> c = Color()
     >>> c.set(fore="green", effect="bold", back="red")
     >>> print(c)
-    Color(fore=2, effect=1, back=1, bold=Color(fore=7, effect=1, back=0))
+    Color(effect=1, fore=2, back=1, bold=Color(effect=1, fore=7, back=0))
     >>> c.set(bold_green={"fore": "green", "effect": "bold"})
     >>> print(c)
-    Color(fore=2, effect=1, back=1, bold=Color(fore=7, effect=1, back=0), bold_green=Color(fore=2, effect=1, back=0))
+    Color(effect=1, fore=2, back=1, bold=Color(effect=1, fore=7, back=0), bold_green=Color(effect=1, fore=2, back=0))
 ..
 
     *Return values using ``get``*
@@ -107,7 +110,7 @@ Object-oriented library for stylizing terminal output
 .. code-block:: python
 
     >>> from object_colors import Color
-    >>> c = Color(fore="cyan", effect="bold")
+    >>> c = Color(effect="bold", fore="cyan")
     >>> c.print("bold cyan")
     '\u001b[1;36;40mbold cyan\u001b[0;0m'
 ..

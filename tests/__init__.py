@@ -15,9 +15,9 @@ ATTRS = (
     "multicolor",
     "populate_colors",
 )
-COLORS = Color.opts["colors"]
+COLORS = Color.colors
 GREEN = "\u001b[0;32;40m"
-INSTANCES = tuple(["fore", "effect", "back", "bold"] + list(COLORS))
+INSTANCES = tuple(["effect", "fore", "back", "bold"] + list(COLORS))
 RED = "\u001b[0;31;40m"
 RESET = "\u001b[0;0m"
 TEST_STR = "A simple string"

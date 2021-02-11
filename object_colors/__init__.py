@@ -14,29 +14,25 @@ __version__ = "1.0.8"
 class Color:
     """Color object."""
 
-    keys = ("fore", "effect", "back")
-    opts = {
-        "colors": (
-            "black",
-            "red",
-            "green",
-            "yellow",
-            "blue",
-            "magenta",
-            "cyan",
-            "white",
-        ),
-        "effect": ("none", "bold", "bright", "underline", "negative"),
-    }
-    code = "\u001b"
-    reset = f"{code}[0;0m"
+    effects = ("none", "bold", "bright", "underline", "negative")
+    colors = (
+        "black",
+        "red",
+        "green",
+        "yellow",
+        "blue",
+        "magenta",
+        "cyan",
+        "white",
+    )
+    _opts = dict(effect=effects, fore=colors, back=colors)
     colorama.init()
 
-    def __init__(self, *args, **kwargs):
-        self.fore = 7
-        self.effect = 0
-        self.back = 0
-        self.set(*args, **kwargs)
+    def __init__(self, effect=0, fore=7, back=0):
+        self.effect = effect
+        self.fore = fore
+        self.back = back
+        self.set(effect=effect, fore=fore, back=back)
 
     def __getattr__(self, item):
         # look up dynamic subclasses
@@ -65,43 +61,28 @@ class Color:
 
     def _get_colored_str(self, _str):
         # get the colored string with ansi-escape code settings added
-        setting = f"{Color.code}[{self.effect};3{self.fore};4{self.back}m"
-        return f"{setting}{_str}{self.reset}"
+        return "\u001b[{};3{};4{}m{}\u001b[0;0m".format(
+            self.effect, self.fore, self.back, _str
+        )
 
-    def _get_processed(self, args, kwargs):
+    def _get_processed(self, **kwargs):
         # organise args and kwargs into a parsable dictionary
         # ensure values given are withing the range of values that can
         # be used and if they aren't instantiate with default values
         # check whether keywords are good to go or need to be resolved
         # first
-        for index_, key in enumerate(Color.keys):
-
-            # the index is good to use if the value is not 0 and is
-            # less than the length of the arguments given
-            if 0 <= index_ < len(args):
-                kwargs.update({key: args[index_]})
-
-            # if kwargs are not able to be used as they are then run
-            # methods which convert kwargs from alternative values to
-            # integer codes
-            opts = self.opts.get(key, self.opts["colors"])
+        for key, value in dict(kwargs).items():
 
             # determine whether keyword arguments provided aren't valid
             # check whether the args given are not integers or are not
             # within the length of opts that can be used
             # return positive value if kwargs will need to be resolved
-            if key in kwargs and (
-                isinstance(kwargs[key], str)
-                or (
-                    isinstance(kwargs[key], int)
-                    and not kwargs[key] <= len(opts)
-                )
-            ):
-                kwargs.update({key: opts.index(kwargs[key])})
+            if isinstance(value, str):
+                kwargs.update({key: self._opts[key].index(value)})
 
         return kwargs
 
-    def _make_subclass(self, args, kwargs):
+    def _make_subclass(self, **kwargs):
         # make subclass attribute and return boolean value so method
         # calling this method can determine whether subclass has
         # successfully been made
@@ -111,8 +92,8 @@ class Color:
                 # set subclass as an instance attribute so dynamic names
                 # are recognised as correct attributes belonging to
                 # class
-                value = self._get_processed(args, value)
-                color = Color(*args, **value)
+                value = self._get_processed(**value)
+                color = Color(**value)
                 setattr(self, key, color)
                 return True
 
@@ -120,27 +101,21 @@ class Color:
 
     def populate_colors(self):
         """This will create a subclass for every available color"""
-        for color in self.opts["colors"]:
+        for color in self.colors:
             kwargs = {color: {"fore": color}}
-            self._make_subclass((), kwargs)
+            self._make_subclass(**kwargs)
 
-    def set(self, *args, **kwargs):
+    def set(self, **kwargs):
         """Call to set new instance values
 
-        :param args:    Colors or effects as integers or strings
         :param kwargs:  More precise keyword arguments
         """
-        # Set any gaps in kwargs with the existing class values
-        # (not subclasses) so as not to override them with the defaults
-        for key, value in self.__dict__.items():
-            if key in self.keys and key not in kwargs:
-                kwargs[key] = value
-
         # if not making a subclass then process args and kwargs and add
         # compiled dict to masterclass
-        if not self._make_subclass(args, kwargs):
-            params = self._get_processed(args, kwargs)
-            self.__dict__.update(params)
+        if not self._make_subclass(**kwargs):
+            params = self._get_processed(**kwargs)
+            for key, value in params.items():
+                setattr(self, key, value)
 
         # bold switch:
         # - if used in a class instantiated as bold, switch bold off
@@ -150,14 +125,13 @@ class Color:
             # Instantiate bold class object if bold is not set for more
             # flexible usage and less setting up when using this module
             # to manipulate particular colored strings
-            bold = {
-                "bold": {
+            self._make_subclass(
+                bold={
                     "fore": self.__dict__["fore"],
                     "effect": "bold",
                     "back": self.__dict__["back"],
                 }
-            }
-            self._make_subclass((), bold)
+            )
 
     def get(self, *args):
         """Return colored string
