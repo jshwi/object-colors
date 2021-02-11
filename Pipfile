@@ -13,6 +13,7 @@ restview = "==2.9.2"
 twine = "==3.3.0"
 
 [packages]
+colorama = "==0.4.4"
 
 [requires]
 python_version = "3.8"

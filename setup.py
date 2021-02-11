@@ -33,6 +33,6 @@ setuptools.setup(
     packages=setuptools.find_packages(exclude=["tests", "tests.lib"]),
     include_package_data=True,
     zip_safe=False,
-    install_requires=[],
+    install_requires=["colorama==0.4.4"],
     python_requires=">=3.8",
 )

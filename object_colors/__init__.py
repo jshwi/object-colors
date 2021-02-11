@@ -8,6 +8,8 @@ import re
 from random import randint
 from typing import Optional
 
+import colorama
+
 __version__ = "1.0.8"
 
 
@@ -127,6 +129,7 @@ class Color:
     code = "\u001b"
     reset = f"{code}[0;0m"
     ansi_escape = re.compile(r"(\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~]))")
+    colorama.init()
 
     def __init__(self, *args, **kwargs):
         self.text = 7
