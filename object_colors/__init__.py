@@ -111,7 +111,7 @@ class Color:
     """
 
     __keys = ["text", "effect", "background"]
-    __opts = {
+    opts = {
         "colors": [
             "black",
             "red",
@@ -265,10 +265,10 @@ class Color:
     def __get_opts(key):
         # get list of values to represent ansi escape codes whether
         # colors are needed or effects are needed
-        if key in Color.__opts:
-            return Color.__opts[key]
+        if key in Color.opts:
+            return Color.opts[key]
 
-        return Color.__opts["colors"]
+        return Color.opts["colors"]
 
     def __resolve_ansi_code(self, keys, str_, switches):
         # separate ansi escape codes from ansi coded string
