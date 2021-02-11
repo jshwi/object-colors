@@ -14,9 +14,9 @@ __version__ = "1.0.8"
 class Color:
     """Color object."""
 
-    keys = ["fore", "effect", "back"]
+    keys = ("fore", "effect", "back")
     opts = {
-        "colors": [
+        "colors": (
             "black",
             "red",
             "green",
@@ -25,8 +25,8 @@ class Color:
             "magenta",
             "cyan",
             "white",
-        ],
-        "effect": ["none", "bold", "bright", "underline", "negative"],
+        ),
+        "effect": ("none", "bold", "bright", "underline", "negative"),
     }
     code = "\u001b"
     reset = f"{code}[0;0m"
@@ -44,8 +44,8 @@ class Color:
 
     def __dir__(self):
         # primarily here so linters know that the subclass calling
-        # methods are not strings strings attempting to call attributes
-        return [str(item) for item in self.__dict__]
+        # methods are not strings attempting to call attributes
+        return tuple([str(item) for item in self.__dict__])
 
     def __repr__(self):
         """View the containing attributes within the ``str``
@@ -68,15 +68,6 @@ class Color:
         setting = f"{Color.code}[{self.effect};3{self.fore};4{self.back}m"
         return f"{setting}{_str}{self.reset}"
 
-    @staticmethod
-    def _get_opts(key):
-        # get list of values to represent ansi escape codes whether
-        # colors are needed or effects are needed
-        if key in Color.opts:
-            return Color.opts[key]
-
-        return Color.opts["colors"]
-
     def _get_processed(self, args, kwargs):
         # organise args and kwargs into a parsable dictionary
         # ensure values given are withing the range of values that can
@@ -85,7 +76,7 @@ class Color:
         # first
         for index_, key in enumerate(Color.keys):
 
-            # the index is good to use if the value is not None and is
+            # the index is good to use if the value is not 0 and is
             # less than the length of the arguments given
             if 0 <= index_ < len(args):
                 kwargs.update({key: args[index_]})
@@ -93,33 +84,20 @@ class Color:
             # if kwargs are not able to be used as they are then run
             # methods which convert kwargs from alternative values to
             # integer codes
-            default = 7 if key == "fore" else 0
-            opts = self._get_opts(key)
+            opts = self.opts.get(key, self.opts["colors"])
 
             # determine whether keyword arguments provided aren't valid
             # check whether the args given are not integers or are not
             # within the length of opts that can be used
             # return positive value if kwargs will need to be resolved
-            not_ready = True
-            if key in kwargs:
-                not_ready = not isinstance(kwargs[key], int) or kwargs[
-                    key
-                ] > len(opts)
-
-            if not_ready:
-
-                # will assign the default value to kwargs if invalid
-                # value is provided otherwise if keypair is string -
-                # but valid - value will be converted to integer
-                if (
-                    key not in kwargs
-                    or key in kwargs
-                    and kwargs[key] not in opts
-                ):
-                    kwargs.update({key: default})
-
-                elif kwargs[key] in opts:
-                    kwargs.update({key: opts.index(kwargs[key])})
+            if key in kwargs and (
+                isinstance(kwargs[key], str)
+                or (
+                    isinstance(kwargs[key], int)
+                    and not kwargs[key] <= len(opts)
+                )
+            ):
+                kwargs.update({key: opts.index(kwargs[key])})
 
         return kwargs
 
@@ -142,7 +120,7 @@ class Color:
 
     def populate_colors(self):
         """This will create a subclass for every available color"""
-        for color in self._get_opts("colors"):
+        for color in self.opts["colors"]:
             kwargs = {color: {"fore": color}}
             self._make_subclass((), kwargs)
 
@@ -154,9 +132,9 @@ class Color:
         """
         # Set any gaps in kwargs with the existing class values
         # (not subclasses) so as not to override them with the defaults
-        for key in self.__dict__:
-            if key in Color.keys and key not in kwargs:
-                kwargs[key] = self.__dict__[key]
+        for key, value in self.__dict__.items():
+            if key in self.keys and key not in kwargs:
+                kwargs[key] = value
 
         # e.g. instead of fore="red", effect="bold", back="blue"
         # 114 would get the same result
