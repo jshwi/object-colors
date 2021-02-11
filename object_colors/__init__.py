@@ -4,6 +4,7 @@ object-colors
 
 Object-oriented library for stylizing terminal output.
 """
+import builtins
 
 import colorama
 
@@ -211,10 +212,15 @@ class Color:
         return self._get_colored_str(args[0])
 
     def print(self, *args, **kwargs):
-        """Print colored strings straight to stdout
-        builtin print() kwargs valid keyword arguments
+        """Print colored strings straight to stdout. Prints the values
+        to a stream, or to sys.stdout by default.
 
-        :param args:    Arbitrary number of strings or integers
-        :param kwargs:  builtin print() kwargs
+        :param args:    String or strings to print.
+        :key file:      A file-like object (stream); defaults to the
+                        current sys.stdout.
+        :key sep:       String inserted between values, default a space.
+        :key end:       String appended after the last value, default a
+                        newline.
+        :key flush:     Whether to forcibly flush the stream.
         """
-        print(self.get(*args), **kwargs)
+        builtins.print(self.get(*args), **kwargs)
