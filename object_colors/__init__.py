@@ -178,14 +178,7 @@ class Color:
         :return:        Colored string
         """
         if len(args) > 1:
-            args = list(args)  # type: ignore
-
-            # replace tuples containing strings with corresponding
-            # colored strings
-            for count, arg in enumerate(args):
-                args[count] = self._get_colored_str(arg)  # type: ignore
-
-            return tuple(args)
+            return tuple(self._get_colored_str(i) for i in list(args))
 
         return self._get_colored_str(args[0])
 
