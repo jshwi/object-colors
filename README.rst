@@ -126,23 +126,3 @@ Object-oriented library for stylizing terminal output
     >>> c.yellow.print("yellow")
     '\u001b[0;33;40myellow\u001b[0;0m'
 ..
-
-    *Create new instances with ``pop``*
-
-.. code-block:: python
-
-    >>> from object_colors import Color
-    >>> c = Color()
-    >>> c.populate_colors()
-    >>> c.set(bold_red={"fore": "red", "effect": "bold"})
-    >>> print(vars(c))
-    {'fore': 7, 'effect': 0, 'back': 0, 'bold': <object_colors.Color object at 0x7fd1c410c970>, 'black': <object_colors.Color object at 0x7fd1c41ab580>, 'red': <object_colors.Color object at 0x7fd1c425cc10>, 'green': <object_colors.Color object at 0x7fd1c410cdf0>, 'yellow': <object_colors.Color object at 0x7fd1c410cd30>, 'blue': <object_colors.Color object at 0x7fd1c410cc40>, 'purple': <object_colors.Color object at 0x7fd1c410cca0>, 'cyan': <object_colors.Color object at 0x7fd1c410c9d0>, 'white': <object_colors.Color object at 0x7fd1c410ccd0>, 'bold_red': <object_colors.Color object at 0x7fd1c42b12b0>}
-    >>> c.pop("bold_red")
-    >>> print(vars(c))
-    {'fore': 7, 'effect': 0, 'back': 0, 'bold': <object_colors.Color object at 0x7fd1c410c970>, 'black': <object_colors.Color object at 0x7fd1c41ab580>, 'red': <object_colors.Color object at 0x7fd1c425cc10>, 'green': <object_colors.Color object at 0x7fd1c410cdf0>, 'yellow': <object_colors.Color object at 0x7fd1c410cd30>, 'blue': <object_colors.Color object at 0x7fd1c410cc40>, 'purple': <object_colors.Color object at 0x7fd1c410cca0>, 'cyan': <object_colors.Color object at 0x7fd1c410c9d0>, 'white': <object_colors.Color object at 0x7fd1c410ccd0>}
-    >>> red = c.pop("red")
-    >>> print(vars(c))
-    {'fore': 7, 'effect': 0, 'back': 0, 'bold': <object_colors.Color object at 0x7fd1c410c970>, 'black': <object_colors.Color object at 0x7fd1c41ab580>, 'green': <object_colors.Color object at 0x7fd1c410cdf0>, 'yellow': <object_colors.Color object at 0x7fd1c410cd30>, 'blue': <object_colors.Color object at 0x7fd1c410cc40>, 'purple': <object_colors.Color object at 0x7fd1c410cca0>, 'cyan': <object_colors.Color object at 0x7fd1c410c9d0>, 'white': <object_colors.Color object at 0x7fd1c410ccd0>}
-    >>> red.print("popped red")
-    '\u001b[0;31;40mpopped red\u001b[0;0m'
-..

@@ -231,18 +231,6 @@ class Color:
 
         return self._get_colored_str(args[0])
 
-    def pop(self, _str):
-        """Retrieve attr present with class instance
-
-        :param _str:    Key to remove
-        :return:        Class dict or None
-        """
-        for key in list(self.__dict__):
-            if _str == key and key not in Color.keys:
-                return self.__dict__.pop(key)
-
-        return None
-
     def print(self, *args, **kwargs):
         """Print colored strings straight to stdout
         builtin print() kwargs valid keyword arguments

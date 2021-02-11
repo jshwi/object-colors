@@ -76,29 +76,6 @@ def test_tuple_return(populated_colors):
     )
 
 
-def test_pop_result(populated_colors):
-    """Test colors can be removed from the instance.
-
-    :param populated_colors:    Instantiated ``Color`` object where
-                                ``populate_colors`` has been called.
-    """
-    assert hasattr(populated_colors, "red")
-    red = populated_colors.pop("red")
-    assert "red" not in populated_colors.__dict__
-    red_string = red.get(TEST_STR)
-    assert red_string == f"\u001b[0;31;40m{TEST_STR}\u001b[0;0m"
-
-
-def test_pop_no_result(color):
-    """Test that error goes by silently if item does not exist.
-
-    :param color: Instantiated ``Color`` object.
-    """
-    assert "red" not in color.__dict__
-    red = color.pop("red")
-    assert red is None
-
-
 def test_color_print(capsys, populated_colors):
     """Test the string is as it is supposed to be when the print
     function is used.
