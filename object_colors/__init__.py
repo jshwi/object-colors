@@ -22,7 +22,7 @@ class Color:
             "green",
             "yellow",
             "blue",
-            "purple",
+            "magenta",
             "cyan",
             "white",
         ],

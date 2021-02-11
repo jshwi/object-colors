@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 - Renames: `` text`` -> ``fore``,  ``background`` -> ``back``
+- Renames: `` purple`` -> ``magenta``
 
 ### Removed
 - Removes multicolor feature

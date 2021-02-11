@@ -57,7 +57,7 @@ Object-oriented library for stylizing terminal output
   - green:        2
   - yellow:       3
   - blue:         4
-  - purple:       5
+  - magenta:      5
   - cyan:         6
   - white:        7
 
