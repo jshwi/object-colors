@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Removed
 - Removes multicolor feature
 - Removes ``pop`` method
+- Removes functionality to pass single {1,2,3} digit number as {1,2,3} arg(s)
 
 ### Fixed
 - Fixes ``print`` method to mirror builtin

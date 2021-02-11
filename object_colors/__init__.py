@@ -136,18 +136,6 @@ class Color:
             if key in self.keys and key not in kwargs:
                 kwargs[key] = value
 
-        # e.g. instead of fore="red", effect="bold", back="blue"
-        # 114 would get the same result
-        args = list(args)
-        for count, arg in enumerate(args):
-
-            # if codes are entered all together then separate them to be
-            # used as individual arguments otherwise return as is
-            if isinstance(arg, int):
-                args[count] = int(str(arg)[0])
-            else:
-                args[count] = arg
-
         # if not making a subclass then process args and kwargs and add
         # compiled dict to masterclass
         if not self._make_subclass(args, kwargs):
