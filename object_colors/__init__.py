@@ -12,7 +12,18 @@ __version__ = "1.0.8"
 
 
 class Color:
-    """Color object."""
+    """Color object. Args passed to constructor call may be strings or
+    integers. There are a defined set of options for each. The list
+    of options referenced below are the string form. The integer that
+    can be called is the index of the list item beginning with 0.
+
+    :param effect:  Effect applied to text output. Select from the
+                    following :py:attr:`Color.effects`.
+    :param fore:    Foreground color applied to text output. Select from
+                    the following :py:attr:`Color.colors`.
+    :param back:    Background color applied to text output. Select from
+                    the following :py:attr:`Color.colors`.
+    """
 
     effects = ("none", "bold", "bright", "underline", "negative")
     colors = (
@@ -35,12 +46,18 @@ class Color:
         self.set(effect=self.effect, fore=self.fore, back=self.back)
 
     def __setattr__(self, key, value):
-        """Organise args and kwargs into a parsable dictionary. Check
-        whether keywords are good to go or need to be resolved first.
-        Determine whether keyword arguments provided aren't valid. Check
-        whether the args given are not integers or are not within the
-        length of opts that can be used return positive value if
-        kwargs will need to be resolved.
+        """The two types of attributes to set are the object's instance
+        attributes, and the dynamic object attributes. Standard
+        attributes can be either ``int``, ``str``, or ``NoneType``.
+        Object values can only be a ``dict`` i.e. ``**kwargs`` to create
+        a new object. All ``int`` values correspond to the index of the
+        color or effect and their respective ANSI code. All ``str``
+        values will be converted to their index integer.
+
+        :param key:         The attribute to set.
+        :param value:       The value of the attribute to set.
+        :raises ValueError: If ``str`` does not a match a ``str`` in the
+                            corresponding tuple.
         """
         if isinstance(value, str):
             value = self._opts[key].index(value)
@@ -48,12 +65,16 @@ class Color:
         object.__setattr__(self, key, value)
 
     def __getattr__(self, item):
-        # look up dynamic subclasses
+        """Look up dynamic subclasses.
+
+        :param item: Item to lookup and return.
+        """
         return item
 
     def __dir__(self):
-        # primarily here so linters know that the subclass calling
-        # methods are not strings attempting to call attributes
+        """Primarily here so linters know that the subclass calling
+        methods are not strings attempting to call attributes.
+        """
         return tuple([str(item) for item in self.__dict__])
 
     def __repr__(self):
@@ -73,7 +94,11 @@ class Color:
         )
 
     def _get_colored_str(self, _str):
-        # get the colored string with ANSI escape code settings added
+        """Compile and return ANSI escaped string.
+
+        :param _str:    Regular ``str`` object.
+        :return:        ``str`` with escape codes added.
+        """
         return "\u001b[{};3{}{}m{}\u001b[0;0m".format(
             self.effect,
             self.fore,
@@ -82,15 +107,22 @@ class Color:
         )
 
     def _make_subclass(self, **kwargs):
-        # make subclass attribute and return boolean value so method
-        # calling this method can determine whether subclass has
-        # successfully been made
+        """Make subclass attribute and return boolean value so method.
+        Calling this method can determine whether subclass has
+        successfully been made. Set subclass as an instance attribute so
+        dynamic names are recognised as correct attributes belonging to
+        class.
+
+        :key effect:    Text effect to use.
+        :key fore:      Color of text foreground.
+        :key back:      Color of text background.
+        :key dict:      A subset of the above arguments assigned to a
+                        key that they subclass will be named after.
+        :return:        bool: Whether the ``if`` condition below
+                        succeeded.
+        """
         for key, value in list(kwargs.items()):
             if isinstance(value, dict):
-
-                # set subclass as an instance attribute so dynamic names
-                # are recognised as correct attributes belonging to
-                # class
                 color = Color(**value)
                 setattr(self, key, color)
                 return True
@@ -104,12 +136,16 @@ class Color:
             self._make_subclass(**kwargs)
 
     def set(self, **kwargs):
-        """Call to set new instance values
+        """Call to set new instance values. If not making a subclass
+        then process args and kwargs and add compiled dict to
+        masterclass.
 
-        :param kwargs:  More precise keyword arguments
+        :key effect:    Text effect to use.
+        :key fore:      Color of text foreground.
+        :key back:      Color of text background.
+        :key ``dict``:  If ``**kwargs`` are provided then any keyword
+                        can be provided.
         """
-        # if not making a subclass then process args and kwargs and add
-        # compiled dict to masterclass
         if not self._make_subclass(**kwargs):
             for key, value in kwargs.items():
                 setattr(self, key, value)
@@ -148,10 +184,9 @@ class Color:
         return self._get_colored_str(args[0])
 
     def print(self, *args, **kwargs):
-        """Print colored strings straight to stdout. Prints the values
-        to a stream, or to sys.stdout by default.
+        """Print colored strings using the builtin ``print`` function.
 
-        :param args:    String or strings to print.
+        :param args:    String(s) to print.
         :key file:      A file-like object (stream); defaults to the
                         current sys.stdout.
         :key sep:       String inserted between values, default a space.
