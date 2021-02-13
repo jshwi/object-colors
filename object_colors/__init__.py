@@ -32,7 +32,20 @@ class Color:
         self.effect = effect
         self.fore = fore
         self.back = back
-        self.set(effect=effect, fore=fore, back=back)
+        self.set(effect=self.effect, fore=self.fore, back=self.back)
+
+    def __setattr__(self, key, value):
+        """Organise args and kwargs into a parsable dictionary. Check
+        whether keywords are good to go or need to be resolved first.
+        Determine whether keyword arguments provided aren't valid. Check
+        whether the args given are not integers or are not within the
+        length of opts that can be used return positive value if
+        kwargs will need to be resolved.
+        """
+        if isinstance(value, str):
+            value = self._opts[key].index(value)
+
+        object.__setattr__(self, key, value)
 
     def __getattr__(self, item):
         # look up dynamic subclasses
@@ -68,23 +81,6 @@ class Color:
             _str,
         )
 
-    def _get_processed(self, **kwargs):
-        # organise args and kwargs into a parsable dictionary
-        # ensure values given are withing the range of values that can
-        # be used and if they aren't instantiate with default values
-        # check whether keywords are good to go or need to be resolved
-        # first
-        for key, value in dict(kwargs).items():
-
-            # determine whether keyword arguments provided aren't valid
-            # check whether the args given are not integers or are not
-            # within the length of opts that can be used
-            # return positive value if kwargs will need to be resolved
-            if isinstance(value, str):
-                kwargs.update({key: self._opts[key].index(value)})
-
-        return kwargs
-
     def _make_subclass(self, **kwargs):
         # make subclass attribute and return boolean value so method
         # calling this method can determine whether subclass has
@@ -95,7 +91,6 @@ class Color:
                 # set subclass as an instance attribute so dynamic names
                 # are recognised as correct attributes belonging to
                 # class
-                value = self._get_processed(**value)
                 color = Color(**value)
                 setattr(self, key, color)
                 return True
@@ -116,8 +111,7 @@ class Color:
         # if not making a subclass then process args and kwargs and add
         # compiled dict to masterclass
         if not self._make_subclass(**kwargs):
-            params = self._get_processed(**kwargs)
-            for key, value in params.items():
+            for key, value in kwargs.items():
                 setattr(self, key, value)
 
         # bold switch:

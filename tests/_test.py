@@ -62,6 +62,27 @@ def test_get(attr, pair, expected):
     )
 
 
+def test_set_static(color):
+    """Test that an existing instance attribute can be set with the
+    ``set`` method.
+
+    :param color: Instantiated ``Color`` object.
+    """
+    color.fore = "red"
+    assert color.get(TEST_STR) == f"{FORE_CODES[1]}{TEST_STR}{RESET}"
+
+
+def test_set_dynamic(color):
+    """Test that a subclass can be set with the ``set`` method.
+
+    :param color: Instantiated ``Color`` object.
+    """
+    key = "the_name_is_up_to_the_user"
+    color.set(**{key: {"fore": "red"}})
+    expected = f"{FORE_CODES[1]}{TEST_STR}{RESET}"
+    assert getattr(color, key).get(TEST_STR) == expected
+
+
 @pytest.mark.parametrize(
     "attr,pair,expected",
     ATTR_COLOR_EFFECT_CODE_INDEX,
@@ -110,27 +131,6 @@ def test__dir__(populated_colors):
     assert color.fore == 1
     assert color.effect == 1
     assert color.back == 2
-
-
-def test_set_static(color):
-    """Test that an existing instance attribute can be set with the
-    ``set`` method.
-
-    :param color: Instantiated ``Color`` object.
-    """
-    color.set(fore="red")
-    assert color.get(TEST_STR) == f"{FORE_CODES[1]}{TEST_STR}{RESET}"
-
-
-def test_set_dynamic(color):
-    """Test that a subclass can be set with the ``set`` method.
-
-    :param color: Instantiated ``Color`` object.
-    """
-    key = "the_name_is_up_to_the_user"
-    color.set(**{key: {"fore": "red"}})
-    expected = f"{FORE_CODES[1]}{TEST_STR}{RESET}"
-    assert getattr(color, key).get(TEST_STR) == expected
 
 
 @pytest.mark.parametrize("name,idx", COLOR_INT_INDEX, ids=COLORS)

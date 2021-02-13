@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 - Renames: `` text`` -> ``fore``,  ``background`` -> ``back``
 - Renames: `` purple`` -> ``magenta``
+- Moves: ``_get_processed`` -> ``__setattr__``
 
 ### Removed
 - Removes multicolor feature
