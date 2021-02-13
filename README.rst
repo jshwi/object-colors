@@ -82,10 +82,10 @@ Object-oriented library for stylizing terminal output
     >>> c = Color()
     >>> c.set(fore="green", effect="bold", back="red")
     >>> print(c)
-    Color(effect=1, fore=2, back=1, bold=Color(effect=1, fore=7, back=0))
+    Color(effect=1, fore=2, back=1, bold=Color(effect=1, fore=7, back=None))
     >>> c.set(bold_green={"fore": "green", "effect": "bold"})
     >>> print(c)
-    Color(effect=1, fore=2, back=1, bold=Color(effect=1, fore=7, back=0), bold_green=Color(effect=1, fore=2, back=0))
+    Color(effect=1, fore=2, back=1, bold=Color(effect=1, fore=7, back=None), bold_green=Color(effect=1, fore=2, back=None))
 ..
 
     *Return values using ``get``*
@@ -99,10 +99,10 @@ Object-oriented library for stylizing terminal output
     >>> c.set(red={"fore": "red"})
     >>> c.set(yellow={"fore": "yellow"})
     >>> print(c.red.get("*") + " " + c.yellow.get("Warning"))
-    '\u001b[0;31;40m*\u001b[0;0m \u001b[0;33;40mWarning\u001b[0;0m'
+    '\u001b[0;31m*\u001b[0;0m \u001b[0;33mWarning\u001b[0;0m'
     >>> x, y, z = c.red.get("x", "y", "z")
     >>> print(x, y, z)
-    '\u001b[0;31;40mx\u001b[0;0m \u001b[0;31;40my\u001b[0;0m \u001b[0;31;40mz\u001b[0;0m'
+    '\u001b[0;31mx\u001b[0;0m \u001b[0;31my\u001b[0;0m \u001b[0;31mz\u001b[0;0m'
 ..
 
     *Print the result using ``print``*
@@ -112,7 +112,7 @@ Object-oriented library for stylizing terminal output
     >>> from object_colors import Color
     >>> c = Color(effect="bold", fore="cyan")
     >>> c.print("bold cyan")
-    '\u001b[1;36;40mbold cyan\u001b[0;0m'
+    '\u001b[1;36mbold cyan\u001b[0;0m'
 ..
 
     *Load all colors using ``populate_colors``*
@@ -123,9 +123,9 @@ Object-oriented library for stylizing terminal output
     >>> c = Color()
     >>> c.populate_colors()
     >>> c.red.print("red")
-    '\u001b[0;31;40mred\u001b[0;0m'
+    '\u001b[0;31mred\u001b[0;0m'
     >>> c.green.print("green")
-    '\u001b[0;32;40mgreen\u001b[0;0m'
+    '\u001b[0;32mgreen\u001b[0;0m'
     >>> c.yellow.print("yellow")
-    '\u001b[0;33;40myellow\u001b[0;0m'
+    '\u001b[0;33myellow\u001b[0;0m'
 ..

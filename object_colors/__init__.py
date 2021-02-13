@@ -28,7 +28,7 @@ class Color:
     _opts = dict(effect=effects, fore=colors, back=colors)
     colorama.init()
 
-    def __init__(self, effect=0, fore=7, back=0):
+    def __init__(self, effect=0, fore=7, back=None):
         self.effect = effect
         self.fore = fore
         self.back = back
@@ -60,9 +60,12 @@ class Color:
         )
 
     def _get_colored_str(self, _str):
-        # get the colored string with ansi-escape code settings added
-        return "\u001b[{};3{};4{}m{}\u001b[0;0m".format(
-            self.effect, self.fore, self.back, _str
+        # get the colored string with ANSI escape code settings added
+        return "\u001b[{};3{}{}m{}\u001b[0;0m".format(
+            self.effect,
+            self.fore,
+            f";4{self.back}" if self.back is not None else "",
+            _str,
         )
 
     def _get_processed(self, **kwargs):

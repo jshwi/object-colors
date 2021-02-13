@@ -55,9 +55,9 @@ def test_tuple_return(populated_colors):
     """
     tup = populated_colors.red.get("t", "u", "p")
     assert tup == (
-        "\u001b[0;31;40mt\u001b[0;0m",
-        "\u001b[0;31;40mu\u001b[0;0m",
-        "\u001b[0;31;40mp\u001b[0;0m",
+        "\u001b[0;31mt\u001b[0;0m",
+        "\u001b[0;31mu\u001b[0;0m",
+        "\u001b[0;31mp\u001b[0;0m",
     )
 
 
@@ -74,15 +74,16 @@ def test_color_print(capsys, populated_colors):
     assert captured.out == f"{RED}{TEST_STR}{RESET}\n"
 
 
-def test_repr(capsys):
+def test_repr(color, capsys) -> None:
     """Test output from ``__repr__``.
 
+    :param color:   Instantiated ``Color`` object.
     :param capsys:  ``pytest`` fixture for capturing and returning
                     terminal output
     """
-    color = Color()
     print(color)
     captured = capsys.readouterr()
     assert captured.out.strip() == (
-        "Color(effect=0, fore=7, back=0, bold=Color(effect=1, fore=7, back=0))"
+        "Color(effect=0, fore=7, back=None, bold=Color(effect=1, fore=7, "
+        "back=None))"
     )

@@ -7,7 +7,7 @@ from object_colors import Color
 
 
 @pytest.fixture(name="color")
-def fixture_color() -> Color:
+def fixture_color():
     """Instantiated ``Color`` object."""
     return Color()
 
