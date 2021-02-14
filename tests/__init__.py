@@ -15,9 +15,9 @@ ATTRS = (
     "multicolor",
     "populate_colors",
 )
+CODES = tuple([f"\u001b[0;3{i}m" for i in range(7)])
 COLORS = Color.colors
-GREEN = "\u001b[0;32m"
 INSTANCES = tuple(["effect", "fore", "back", "bold"] + list(COLORS))
-RED = "\u001b[0;31m"
 RESET = "\u001b[0;0m"
 TEST_STR = "A simple string"
+TEST_TUPLE = ("A", "simple", "tuple")

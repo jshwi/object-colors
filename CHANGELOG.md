@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Adds ``colorama`` for ``Windows`` systems
 - Overrides ``__repr__``
+- Adds string formatter to ``get``
 
 ### Changed
 - Renames: `` text`` -> ``fore``,  ``background`` -> ``back``

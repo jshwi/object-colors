@@ -136,13 +136,19 @@ class Color:
                 }
             )
 
-    def get(self, *args):
-        """Return colored string
+    def get(self, *args, **kwargs):
+        """Return colored ``str`` or ``tuple`` depending on the arg
+        passed to method.
 
-        :param args:    Manipulate string(s)
-        :return:        Colored string
+        :param args:    Manipulate string(s).
+        :key format:    Return a string instead of a tuple if strings
+                        are passed as tuple.
+        :return:        Colored string.
         """
         if len(args) > 1:
+            if kwargs.get("format", False):
+                return self._get_colored_str(" ".join(args))
+
             return tuple(self._get_colored_str(i) for i in list(args))
 
         return self._get_colored_str(args[0])
@@ -159,4 +165,4 @@ class Color:
                         newline.
         :key flush:     Whether to forcibly flush the stream.
         """
-        builtins.print(self.get(*args), **kwargs)
+        builtins.print(self.get(*args, format=True), **kwargs)
