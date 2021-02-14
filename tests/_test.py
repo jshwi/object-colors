@@ -2,6 +2,8 @@
 tests._test
 ===========
 """
+from typing import Any, Tuple
+
 import pytest
 
 from object_colors import Color
@@ -22,7 +24,7 @@ from . import (
     ATTR_COLOR_EFFECT_CODE_INDEX,
     ids=[f"{i[0]}-{i[1][0]}" for i in ATTR_COLOR_EFFECT_CODE_INDEX],
 )
-def test_get(attr, pair, expected):
+def test_get(attr: str, pair: Tuple[str, int], expected: str) -> None:
     """Test returning a simple string with effects and colors.
 
     :param attr:        Attribute belonging to ``Color`` constructor
@@ -41,7 +43,7 @@ def test_get(attr, pair, expected):
     )
 
 
-def test_set_static(color):
+def test_set_static(color: Color) -> None:
     """Test that an existing instance attribute can be set with the
     ``set`` method.
 
@@ -51,7 +53,7 @@ def test_set_static(color):
     assert color.get(TEST_STR) == f"{FORE_CODES[1]}{TEST_STR}{RESET}"
 
 
-def test_set_dynamic(color):
+def test_set_dynamic(color: Color) -> None:
     """Test that a subclass can be set with the ``set`` method.
 
     :param color: Instantiated ``Color`` object.
@@ -67,7 +69,9 @@ def test_set_dynamic(color):
     ATTR_COLOR_EFFECT_CODE_INDEX,
     ids=[f"{i[0]}-{i[1][0]}" for i in ATTR_COLOR_EFFECT_CODE_INDEX],
 )
-def test_print(attr, pair, expected, capsys):
+def test_print(
+    attr: str, pair: Tuple[str, int], expected: str, capsys: Any
+) -> None:
     """Test printing a simple string with effects and colors.
 
     :param attr:        Attribute belonging to ``Color`` constructor
@@ -89,7 +93,7 @@ def test_print(attr, pair, expected, capsys):
 
 
 @pytest.mark.parametrize("name,idx", COLOR_INT_INDEX, ids=COLORS)
-def test_populate_colors(populated_colors, name, idx):
+def test_populate_colors(populated_colors: Color, name: str, idx: int) -> None:
     """Test the string is as it is supposed to be when the ``get``
     method is used within a color subclass.
 
@@ -102,7 +106,7 @@ def test_populate_colors(populated_colors, name, idx):
     assert result == f"{FORE_CODES[idx]}{TEST_STR}{RESET}"
 
 
-def test_repr(color, capsys):
+def test_repr(color: Color, capsys: Any) -> None:
     """Test output from ``__repr__``.
 
     :param color:   Instantiated ``Color`` object.
@@ -116,7 +120,7 @@ def test_repr(color, capsys):
     )
 
 
-def test_populate_err(color):
+def test_populate_err(color: Color) -> None:
     """Test attribute error is raised when invalid value is provided
     to populate.
 
@@ -128,7 +132,7 @@ def test_populate_err(color):
     assert str(err.value) == f"'{type(color).__name__}' has no attribute 'key'"
 
 
-def test_populate_colors_deprecated(color):
+def test_populate_colors_deprecated(color: Color) -> None:
     """Test the legacy ``populate_colors`` works as it should.
 
     :param color: Instantiated ``Color`` object.
@@ -138,9 +142,11 @@ def test_populate_colors_deprecated(color):
         assert hasattr(color, item)
 
 
-def test_set_invalid(color):
+def test_set_invalid(color: Color) -> None:
     """Test that a non-existing instance attribute will raise an
     ``AttributeError`` if attempting to be set.
+
+    :param color: Instantiated ``Color`` object.
     """
     key = "not_a_key"
     kwargs = {key: "not_a_value"}
@@ -151,9 +157,11 @@ def test_set_invalid(color):
     assert str(err.value) == expected
 
 
-def test_key_error(color):
+def test_key_error(color: Color) -> None:
     """Test ``AttributeError`` is raised when invalid keyword arguments
     are provided as ``effect``, ``fore``, or ``back``
+
+    :param color: Instantiated ``Color`` object.
     """
     with pytest.raises(AttributeError) as err:
         color.not_an_attr.print("Hello, world!")

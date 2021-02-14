@@ -5,6 +5,7 @@ object-colors
 Object-oriented library for stylizing terminal output.
 """
 import builtins
+from typing import Any, Dict, Optional, Tuple, Union
 
 import colorama
 
@@ -27,7 +28,7 @@ class Color:
                     the following :py:attr:`Color.colors`.
     """
 
-    effects = (
+    effects: Tuple[str, ...] = (
         "none",
         "bold",
         "dim",
@@ -39,7 +40,7 @@ class Color:
         "empty",
         "strikethrough",
     )
-    colors = (
+    colors: Tuple[str, ...] = (
         "black",
         "red",
         "green",
@@ -49,16 +50,23 @@ class Color:
         "cyan",
         "white",
     )
-    _opts = dict(effect=effects, fore=colors, back=colors)
+    _opts: Dict[str, Tuple[str, ...]] = dict(
+        effect=effects, fore=colors, back=colors
+    )
     colorama.init()
 
-    def __init__(self, effect=0, fore=7, back=None):
+    def __init__(
+        self,
+        effect: Union[str, int] = 0,
+        fore: Union[str, int] = 7,
+        back: Optional[Union[str, int]] = None,
+    ) -> None:
         self.effect = effect
         self.fore = fore
         self.back = back
         object.__setattr__(self, "_objects", dict())
 
-    def __setattr__(self, key, value):
+    def __setattr__(self, key: str, value: Any) -> None:
         """The two types of attributes to set are the object's instance
         attributes, and the dynamic object attributes. Standard
         attributes can be either ``int``, ``str``, or ``NoneType``.
@@ -89,7 +97,7 @@ class Color:
 
             self._objects[key] = self.__class__(**value)
 
-    def __getattribute__(self, key):
+    def __getattribute__(self, key: str) -> Any:
         """Attempt to return the attribute matching the key. If no
         attribute can be found search ``_objects`` for objects. If
         neither of the above can yield a result then raise
@@ -111,7 +119,7 @@ class Color:
             except KeyError:
                 raise AttributeError(err) from err
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         """View the containing attributes within the ``str``
         representation.
 
@@ -127,7 +135,7 @@ class Color:
             ),
         )
 
-    def _get_colored_str(self, _str):
+    def _get_colored_str(self, _str: str) -> str:
         """Compile and return ANSI escaped string.
 
         :param _str:    Regular ``str`` object.
@@ -140,7 +148,7 @@ class Color:
             _str,
         )
 
-    def populate(self, elem):
+    def populate(self, elem: str) -> None:
         """Create an object for every available selection.
 
         :param elem:            Attribute to fill with available
@@ -158,7 +166,7 @@ class Color:
                 "'{}' has no attribute '{}'".format(type(self).__name__, elem)
             ) from err
 
-    def populate_colors(self):
+    def populate_colors(self) -> None:
         """Create an object for every available foreground color.
         Deprecated.
         """
@@ -166,7 +174,7 @@ class Color:
         for color in self.colors:
             getattr(self, color).populate("effect")
 
-    def set(self, **kwargs):
+    def set(self, **kwargs: Optional[Union[str, int, Dict[str, Any]]]) -> None:
         """Call to set new instance values. If not making a subclass
         then process args and kwargs and add compiled dict to
         masterclass.
@@ -180,7 +188,7 @@ class Color:
         for key, value in kwargs.items():
             setattr(self, key, value)
 
-    def get(self, *args, **kwargs):
+    def get(self, *args: str, **kwargs: bool) -> Any:
         """Return colored ``str`` or ``tuple`` depending on the arg
         passed to method.
 
@@ -197,7 +205,7 @@ class Color:
 
         return self._get_colored_str(args[0])
 
-    def print(self, *args, **kwargs):
+    def print(self, *args: str, **kwargs: Any) -> None:
         """Print colored strings using the builtin ``print`` function.
 
         :param args:    String(s) to print.
