@@ -6,23 +6,96 @@ import pytest
 
 from object_colors import Color
 
-from . import ATTRS, CODES, INSTANCES, RESET, TEST_STR, TEST_TUPLE
+from . import (
+    ATTR_COLOR_EFFECT_CODE_INDEX,
+    ATTR_COLOR_EFFECT_INDEX,
+    ATTRS,
+    COLOR_INT_INDEX,
+    COLORS,
+    FORE_CODES,
+    INSTANCES,
+    RESET,
+    TEST_STR,
+    TEST_TUPLE,
+)
 
 
-@pytest.mark.parametrize("fore,expected", [("red", 1), ("green", 2)])
-def test_color_string(fore, expected):
-    """Test a simple string."""
-    color = Color(fore=fore)
-    assert color.get(TEST_STR) == f"{CODES[expected]}{TEST_STR}{RESET}"
+@pytest.mark.parametrize(
+    "attr,pair",
+    ATTR_COLOR_EFFECT_INDEX,
+    ids=[f"{i[0]}-{i[1][0]}" for i in ATTR_COLOR_EFFECT_INDEX],
+)
+def test_getattr(attr, pair):
+    """Test the value of ``Color`` attributes are what they are supposed
+    to be when instantiating with a ``str`` or an ``int``.
+
+    :param attr:    Attribute belonging to ``Color`` constructor call.
+    :param pair:    A pair containing a str and an int or an int and and
+                    int
+    """
+    arg, idx = pair
+    color = Color(**{attr: arg})
+    assert getattr(color, attr) == idx
 
 
-def test__getattr__(color):
+@pytest.mark.parametrize(
+    "attr,pair,expected",
+    ATTR_COLOR_EFFECT_CODE_INDEX,
+    ids=[f"{i[0]}-{i[1][0]}" for i in ATTR_COLOR_EFFECT_CODE_INDEX],
+)
+def test_get(attr, pair, expected):
+    """Test returning a simple string with effects and colors.
+
+    :param attr:        Attribute belonging to ``Color`` constructor
+                        call.
+    :param pair:        A pair containing a str and an int or an int and
+                        and int.
+    :param expected:    Expected escape codes ordered in indexed order
+                        by their integer value.
+    """
+    color = Color(**{attr: pair[0]})
+    assert color.get(TEST_STR) == f"{expected}{TEST_STR}{RESET}"
+    assert color.get(*TEST_TUPLE) == (
+        f"{expected}{TEST_TUPLE[0]}{RESET}",
+        f"{expected}{TEST_TUPLE[1]}{RESET}",
+        f"{expected}{TEST_TUPLE[2]}{RESET}",
+    )
+
+
+@pytest.mark.parametrize(
+    "attr,pair,expected",
+    ATTR_COLOR_EFFECT_CODE_INDEX,
+    ids=[f"{i[0]}-{i[1][0]}" for i in ATTR_COLOR_EFFECT_CODE_INDEX],
+)
+def test_print(attr, pair, expected, capsys):
+    """Test printing a simple string with effects and colors.
+
+    :param attr:        Attribute belonging to ``Color`` constructor
+                        call.
+    :param pair:        A pair containing a str and an int or an int and
+                        and int.
+    :param expected:    Expected escape codes ordered in indexed order
+                        by their integer value.
+    :param capsys:      ``pytest`` fixture for capturing and returning
+                        terminal output
+    """
+    color = Color(**{attr: pair[0]})
+    color.print(TEST_STR)
+    captured = capsys.readouterr()
+    assert captured.out == f"{expected}{TEST_STR}{RESET}\n"
+    color.print(*TEST_TUPLE)
+    captured = capsys.readouterr()
+    assert captured.out == f"{expected}{' '.join(TEST_TUPLE)}{RESET}\n"
+
+
+def test__getattr__(populated_colors):
     """Test __getattr__.
 
-    :param color: Instantiated ``Color`` object.
+    :param populated_colors:    Instantiated ``Color`` object where
+                                ``populate_colors`` has been called.
     """
     for attr in ATTRS:
-        assert hasattr(color, attr)
+        assert hasattr(populated_colors, attr)
 
 
 def test__dir__(populated_colors):
@@ -39,48 +112,42 @@ def test__dir__(populated_colors):
     assert color.back == 2
 
 
-def test_str_args():
-    """Test for the correct ANSI codes for color, effect, and
-    background.
+def test_set_static(color):
+    """Test that an existing instance attribute can be set with the
+    ``set`` method.
+
+    :param color: Instantiated ``Color`` object.
     """
-    color = Color(fore="red", effect="bold", back="green")
-    assert color.fore == 1
-    assert color.effect == 1
-    assert color.back == 2
+    color.set(fore="red")
+    assert color.get(TEST_STR) == f"{FORE_CODES[1]}{TEST_STR}{RESET}"
 
 
-def test_tuple_return(populated_colors):
-    """Test that a tuple supplied as arguments gets returned as a tuple
-    and not just a concatenated string.
+def test_set_dynamic(color):
+    """Test that a subclass can be set with the ``set`` method.
+
+    :param color: Instantiated ``Color`` object.
+    """
+    key = "the_name_is_up_to_the_user"
+    color.set(**{key: {"fore": "red"}})
+    expected = f"{FORE_CODES[1]}{TEST_STR}{RESET}"
+    assert getattr(color, key).get(TEST_STR) == expected
+
+
+@pytest.mark.parametrize("name,idx", COLOR_INT_INDEX, ids=COLORS)
+def test_populate_colors(populated_colors, name, idx):
+    """Test the string is as it is supposed to be when the ``get``
+    method is used within a color subclass.
 
     :param populated_colors:    Instantiated ``Color`` object where
                                 ``populate_colors`` has been called.
+    :param name:                Name of attribute to test for.
+    :param idx:                 Index of expected ANSI escape code.
     """
-    tup = populated_colors.red.get("t", "u", "p")
-    assert tup == (
-        "\u001b[0;31mt\u001b[0;0m",
-        "\u001b[0;31mu\u001b[0;0m",
-        "\u001b[0;31mp\u001b[0;0m",
-    )
+    result = getattr(populated_colors, name).get(TEST_STR)
+    assert result == f"{FORE_CODES[idx]}{TEST_STR}{RESET}"
 
 
-def test_color_print(capsys, populated_colors):
-    """Test the string is as it is supposed to be when the print
-    function is used.
-
-    :param capsys:              ``pytest`` fixture to capture output.
-    :param populated_colors:    Instantiated ``Color`` object where
-                                ``populate_colors`` has been called.
-    """
-    populated_colors.red.print(TEST_STR)
-    captured = capsys.readouterr()
-    assert captured.out == f"{CODES[1]}{TEST_STR}{RESET}\n"
-    populated_colors.red.print(*TEST_TUPLE)
-    captured = capsys.readouterr()
-    assert captured.out == f"{CODES[1]}{' '.join(TEST_TUPLE)}{RESET}\n"
-
-
-def test_repr(color, capsys) -> None:
+def test_repr(color, capsys):
     """Test output from ``__repr__``.
 
     :param color:   Instantiated ``Color`` object.
@@ -93,27 +160,3 @@ def test_repr(color, capsys) -> None:
         "Color(effect=0, fore=7, back=None, bold=Color(effect=1, fore=7, "
         "back=None))"
     )
-
-
-def test_set_subclass(capsys):
-    """Test that a color subclass can be set within the main
-    instance.
-    """
-    color = Color()
-    color.set(the_name_is_up_to_the_user={"fore": "red"})
-    color.the_name_is_up_to_the_user.print(TEST_STR)
-    captured = capsys.readouterr()
-    assert captured.out == f"{CODES[1]}{TEST_STR}{RESET}\n"
-
-
-def test_set_regular_attr(capsys):
-    """Test that an attr can be set with the ``set`` method too
-    instance.
-    """
-    color = Color()
-    assert color.fore == 7
-    color.set(fore="red")
-    assert color.fore == 1
-    color.print(TEST_STR)
-    captured = capsys.readouterr()
-    assert captured.out == f"{CODES[1]}{TEST_STR}{RESET}\n"
