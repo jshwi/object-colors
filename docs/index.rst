@@ -1,10 +1,7 @@
-Object Color's Docs
-===================
+object-colors docs
+==================
+
 |
-
-Adding colours to Python simplified into a single class
-
-pip install object-colors
 
 The source code is available `here <https://github.com/jshwi/object_colors>`_
 
@@ -15,11 +12,8 @@ The source code is available `here <https://github.com/jshwi/object_colors>`_
    :name: mastertoc
 
    object_colors
-   readme_include
-
+   readme
 
 * :ref:`genindex`
-
-|
 
 This documentation was last updated on |today|

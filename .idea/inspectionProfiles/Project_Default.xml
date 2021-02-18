@@ -11,6 +11,11 @@
       <scope name="whitelist" level="WARNING" enabled="false" />
     </inspection_tool>
     <inspection_tool class="SpellCheckingInspection" enabled="true" level="TYPO" enabled_by_default="true">
+      <scope name="requirements" level="TYPO" enabled="false">
+        <option name="processCode" value="true" />
+        <option name="processLiterals" value="true" />
+        <option name="processComments" value="true" />
+      </scope>
       <scope name="pipfile.lock" level="TYPO" enabled="false">
         <option name="processCode" value="true" />
         <option name="processLiterals" value="true" />
