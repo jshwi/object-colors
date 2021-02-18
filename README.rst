@@ -1,21 +1,26 @@
-README
-======
-`Pypi <https://pypi.org/project/object-colors/>`_ |
-`Read the Docs <https://object-colors.readthedocs.io/en/latest/>`_ |
-`Github Pages <https://jshwi.github.io/object_colors/index.html>`_
-
-.. image:: https://travis-ci.org/jshwi/object_colors.svg?branch=master
-    :target: https://travis-ci.org/jshwi/object_colors
-    :alt: Build Status
-.. image:: https://codecov.io/github/jshwi/object_colors/coverage.svg?branch=master
-    :target: https://codecov.io/github/jshwi/object_colors?branch=master
+object-colors
+=============
+.. image:: https://github.com/jshwi/object-colors/workflows/build/badge.svg
+    :target: https://github.com/jshwi/object_colors/workflows/build/badge.svg
+    :alt: build
+.. image:: https://img.shields.io/badge/python-3.8-blue.svg
+    :target: https://www.python.org/downloads/release/python-380
+    :alt: python3.8
+.. image:: https://img.shields.io/pypi/v/object-colors
+    :target: https://img.shields.io/pypi/v/object-colors
+    :alt: pypi
+.. image:: https://codecov.io/gh/jshwi/object-colors/branch/master/graph/badge.svg
+    :target: https://codecov.io/gh/jshwi/object-colors
     :alt: codecov.io
-.. image:: https://badge.fury.io/py/object-colors.svg
-    :target: https://badge.fury.io/py/object-colors
-    :alt: PyPi Version
-.. image:: https://img.shields.io/badge/License-MIT-yellow.svg
-    :target: https://opensource.org/licenses/MIT
-    :alt: Licence
+.. image:: https://readthedocs.org/projects/object-colors/badge/?version=latest
+    :target: https://object-colors.readthedocs.io/en/latest/?badge=latest
+    :alt: readthedocs.org
+.. image:: https://img.shields.io/badge/License-MIT-blue.svg
+    :target: https://lbesson.mit-license.org/
+    :alt: mit
+.. image:: https://img.shields.io/badge/code%20style-black-000000.svg
+    :target: https://github.com/psf/black
+    :alt: black
 
 Installation
 
