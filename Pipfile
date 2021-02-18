@@ -1,0 +1,18 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[dev-packages]
+ipython = "==7.19.0"
+object-colors = {editable = true, path = "."}
+prompt-toolkit = "==3.0.13"
+pyaud = "==1.2.1"
+pytest = "==6.2.1"
+restview = "==2.9.2"
+twine = "==3.3.0"
+
+[packages]
+
+[requires]
+python_version = "3.8"
