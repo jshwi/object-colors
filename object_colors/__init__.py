@@ -5,7 +5,7 @@ object-colors
 Object-oriented library for stylizing terminal output.
 """
 import builtins
-from typing import Any, Dict, Optional, Tuple, Union
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 import colorama
 
@@ -57,9 +57,9 @@ class Color:
 
     def __init__(
         self,
-        effect: Union[str, int] = 0,
-        fore: Union[str, int] = 7,
-        back: Optional[Union[str, int]] = None,
+        effect: Optional[Union[int, str]] = None,
+        fore: Optional[Union[int, str]] = None,
+        back: Optional[Union[int, str]] = None,
     ) -> None:
         self.effect = effect
         self.fore = fore
@@ -158,18 +158,34 @@ class Color:
             ),
         )
 
-    def _get_colored_str(self, _str: str) -> str:
-        """Compile and return ANSI escaped string.
+    def _color_str(self, string: str) -> str:
+        """Compile and return ANSI escaped string if parameters are
+        provided or a regular ``str`` otherwise.
 
-        :param _str:    Regular ``str`` object.
-        :return:        ``str`` with escape codes added.
+        :param string:  Regular ``str`` object.
+        :return:        ``str`` with escape codes added or the regular
+                        ``str`` if ``NoneType``s provided.
         """
-        return "\u001b[{};3{}{}m{}\u001b[0;0m".format(
-            self.effect,
-            self.fore,
-            f";4{self.back}" if self.back is not None else "",
-            _str,
-        )
+        sequence: List[str] = []
+        keys = tuple(self._opts.keys())
+        for count, key in enumerate(keys):
+            attr = getattr(self, key)
+            last = count == len(keys) - 1
+            if attr is not None:
+                if not sequence:
+                    sequence.extend(["\u001b[", "\u001b[0;0m"])
+
+                elif not last:
+                    sequence.insert(len(sequence) - 1, ";")
+
+                prefix = count + 2 if count > 0 else ""
+                sequence.insert(len(sequence) - 1, "{}{}".format(prefix, attr))
+
+            if last and sequence:
+                sequence.insert(len(sequence) - 1, "m")
+
+        sequence.insert(len(sequence) - 1, string)
+        return "".join(sequence)
 
     def populate(self, elem: str) -> None:
         """Create an object for every available selection.
@@ -222,11 +238,11 @@ class Color:
         """
         if len(args) > 1:
             if kwargs.get("format", False):
-                return self._get_colored_str(" ".join(args))
+                return self._color_str(" ".join(args))
 
-            return tuple(self._get_colored_str(i) for i in list(args))
+            return tuple(self._color_str(i) for i in list(args))
 
-        return self._get_colored_str(args[0])
+        return self._color_str(args[0])
 
     def print(self, *args: str, **kwargs: Any) -> None:
         """Print colored strings using the builtin ``print`` function.

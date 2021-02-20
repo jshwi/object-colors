@@ -119,7 +119,8 @@ def test_repr(color: Color, capsys: Any) -> None:
     print(color)
     captured = capsys.readouterr()
     assert (
-        captured.out.strip() == "Color(effect=0, fore=7, back=None, objects())"
+        captured.out.strip()
+        == "Color(effect=None, fore=None, back=None, objects())"
     )
 
 
@@ -227,3 +228,25 @@ def test_value_error_kwargs(key: str, value: str) -> None:
         Color(**kwargs)
 
     assert str(err.value) == f"'{value}' cannot be assigned to '{key}'"
+
+
+def test_all_fields(color: Color) -> None:
+    """Test all fields are properly compiled with the semicolon when
+    returning a string.
+
+    :param color: Instantiated ``Color`` object.
+    """
+    color.set(effect=1, fore=1, back=1)
+    assert color.get("Hello, world!") == "\x1b[1;3141mHello, world!\x1b[0;0m"
+
+
+def test_get_no_key(color: Color) -> None:
+    """Test that a non-existing instance attribute will raise an
+    ``AttributeError`` if attempting get.
+
+    :param color:       Instantiated ``Color`` object.
+    """
+    with pytest.raises(AttributeError) as err:
+        color.r.get()
+
+    assert str(err.value) == "'Color' object has no attribute 'r'"

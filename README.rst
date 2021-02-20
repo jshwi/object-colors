@@ -106,10 +106,10 @@ Object-oriented library for stylizing terminal output
     >>> c.set(red={"fore": "red"})
     >>> c.set(yellow={"fore": "yellow"})
     >>> print(c.red.get("*") + " " + c.yellow.get("Warning"))
-    '\u001b[0;31m*\u001b[0;0m \u001b[0;33mWarning\u001b[0;0m'
+    '\u001b[31m*\u001b[0;0m \u001b[33mWarning\u001b[0;0m'
     >>> x, y, z = c.red.get("x", "y", "z")
     >>> print(x, y, z)
-    '\u001b[0;31mx\u001b[0;0m \u001b[0;31my\u001b[0;0m \u001b[0;31mz\u001b[0;0m'
+    '\u001b[31mx\u001b[0;0m \u001b[31my\u001b[0;0m \u001b[31mz\u001b[0;0m'
 ..
 
     *Print the result using ``print``*
@@ -130,10 +130,10 @@ Object-oriented library for stylizing terminal output
     >>> c = Color()
     >>> c.populate("fore")
     >>> print(c)
-    Color(effect=0, fore=7, back=None, objects(black, red, green, yellow, blue, magenta, cyan, white))
+    Color(effect=None, fore=None, back=None, objects(black, red, green, yellow, blue, magenta, cyan, white))
     >>> c.red.populate("effect")
     >>> print(c.red)
-    Color(effect=0, fore=1, back=None, objects(none, bold, dim, italic, underline, blink, blinking, negative, empty, strikethrough))
+    Color(effect=None, fore=1, back=None, objects(none, bold, dim, italic, underline, blink, blinking, negative, empty, strikethrough))
     >>> c.red.strikethrough.print("strikethrough red")
     '\u001b[9;31mstrikethrough red\u001b[0;0m'
 ..

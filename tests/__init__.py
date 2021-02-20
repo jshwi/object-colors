@@ -6,16 +6,17 @@ from typing import Any, Dict, List, Tuple, Union
 
 from object_colors import Color
 
+CODE: str = "\u001b["
 COLORS: Tuple[str, ...] = Color.colors
 EFFECTS: Tuple[str, ...] = Color.effects
 BACK_CODES: Tuple[str, ...] = tuple(
-    [f"\u001b[0;37;4{i}m" for i in range(len(COLORS))]
+    [f"{CODE}4{i}m" for i in range(len(COLORS))]
 )
 EFFECT_CODES: Tuple[str, ...] = tuple(
-    [f"\u001b[{i};37m" for i in range(len(EFFECTS))]
+    [f"{CODE}{i}m" for i in range(len(EFFECTS))]
 )
 FORE_CODES: Tuple[str, ...] = tuple(
-    [f"\u001b[0;3{i}m" for i in range(len(COLORS))]
+    [f"{CODE}3{i}m" for i in range(len(COLORS))]
 )
 CODE_OBJ: Dict[str, Tuple[str, ...]] = {
     "effect": EFFECT_CODES,

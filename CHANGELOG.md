@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Renames: `` text`` -> ``fore``,  ``background`` -> ``back``
 - Renames: `` purple`` -> ``magenta``
 - Moves: ``_get_processed`` -> ``__setattr__``
+- Improves compiled ANSI string and default types
 
 ### Deprecated
 - ``populate_colors`` is deprecated in favour of ``populate("fore")``
