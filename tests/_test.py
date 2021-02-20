@@ -8,7 +8,6 @@ from object_colors import Color
 
 from . import (
     ATTR_COLOR_EFFECT_CODE_INDEX,
-    ATTRS,
     COLOR_INT_INDEX,
     COLORS,
     FORE_CODES,
@@ -58,7 +57,7 @@ def test_set_dynamic(color):
     :param color: Instantiated ``Color`` object.
     """
     key = "the_name_is_up_to_the_user"
-    color.set(**{key: {"fore": "red"}})
+    setattr(color, key, {"fore": "red"})
     expected = f"{FORE_CODES[1]}{TEST_STR}{RESET}"
     assert getattr(color, key).get(TEST_STR) == expected
 
@@ -89,16 +88,6 @@ def test_print(attr, pair, expected, capsys):
     assert captured.out == f"{expected}{' '.join(TEST_TUPLE)}{RESET}\n"
 
 
-def test__getattr__(populated_colors):
-    """Test __getattr__.
-
-    :param populated_colors:    Instantiated ``Color`` object where
-                                ``populate_colors`` has been called.
-    """
-    for attr in ATTRS:
-        assert hasattr(populated_colors, attr)
-
-
 @pytest.mark.parametrize("name,idx", COLOR_INT_INDEX, ids=COLORS)
 def test_populate_colors(populated_colors, name, idx):
     """Test the string is as it is supposed to be when the ``get``
@@ -122,7 +111,9 @@ def test_repr(color, capsys):
     """
     print(color)
     captured = capsys.readouterr()
-    assert captured.out.strip() == "Color(effect=0, fore=7, back=None)"
+    assert (
+        captured.out.strip() == "Color(effect=0, fore=7, back=None, objects())"
+    )
 
 
 def test_populate_err(color):
@@ -145,3 +136,26 @@ def test_populate_colors_deprecated(color):
     color.populate_colors()
     for item in color.colors:
         assert hasattr(color, item)
+
+
+def test_set_invalid(color):
+    """Test that a non-existing instance attribute will raise an
+    ``AttributeError`` if attempting to be set.
+    """
+    key = "not_a_key"
+    kwargs = {key: "not_a_value"}
+    with pytest.raises(TypeError) as err:
+        color.set(**kwargs)
+
+    expected = f"got an unexpected keyword argument '{key}'"
+    assert str(err.value) == expected
+
+
+def test_key_error(color):
+    """Test ``AttributeError`` is raised when invalid keyword arguments
+    are provided as ``effect``, ``fore``, or ``back``
+    """
+    with pytest.raises(AttributeError) as err:
+        color.not_an_attr.print("Hello, world!")
+
+    assert str(err.value) == "'Color' object has no attribute 'not_an_attr'"

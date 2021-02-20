@@ -56,7 +56,7 @@ class Color:
         self.effect = effect
         self.fore = fore
         self.back = back
-        self.set(effect=self.effect, fore=self.fore, back=self.back)
+        object.__setattr__(self, "_objects", dict())
 
     def __setattr__(self, key, value):
         """The two types of attributes to set are the object's instance
@@ -65,24 +65,51 @@ class Color:
         Object values can only be a ``dict`` i.e. ``**kwargs`` to create
         a new object. All ``int`` values correspond to the index of the
         color or effect and their respective ANSI code. All ``str``
-        values will be converted to their index integer.
+        values will be converted to their index integer. If a key does
+        not match ``effect``, ``fore``, or ``back`` it must be a
+        ``dict`` which can be instantiated to create a new named object.
 
         :param key:         The attribute to set.
         :param value:       The value of the attribute to set.
         :raises ValueError: If ``str`` does not a match a ``str`` in the
                             corresponding tuple.
+        :raises TypeError:  If an unknown keyword is provided and the
+                            value is not a ``dict``.
         """
-        if isinstance(value, str):
-            value = self._opts[key].index(value)
+        if key in self._opts:
+            if isinstance(value, str):
+                value = self._opts[key].index(value)
 
-        object.__setattr__(self, key, value)
+            object.__setattr__(self, key, value)
+        else:
+            if not isinstance(value, dict):
+                raise TypeError(
+                    "got an unexpected keyword argument '{}'".format(key)
+                )
 
-    def __getattr__(self, item):
-        """Look up dynamic subclasses.
+            self._objects[key] = self.__class__(**value)
 
-        :param item: Item to lookup and return.
+    def __getattribute__(self, key):
+        """Attempt to return the attribute matching the key. If no
+        attribute can be found search ``_objects`` for objects. If
+        neither of the above can yield a result then raise
+        ``AttributeError`` error.
+
+        :param key:             The attribute to get.
+        :raises AttributeError: Raise if no instance attribute or
+                                objects can be returned with the given
+                                key.
+        :return:                The retrieved attribute.
         """
-        return item
+        try:
+            return object.__getattribute__(self, key)
+
+        except AttributeError as err:
+            try:
+                return self._objects[key]
+
+            except KeyError:
+                raise AttributeError(err) from err
 
     def __repr__(self):
         """View the containing attributes within the ``str``
@@ -113,29 +140,6 @@ class Color:
             _str,
         )
 
-    def _make_subclass(self, **kwargs):
-        """Make subclass attribute and return boolean value so method.
-        Calling this method can determine whether subclass has
-        successfully been made. Set subclass as an instance attribute so
-        dynamic names are recognised as correct attributes belonging to
-        class.
-
-        :key effect:    Text effect to use.
-        :key fore:      Color of text foreground.
-        :key back:      Color of text background.
-        :key dict:      A subset of the above arguments assigned to a
-                        key that they subclass will be named after.
-        :return:        bool: Whether the ``if`` condition below
-                        succeeded.
-        """
-        for key, value in list(kwargs.items()):
-            if isinstance(value, dict):
-                color = Color(**value)
-                setattr(self, key, color)
-                return True
-
-        return False
-
     def populate(self, elem):
         """Create an object for every available selection.
 
@@ -143,12 +147,11 @@ class Color:
                                 options.
         :raises AttributeError: If element does not exist.
         """
+        kwargs = {k: v for k, v in vars(self).items() if not k.startswith("_")}
         try:
             for item in self._opts[elem]:
-                kwargs = {item: {elem: item}}
-                self._make_subclass(**kwargs)
-                kwargs = {"bold": {"effect": "bold", "fore": self.fore}}
-                self._make_subclass(**kwargs)
+                kwargs[elem] = item
+                setattr(self, item, kwargs)
 
         except KeyError as err:
             raise AttributeError(
@@ -174,9 +177,8 @@ class Color:
         :key ``dict``:  If ``**kwargs`` are provided then any keyword
                         can be provided.
         """
-        if not self._make_subclass(**kwargs):
-            for key, value in kwargs.items():
-                setattr(self, key, value)
+        for key, value in kwargs.items():
+            setattr(self, key, value)
 
     def get(self, *args, **kwargs):
         """Return colored ``str`` or ``tuple`` depending on the arg

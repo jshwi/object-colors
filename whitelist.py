@@ -1,4 +1,6 @@
-_.fore  # unused attribute (tests/_test.py:51)
+_.fore  # unused attribute (tests/_test.py:50)
 fixture_color  # unused function (tests/conftest.py:9)
 fixture_populated_colors  # unused function (tests/conftest.py:15)
-_.populate_colors  # unused method (object_colors/__init__.py:158)
+Color  # unused class (object_colors/__init__.py:14)
+_.populate_colors  # unused method (object_colors/__init__.py:161)
+_.set  # unused method (object_colors/__init__.py:169)

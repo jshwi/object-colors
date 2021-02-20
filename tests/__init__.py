@@ -4,17 +4,6 @@ tests
 """
 from object_colors import Color
 
-ATTRS = (
-    "get",
-    "set",
-    "get",
-    "get_key",
-    "print",
-    "print_key",
-    "pop",
-    "multicolor",
-    "populate_colors",
-)
 COLORS = Color.colors
 EFFECTS = Color.effects
 BACK_CODES = tuple([f"\u001b[0;37;4{i}m" for i in range(len(COLORS))])

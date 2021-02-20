@@ -42,10 +42,10 @@ Object-oriented library for stylizing terminal output
     >>> from object_colors import Color
     >>> c = Color(effect="bold", fore="red", back="green")
     >>> print(c)
-    Color(effect=1, fore=1, back=2)
+    Color(effect=1, fore=1, back=2, objects())
     >>> c = Color(effect=1, fore=1, back=2)
     >>> print(c)
-    Color(effect=1, fore=1, back=2)
+    Color(effect=1, fore=1, back=2, objects())
 ..
 
     *The above options are part of the below mapping*
@@ -91,10 +91,10 @@ Object-oriented library for stylizing terminal output
     >>> c = Color()
     >>> c.set(effect="bold", fore="red", back="red")
     >>> print(c)
-    Color(effect=1, fore=1, back=1)
+    Color(effect=1, fore=1, back=1, objects())
     >>> c.set(bold_green={"effect": "bold", "fore": "green"})
     >>> print(c)
-    Color(effect=1, fore=1, back=1, bold_green=Color(effect=1, fore=2, back=None))
+    Color(effect=1, fore=1, back=1, objects(bold_green))
 ..
 
     *Return ``str`` or ``tuple`` using ``get``*
@@ -130,8 +130,10 @@ Object-oriented library for stylizing terminal output
     >>> c = Color()
     >>> c.populate("fore")
     >>> print(c)
-    Color(effect=0, fore=7, back=None, black=Color(effect=0, fore=0, back=None), bold=Color(effect=1, fore=7, back=None), red=Color(effect=0, fore=1, back=None), green=Color(effect=0, fore=2, back=None), yellow=Color(effect=0, fore=3, back=None), blue=Color(effect=0, fore=4, back=None), magenta=Color(effect=0, fore=5, back=None), cyan=Color(effect=0, fore=6, back=None), white=Color(effect=0, fore=7, back=None))
+    Color(effect=0, fore=7, back=None, objects(black, red, green, yellow, blue, magenta, cyan, white))
     >>> c.red.populate("effect")
     >>> print(c.red)
-    Color(effect=0, fore=1, back=None, none=Color(effect=0, fore=7, back=None), bold=Color(effect=1, fore=1, back=None), dim=Color(effect=2, fore=7, back=None), italic=Color(effect=3, fore=7, back=None), underline=Color(effect=4, fore=7, back=None), blink=Color(effect=5, fore=7, back=None), blinking=Color(effect=6, fore=7, back=None), negative=Color(effect=7, fore=7, back=None), empty=Color(effect=8, fore=7, back=None), strikethrough=Color(effect=9, fore=7, back=None))
+    Color(effect=0, fore=1, back=None, objects(none, bold, dim, italic, underline, blink, blinking, negative, empty, strikethrough))
+    >>> c.red.strikethrough.print("strikethrough red")
+    '\u001b[9;31mstrikethrough red\u001b[0;0m'
 ..
