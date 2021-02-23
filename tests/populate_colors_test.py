@@ -18,7 +18,5 @@ class TestPopulateColors:
                 result = key == color
             if result:
                 bool_list.append(result)
-            elif count == len(colors):
-                assert result
         for result in bool_list:
             assert result
