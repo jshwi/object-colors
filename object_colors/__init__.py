@@ -75,9 +75,10 @@ class Color:
         color or effect and their respective ANSI code. All ``str``
         values will be converted to their index integer. Ensure ``int``
         passed as parameter does not exceed the length of the key's
-        index. If a key does not match ``effect``, ``fore``, or ``back``
-        it must be a ``dict` which can be instantiated to create a new
-        named object.
+        index. Ensure ``str`` is one of the specific strings matching
+        the key's index. If a key does not match ``effect``, ``fore``,
+        or ``back`` it must be a ``dict` which can be instantiated to
+        create a new named object.
 
         :param key:         The attribute to set.
         :param value:       The value of the attribute to set.
@@ -95,7 +96,13 @@ class Color:
                     raise IndexError("tuple index out of range")
 
             elif isinstance(value, str):
-                value = self._opts[key].index(value)
+                try:
+                    value = self._opts[key].index(value)
+
+                except ValueError as err:
+                    raise ValueError(
+                        "'{}' cannot be assigned to '{}'".format(value, key)
+                    ) from err
 
             elif value is not None:
                 raise TypeError(

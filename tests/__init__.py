@@ -51,6 +51,14 @@ MATCHED_VALUES: Dict[str, Tuple[str, ...]] = {
     "fore": COLORS,
     "back": COLORS,
 }
+UNMATCHED_VALUES: Dict[str, Tuple[str, ...]] = {
+    "effect": COLORS,
+    "fore": EFFECTS,
+    "back": EFFECTS,
+}
+ATTR_COLOR_EFFECT_UNMATCHED_INDEX: Tuple[Tuple[str, str], ...] = tuple(
+    [(k, i) for k, v in UNMATCHED_VALUES.items() for i in v]
+)
 ATTR_COLOR_EFFECT_EXCEED_INDEX: Tuple[Tuple[str, int], ...] = tuple(
     [(k, len(v) + 1) for k, v in MATCHED_VALUES.items()]
 )

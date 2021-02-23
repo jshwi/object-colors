@@ -12,6 +12,7 @@ from . import (
     ATTR_COLOR_EFFECT_CODE_INDEX,
     ATTR_COLOR_EFFECT_EXCEED_INDEX,
     ATTR_COLOR_EFFECT_TYPE_ERROR,
+    ATTR_COLOR_EFFECT_UNMATCHED_INDEX,
     COLOR_INT_INDEX,
     COLORS,
     FORE_CODES,
@@ -209,3 +210,20 @@ def test_type_error_kwargs(key: str, value: Any) -> None:
         Color(**kwargs)
 
     assert f"not {type(value).__name__}" in str(err.value)
+
+
+@pytest.mark.parametrize("key,value", ATTR_COLOR_EFFECT_UNMATCHED_INDEX)
+def test_value_error_kwargs(key: str, value: str) -> None:
+    """Test that ``ValueError`` and correct error message are raised
+    when an incorrect keyword argument are supplied to ``Color``
+    constructor.
+
+    :param key:     Keyword argument for constructor: ``effect``,
+                    ``fore``, or ``back``
+    :param value:   Value NOT belonging to any of the above keys.
+    """
+    with pytest.raises(ValueError) as err:
+        kwargs = {key: value}
+        Color(**kwargs)
+
+    assert str(err.value) == f"'{value}' cannot be assigned to '{key}'"
