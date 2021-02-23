@@ -87,3 +87,17 @@ def test_color_print(capsys, populated_colors):
     populated_colors.red.print(TEST_STR)
     captured = capsys.readouterr()
     assert captured.out == f"{RED}{TEST_STR}{RESET}\n"
+
+
+def test_repr(capsys):
+    """Test output from ``__repr__``.
+
+    :param capsys:  ``pytest`` fixture for capturing and returning
+                    terminal output
+    """
+    color = Color()
+    print(color)
+    captured = capsys.readouterr()
+    assert captured.out.strip() == (
+        "Color(fore=7, effect=0, back=0, bold=Color(fore=7, effect=1, back=0))"
+    )

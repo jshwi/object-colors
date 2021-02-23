@@ -46,6 +46,22 @@ class Color:
         # methods are not strings strings attempting to call attributes
         return [str(item) for item in self.__dict__]
 
+    def __repr__(self):
+        """View the containing attributes within the ``str``
+        representation.
+
+        :return:  ``str`` representation of this class.
+        """
+        return "{}({})".format(
+            type(self).__name__,
+            ", ".join(
+                "{}={}".format(k, v)
+                if not isinstance(v, dict)
+                else "objects({})".format(", ".join(v))
+                for k, v in vars(self).items()
+            ),
+        )
+
     def _get_colored_str(self, _str):
         # get the colored string with ansi-escape code settings added
         setting = f"{Color.code}[{self.effect};3{self.fore};4{self.back}m"

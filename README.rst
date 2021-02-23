@@ -41,11 +41,11 @@ Object-oriented library for stylizing terminal output
 
     >>> from object_colors import Color
     >>> c = Color(effect="bold", fore="red", back="green")
-    >>> print(vars(c))
-    {'fore': 1, 'effect': 1, 'back': 2}
+    >>> print(c)
+    Color(fore=1, effect=1, back=2)
     >>> c = Color(effect=1, fore=1, back=2)
-    >>> print(vars(c))
-    {'fore': 1, 'effect': 1, 'back': 2}
+    >>> print(c)
+    Color(fore=1, effect=1, back=2)
 ..
 
     *The above options are part of the below mapping*
@@ -78,11 +78,11 @@ Object-oriented library for stylizing terminal output
     >>> from object_colors import Color
     >>> c = Color()
     >>> c.set(fore="green", effect="bold", back="red")
-    >>> print(vars(c))
-    {'fore': 2, 'effect': 1, 'back': 1, 'bold': <object_colors.Color object at 0x7f11e209c8b0>}
+    >>> print(c)
+    Color(fore=2, effect=1, back=1, bold=Color(fore=7, effect=1, back=0))
     >>> c.set(bold_green={"fore": "green", "effect": "bold"})
-    >>> print(vars(c))
-    {'fore': 2, 'effect': 1, 'back': 1, 'bold': <object_colors.Color object at 0x7f11e20cbe80>, 'bold_green': <object_colors.Color object at 0x7f11e20cbe20>}
+    >>> print(c)
+    Color(fore=2, effect=1, back=1, bold=Color(fore=7, effect=1, back=0), bold_green=Color(fore=2, effect=1, back=0))
 ..
 
     *Return values using ``get``*
