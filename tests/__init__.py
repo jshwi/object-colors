@@ -40,7 +40,6 @@ ATTR_COLOR_EFFECT_INDEX = [
     for s, v in ATTR_KEY_VALUES.items()
     for t in v
 ]
-INSTANCES = tuple(["effect", "fore", "back", "bold"] + list(COLORS))
 RESET = "\u001b[0;0m"
 TEST_STR = "A simple string"
 TEST_TUPLE = ("A", "simple", "tuple")

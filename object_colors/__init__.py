@@ -17,6 +17,8 @@ class Color:
     of options referenced below are the string form. The integer that
     can be called is the index of the list item beginning with 0.
 
+    @DynamicAttrs
+
     :param effect:  Effect applied to text output. Select from the
                     following :py:attr:`Color.effects`.
     :param fore:    Foreground color applied to text output. Select from
@@ -70,12 +72,6 @@ class Color:
         :param item: Item to lookup and return.
         """
         return item
-
-    def __dir__(self):
-        """Primarily here so linters know that the subclass calling
-        methods are not strings attempting to call attributes.
-        """
-        return tuple([str(item) for item in self.__dict__])
 
     def __repr__(self):
         """View the containing attributes within the ``str``

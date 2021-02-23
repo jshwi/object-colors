@@ -13,7 +13,6 @@ from . import (
     COLOR_INT_INDEX,
     COLORS,
     FORE_CODES,
-    INSTANCES,
     RESET,
     TEST_STR,
     TEST_TUPLE,
@@ -117,20 +116,6 @@ def test__getattr__(populated_colors):
     """
     for attr in ATTRS:
         assert hasattr(populated_colors, attr)
-
-
-def test__dir__(populated_colors):
-    """Test __dir__.
-
-    :param populated_colors:    Instantiated ``Color`` object where
-                                ``populate_colors`` has been called.
-    """
-    color_instances = populated_colors.__dir__()
-    assert color_instances == INSTANCES
-    color = Color(fore="red", effect="bold", back="green")
-    assert color.fore == 1
-    assert color.effect == 1
-    assert color.back == 2
 
 
 @pytest.mark.parametrize("name,idx", COLOR_INT_INDEX, ids=COLORS)
