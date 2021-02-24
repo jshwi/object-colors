@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Raises ``IndexError`` if setting of range ``int`` attributes
 - Raises ``TypeError`` if setting invalid attribute type
 - Raises ``ValueError`` if setting invalid attribute ``str`` value
+- Overrides ``__len__``
 
 ### Changed
 - Renames: `` text`` -> ``fore``,  ``background`` -> ``back``

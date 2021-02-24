@@ -250,3 +250,13 @@ def test_get_no_key(color: Color) -> None:
         color.r.get()
 
     assert str(err.value) == "'Color' object has no attribute 'r'"
+
+
+def test_len(color: Color) -> None:
+    """Test correct length of ``color._objects`` is returned.
+
+    :param color: Instantiated ``Color`` object.
+    """
+    assert len(color) == 0
+    color.populate("fore")
+    assert len(color) == 8

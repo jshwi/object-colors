@@ -158,6 +158,13 @@ class Color:
             ),
         )
 
+    def __len__(self) -> int:
+        """Length of ``_objects``.
+
+        :return: The number of objects in ``_objects``.
+        """
+        return len(self._objects)
+
     def _color_str(self, string: str) -> str:
         """Compile and return ANSI escaped string if parameters are
         provided or a regular ``str`` otherwise.
