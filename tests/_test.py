@@ -8,7 +8,6 @@ from object_colors import Color
 
 from . import (
     ATTR_COLOR_EFFECT_CODE_INDEX,
-    ATTR_COLOR_EFFECT_INDEX,
     ATTRS,
     COLOR_INT_INDEX,
     COLORS,
@@ -17,24 +16,6 @@ from . import (
     TEST_STR,
     TEST_TUPLE,
 )
-
-
-@pytest.mark.parametrize(
-    "attr,pair",
-    ATTR_COLOR_EFFECT_INDEX,
-    ids=[f"{i[0]}-{i[1][0]}" for i in ATTR_COLOR_EFFECT_INDEX],
-)
-def test_getattr(attr, pair):
-    """Test the value of ``Color`` attributes are what they are supposed
-    to be when instantiating with a ``str`` or an ``int``.
-
-    :param attr:    Attribute belonging to ``Color`` constructor call.
-    :param pair:    A pair containing a str and an int or an int and and
-                    int
-    """
-    arg, idx = pair
-    color = Color(**{attr: arg})
-    assert getattr(color, attr) == idx
 
 
 @pytest.mark.parametrize(
@@ -141,7 +122,4 @@ def test_repr(color, capsys):
     """
     print(color)
     captured = capsys.readouterr()
-    assert captured.out.strip() == (
-        "Color(effect=0, fore=7, back=None, bold=Color(effect=1, fore=7, "
-        "back=None))"
-    )
+    assert captured.out.strip() == "Color(effect=0, fore=7, back=None)"

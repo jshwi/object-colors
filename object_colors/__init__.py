@@ -27,7 +27,18 @@ class Color:
                     the following :py:attr:`Color.colors`.
     """
 
-    effects = ("none", "bold", "bright", "underline", "negative")
+    effects = (
+        "none",
+        "bold",
+        "dim",
+        "italic",
+        "underline",
+        "blink",
+        "blinking",
+        "negative",
+        "empty",
+        "strikethrough",
+    )
     colors = (
         "black",
         "red",
@@ -130,6 +141,7 @@ class Color:
         for color in self.colors:
             kwargs = {color: {"fore": color}}
             self._make_subclass(**kwargs)
+            getattr(self, color).set(bold={"effect": "bold", "fore": color})
 
     def set(self, **kwargs):
         """Call to set new instance values. If not making a subclass
@@ -145,22 +157,6 @@ class Color:
         if not self._make_subclass(**kwargs):
             for key, value in kwargs.items():
                 setattr(self, key, value)
-
-        # bold switch:
-        # - if used in a class instantiated as bold, switch bold off
-        # - if used in a class instantiated without bold, switch bold on
-        if self.effect != 1:
-
-            # Instantiate bold class object if bold is not set for more
-            # flexible usage and less setting up when using this module
-            # to manipulate particular colored strings
-            self._make_subclass(
-                bold={
-                    "fore": self.__dict__["fore"],
-                    "effect": "bold",
-                    "back": self.__dict__["back"],
-                }
-            )
 
     def get(self, *args, **kwargs):
         """Return colored ``str`` or ``tuple`` depending on the arg

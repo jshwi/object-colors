@@ -67,9 +67,14 @@ Object-oriented library for stylizing terminal output
     ...     print(i, e)
     0 none
     1 bold
-    2 bright
-    3 underline
-    4 negative
+    2 dim
+    3 italic
+    4 underline
+    5 blink
+    6 blinking
+    7 negative
+    8 empty
+    9 strikethrough
 ..
 
 **Usage**
@@ -82,10 +87,10 @@ Object-oriented library for stylizing terminal output
     >>> c = Color()
     >>> c.set(fore="green", effect="bold", back="red")
     >>> print(c)
-    Color(effect=1, fore=2, back=1, bold=Color(effect=1, fore=7, back=None))
+    Color(effect=1, fore=2, back=1)
     >>> c.set(bold_green={"fore": "green", "effect": "bold"})
     >>> print(c)
-    Color(effect=1, fore=2, back=1, bold=Color(effect=1, fore=7, back=None), bold_green=Color(effect=1, fore=2, back=None))
+    Color(effect=1, fore=2, back=1, bold_green=Color(effect=1, fore=2, back=None))
 ..
 
     *Return values using ``get``*

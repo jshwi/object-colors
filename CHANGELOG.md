@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Fixed
 - Fixes ``print`` method to mirror builtin
 - Removes default black background for none
+- Adds all effects
 
 [v1.0.8](https://github.com/jshwi/object_colors/releases/tag/v1.0.8)  - 2020-02-02
 ------------------------------------------------------------------------

@@ -34,12 +34,6 @@ ATTR_COLOR_EFFECT_CODE_INDEX = [
     for s, v in ATTR_KEY_VALUES.items()
     for t in v
 ]
-ATTR_COLOR_EFFECT_INDEX = [
-    (s, (t[i], t[1]))
-    for i in (0, 1)
-    for s, v in ATTR_KEY_VALUES.items()
-    for t in v
-]
 RESET = "\u001b[0;0m"
 TEST_STR = "A simple string"
 TEST_TUPLE = ("A", "simple", "tuple")
