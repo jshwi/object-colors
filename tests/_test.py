@@ -123,3 +123,25 @@ def test_repr(color, capsys):
     print(color)
     captured = capsys.readouterr()
     assert captured.out.strip() == "Color(effect=0, fore=7, back=None)"
+
+
+def test_populate_err(color):
+    """Test attribute error is raised when invalid value is provided
+    to populate.
+
+    :param color: Instantiated ``Color`` object.
+    """
+    with pytest.raises(AttributeError) as err:
+        color.populate("key")
+
+    assert str(err.value) == f"'{type(color).__name__}' has no attribute 'key'"
+
+
+def test_populate_colors_deprecated(color):
+    """Test the legacy ``populate_colors`` works as it should.
+
+    :param color: Instantiated ``Color`` object.
+    """
+    color.populate_colors()
+    for item in color.colors:
+        assert hasattr(color, item)

@@ -79,21 +79,23 @@ Object-oriented library for stylizing terminal output
 
 **Usage**
 
-    *create new objects with ``set``*
+    *To configure the current object either ``effect``, ``fore``, or ``back`` can be provided and they must be an ``int``, ``str``, or ``None``*
+
+    *Create new objects with by providing a ``dict`` object with any keyword argument*
+
+    *Use ``set`` to set multiple parameters*
 
 .. code-block:: python
 
     >>> from object_colors import Color
     >>> c = Color()
-    >>> c.set(fore="green", effect="bold", back="red")
+    >>> c.set(effect="bold", fore="red", back="red")
     >>> print(c)
-    Color(effect=1, fore=2, back=1)
-    >>> c.set(bold_green={"fore": "green", "effect": "bold"})
+    Color(effect=1, fore=1, back=1)
+    >>> c.set(bold_green={"effect": "bold", "fore": "green"})
     >>> print(c)
-    Color(effect=1, fore=2, back=1, bold_green=Color(effect=1, fore=2, back=None))
+    Color(effect=1, fore=1, back=1, bold_green=Color(effect=1, fore=2, back=None))
 ..
-
-    *Return values using ``get``*
 
     *Return ``str`` or ``tuple`` using ``get``*
 
@@ -120,17 +122,16 @@ Object-oriented library for stylizing terminal output
     '\u001b[1;36mbold cyan\u001b[0;0m'
 ..
 
-    *Load all colors using ``populate_colors``*
+    *Load all ``effect``, ``fore``, or ``back`` elements using ``populate``*
 
 .. code-block:: python
 
     >>> from object_colors import Color
     >>> c = Color()
-    >>> c.populate_colors()
-    >>> c.red.print("red")
-    '\u001b[0;31mred\u001b[0;0m'
-    >>> c.green.print("green")
-    '\u001b[0;32mgreen\u001b[0;0m'
-    >>> c.yellow.print("yellow")
-    '\u001b[0;33myellow\u001b[0;0m'
+    >>> c.populate("fore")
+    >>> print(c)
+    Color(effect=0, fore=7, back=None, black=Color(effect=0, fore=0, back=None), bold=Color(effect=1, fore=7, back=None), red=Color(effect=0, fore=1, back=None), green=Color(effect=0, fore=2, back=None), yellow=Color(effect=0, fore=3, back=None), blue=Color(effect=0, fore=4, back=None), magenta=Color(effect=0, fore=5, back=None), cyan=Color(effect=0, fore=6, back=None), white=Color(effect=0, fore=7, back=None))
+    >>> c.red.populate("effect")
+    >>> print(c.red)
+    Color(effect=0, fore=1, back=None, none=Color(effect=0, fore=7, back=None), bold=Color(effect=1, fore=1, back=None), dim=Color(effect=2, fore=7, back=None), italic=Color(effect=3, fore=7, back=None), underline=Color(effect=4, fore=7, back=None), blink=Color(effect=5, fore=7, back=None), blinking=Color(effect=6, fore=7, back=None), negative=Color(effect=7, fore=7, back=None), empty=Color(effect=8, fore=7, back=None), strikethrough=Color(effect=9, fore=7, back=None))
 ..

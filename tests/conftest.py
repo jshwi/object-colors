@@ -19,5 +19,5 @@ def fixture_populated_colors(color):
 
     :param color: Instantiated ``Color`` object.
     """
-    color.populate_colors()
+    color.populate("fore")
     return color

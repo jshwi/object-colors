@@ -136,12 +136,32 @@ class Color:
 
         return False
 
+    def populate(self, elem):
+        """Create an object for every available selection.
+
+        :param elem:            Attribute to fill with available
+                                options.
+        :raises AttributeError: If element does not exist.
+        """
+        try:
+            for item in self._opts[elem]:
+                kwargs = {item: {elem: item}}
+                self._make_subclass(**kwargs)
+                kwargs = {"bold": {"effect": "bold", "fore": self.fore}}
+                self._make_subclass(**kwargs)
+
+        except KeyError as err:
+            raise AttributeError(
+                "'{}' has no attribute '{}'".format(type(self).__name__, elem)
+            ) from err
+
     def populate_colors(self):
-        """This will create a subclass for every available color"""
+        """Create an object for every available foreground color.
+        Deprecated.
+        """
+        self.populate("fore")
         for color in self.colors:
-            kwargs = {color: {"fore": color}}
-            self._make_subclass(**kwargs)
-            getattr(self, color).set(bold={"effect": "bold", "fore": color})
+            getattr(self, color).populate("effect")
 
     def set(self, **kwargs):
         """Call to set new instance values. If not making a subclass

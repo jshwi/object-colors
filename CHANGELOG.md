@@ -10,11 +10,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Adds ``colorama`` for ``Windows`` systems
 - Overrides ``__repr__``
 - Adds string formatter to ``get``
+- Adds ``populate`` for all elements
 
 ### Changed
 - Renames: `` text`` -> ``fore``,  ``background`` -> ``back``
 - Renames: `` purple`` -> ``magenta``
 - Moves: ``_get_processed`` -> ``__setattr__``
+
+### Deprecated
+- ``populate_colors`` is deprecated in favour of ``populate("fore")``
 
 ### Removed
 - Removes multicolor feature
