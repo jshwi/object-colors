@@ -2,7 +2,7 @@
 tests
 =====
 """
-from typing import Any, Dict, Tuple
+from typing import Any, Dict, List, Tuple, Union
 
 from object_colors import Color
 

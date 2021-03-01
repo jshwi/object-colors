@@ -81,7 +81,7 @@ class Color:
         :param value:       The value of the attribute to set.
         :raises ValueError: If ``str`` does not a match a ``str`` in the
                             corresponding tuple.
-        :raises TypeError:  If an unknown keyword is provided and the
+        :raises TypeError:  If an unexpected keyword is provided and the
                             value is not a ``dict``.
         """
         if key in self._opts:
