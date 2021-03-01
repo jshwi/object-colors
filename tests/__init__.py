@@ -54,3 +54,7 @@ MATCHED_VALUES: Dict[str, Tuple[str, ...]] = {
 ATTR_COLOR_EFFECT_EXCEED_INDEX: Tuple[Tuple[str, int], ...] = tuple(
     [(k, len(v) + 1) for k, v in MATCHED_VALUES.items()]
 )
+ATTR_COLOR_EFFECT_TYPE_ERROR: Tuple[
+    Union[Tuple[str, float], Tuple[str, Tuple[str]], Tuple[str, List[str]]],
+    ...,
+] = tuple([("effect", 1.1), ("fore", ("tuple",)), ("back", ["list"])])

@@ -11,6 +11,7 @@ from object_colors import Color
 from . import (
     ATTR_COLOR_EFFECT_CODE_INDEX,
     ATTR_COLOR_EFFECT_EXCEED_INDEX,
+    ATTR_COLOR_EFFECT_TYPE_ERROR,
     COLOR_INT_INDEX,
     COLORS,
     FORE_CODES,
@@ -190,3 +191,21 @@ def test_index_error_kwargs(key: str, idx: int) -> None:
         Color(**kwargs)
 
     assert str(err.value) == "tuple index out of range"
+
+
+@pytest.mark.parametrize(
+    "key,value", ATTR_COLOR_EFFECT_TYPE_ERROR, ids=["effect", "fore", "back"]
+)
+def test_type_error_kwargs(key: str, value: Any) -> None:
+    """Test that ``TypeError`` and correct error message are raised
+    when an invalid type is supplied to ``Color`` constructor.
+
+    :param key: Keyword argument for constructor: ``effect``, ``fore``,
+                or ``back``
+    :param value: A type not valid for attribute.
+    """
+    with pytest.raises(TypeError) as err:
+        kwargs = {key: value}
+        Color(**kwargs)
+
+    assert f"not {type(value).__name__}" in str(err.value)

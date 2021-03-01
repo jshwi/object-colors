@@ -84,6 +84,8 @@ class Color:
         :raises IndexError: If length of ``int`` exceeds key's length.
         :raises ValueError: If ``str`` does not a match a ``str`` in the
                             corresponding tuple.
+        :raises TypeError:  If a type is provided that does not match
+                            one of the allowed types.
         :raises TypeError:  If an unexpected keyword is provided and the
                             value is not a ``dict``.
         """
@@ -94,6 +96,13 @@ class Color:
 
             elif isinstance(value, str):
                 value = self._opts[key].index(value)
+
+            elif value is not None:
+                raise TypeError(
+                    "expected int, str, or NoneType, not {}".format(
+                        type(value).__name__
+                    )
+                )
 
             object.__setattr__(self, key, value)
         else:

@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Adds ``populate`` for all elements
 - Raises ``TypeError`` if setting invalid attribute name
 - Raises ``IndexError`` if setting of range ``int`` attributes
+- Raises ``TypeError`` if setting invalid attribute type
 
 ### Changed
 - Renames: `` text`` -> ``fore``,  ``background`` -> ``back``
