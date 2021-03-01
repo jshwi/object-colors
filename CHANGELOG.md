@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Raises ``TypeError`` if setting invalid attribute type
 - Raises ``ValueError`` if setting invalid attribute ``str`` value
 - Overrides ``__len__``
+- Allows empty ``get`` or ``print`` without raising an ``IndexError``
 
 ### Changed
 - Renames: `` text`` -> ``fore``,  ``background`` -> ``back``

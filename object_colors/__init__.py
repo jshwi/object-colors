@@ -241,7 +241,7 @@ class Color:
         :param args:    Manipulate string(s).
         :key format:    Return a string instead of a tuple if strings
                         are passed as tuple.
-        :return:        Colored string.
+        :return:        Colored string or ``None``.
         """
         if len(args) > 1:
             if kwargs.get("format", False):
@@ -249,7 +249,10 @@ class Color:
 
             return tuple(self._color_str(i) for i in list(args))
 
-        return self._color_str(args[0])
+        if len(args) == 1:
+            return self._color_str(args[0])
+
+        return None
 
     def print(self, *args: str, **kwargs: Any) -> None:
         """Print colored strings using the builtin ``print`` function.
@@ -262,4 +265,6 @@ class Color:
                         newline.
         :key flush:     Whether to forcibly flush the stream.
         """
-        builtins.print(self.get(*args, format=True), **kwargs)
+        args = self.get(*args, format=True)
+        if args is not None:
+            builtins.print(args, **kwargs)

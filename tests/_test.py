@@ -260,3 +260,12 @@ def test_len(color: Color) -> None:
     assert len(color) == 0
     color.populate("fore")
     assert len(color) == 8
+
+
+def test_print_nothing(color: Color) -> None:
+    """Test no error is raised when printing nothing (as per the result
+    from the builtin).
+
+    :param color: Instantiated ``Color`` object.
+    """
+    color.print()
