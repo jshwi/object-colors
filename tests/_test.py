@@ -10,6 +10,7 @@ from object_colors import Color
 
 from . import (
     ATTR_COLOR_EFFECT_CODE_INDEX,
+    ATTR_COLOR_EFFECT_EXCEED_INDEX,
     COLOR_INT_INDEX,
     COLORS,
     FORE_CODES,
@@ -167,3 +168,25 @@ def test_key_error(color: Color) -> None:
         color.not_an_attr.print("Hello, world!")
 
     assert str(err.value) == "'Color' object has no attribute 'not_an_attr'"
+
+
+@pytest.mark.parametrize(
+    "key,idx",
+    ATTR_COLOR_EFFECT_EXCEED_INDEX,
+    ids=[f"{k}-exceed" for k in ATTR_COLOR_EFFECT_EXCEED_INDEX],
+)
+def test_index_error_kwargs(key: str, idx: int) -> None:
+    """Test that ``IndexError`` and correct error message are raised
+    when an out-of-range integer argument is supplied to ``Color``
+    constructor.
+
+    :param key: Keyword argument for constructor: ``effect``, ``fore``,
+                or ``back``
+    :param idx: Index exceeding the length of the key's respective
+                tuple.
+    """
+    with pytest.raises(IndexError) as err:
+        kwargs = {key: idx}
+        Color(**kwargs)
+
+    assert str(err.value) == "tuple index out of range"

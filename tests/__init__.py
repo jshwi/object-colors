@@ -46,3 +46,11 @@ ATTR_COLOR_EFFECT_CODE_INDEX: Tuple[
 RESET: str = "\u001b[0;0m"
 TEST_STR: str = "A simple string"
 TEST_TUPLE: Tuple[str, ...] = ("A", "simple", "tuple")
+MATCHED_VALUES: Dict[str, Tuple[str, ...]] = {
+    "effect": EFFECTS,
+    "fore": COLORS,
+    "back": COLORS,
+}
+ATTR_COLOR_EFFECT_EXCEED_INDEX: Tuple[Tuple[str, int], ...] = tuple(
+    [(k, len(v) + 1) for k, v in MATCHED_VALUES.items()]
+)

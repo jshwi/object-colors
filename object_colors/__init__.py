@@ -73,19 +73,26 @@ class Color:
         Object values can only be a ``dict`` i.e. ``**kwargs`` to create
         a new object. All ``int`` values correspond to the index of the
         color or effect and their respective ANSI code. All ``str``
-        values will be converted to their index integer. If a key does
-        not match ``effect``, ``fore``, or ``back`` it must be a
-        ``dict`` which can be instantiated to create a new named object.
+        values will be converted to their index integer. Ensure ``int``
+        passed as parameter does not exceed the length of the key's
+        index. If a key does not match ``effect``, ``fore``, or ``back``
+        it must be a ``dict` which can be instantiated to create a new
+        named object.
 
         :param key:         The attribute to set.
         :param value:       The value of the attribute to set.
+        :raises IndexError: If length of ``int`` exceeds key's length.
         :raises ValueError: If ``str`` does not a match a ``str`` in the
                             corresponding tuple.
         :raises TypeError:  If an unexpected keyword is provided and the
                             value is not a ``dict``.
         """
         if key in self._opts:
-            if isinstance(value, str):
+            if isinstance(value, int):
+                if value > len(self._opts[key]):
+                    raise IndexError("tuple index out of range")
+
+            elif isinstance(value, str):
                 value = self._opts[key].index(value)
 
             object.__setattr__(self, key, value)
