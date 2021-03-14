@@ -3,13 +3,14 @@ tests._test
 ===========
 """
 from object_colors import Color
+
 from . import (
     ATTRS,
     CODES,
     COLORED_DUPES,
-    DUPES,
     DUPE_MARKED,
     DUPE_MARKED_COLOR,
+    DUPES,
     EXACT_INDEX_COLOR,
     GREEN,
     INSTANCES,
