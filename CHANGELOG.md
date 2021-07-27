@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 [Unreleased](https://github.com/jshwi/object_colors/compare/v2.0.0...HEAD)
 ------------------------------------------------------------------------
+### Security
+Bump urllib3 from 1.26.3 to 1.26.5
 
 [2.0.0](https://github.com/jshwi/object_colors/releases/tag/v2.0.0) - 2021-03-15
 ------------------------------------------------------------------------
