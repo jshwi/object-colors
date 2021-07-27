@@ -9,7 +9,7 @@ from typing import Any, Dict, List, Optional, Tuple, Union
 
 import colorama
 
-__version__ = "2.0.1"
+__version__ = "2.0.0"
 
 
 class Color:
@@ -17,6 +17,11 @@ class Color:
     integers. There are a defined set of options for each. The list of
     options referenced below are the string form. The integer that can
     be called is the index of the list item beginning with 0.
+
+    .. todo::
+
+        ``get`` should always return a string: i.e. cannot print ``kwargs``
+        without throwing an error.
 
     @DynamicAttrs
 
