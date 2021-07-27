@@ -1,0 +1,203 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>README &#8212; object_colors 2.0.0 documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/graphite.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="object_colors" href="object_colors.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="object_colors.html" title="object_colors"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">object_colors 2.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">README</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="readme">
+<h1>README<a class="headerlink" href="#readme" title="Permalink to this headline">¶</a></h1>
+<a class="reference external image-reference" href="https://github.com/jshwi/object_colors/workflows/build/badge.svg"><img alt="build" src="https://github.com/jshwi/object-colors/workflows/build/badge.svg" /></a>
+<a class="reference external image-reference" href="https://www.python.org/downloads/release/python-380"><img alt="python3.8" src="https://img.shields.io/badge/python-3.8-blue.svg" /></a>
+<a class="reference external image-reference" href="https://img.shields.io/pypi/v/object-colors"><img alt="pypi" src="https://img.shields.io/pypi/v/object-colors" /></a>
+<a class="reference external image-reference" href="https://codecov.io/gh/jshwi/object-colors"><img alt="codecov.io" src="https://codecov.io/gh/jshwi/object-colors/branch/master/graph/badge.svg" /></a>
+<a class="reference external image-reference" href="https://object-colors.readthedocs.io/en/latest/?badge=latest"><img alt="readthedocs.org" src="https://readthedocs.org/projects/object-colors/badge/?version=latest" /></a>
+<a class="reference external image-reference" href="https://lbesson.mit-license.org/"><img alt="mit" src="https://img.shields.io/badge/License-MIT-blue.svg" /></a>
+<a class="reference external image-reference" href="https://github.com/psf/black"><img alt="black" src="https://img.shields.io/badge/code%20style-black-000000.svg" /></a>
+<p>Object-oriented library for stylizing terminal output</p>
+<p><strong>Installation</strong></p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pip install object-colors
+</pre></div>
+</div>
+<p><strong>Options</strong></p>
+<blockquote>
+<div><p><em>Args can be provided as strings or as indices corresponding to their index in an ANSI escape sequence</em></p>
+<p><em>The following would yield the same result</em></p>
+</div></blockquote>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">object_colors</span> <span class="kn">import</span> <span class="n">Color</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">Color</span><span class="p">(</span><span class="n">effect</span><span class="o">=</span><span class="s2">&quot;bold&quot;</span><span class="p">,</span> <span class="n">fore</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="n">back</span><span class="o">=</span><span class="s2">&quot;green&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+<span class="go">Color(effect=1, fore=1, back=2, objects())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">Color</span><span class="p">(</span><span class="n">effect</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">fore</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">back</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+<span class="go">Color(effect=1, fore=1, back=2, objects())</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p><em>The above options are part of the below mapping</em></p>
+</div></blockquote>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">object_colors</span> <span class="kn">import</span> <span class="n">Color</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">Color</span><span class="o">.</span><span class="n">colors</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+<span class="go">0 black</span>
+<span class="go">1 red</span>
+<span class="go">2 green</span>
+<span class="go">3 yellow</span>
+<span class="go">4 blue</span>
+<span class="go">5 magenta</span>
+<span class="go">6 cyan</span>
+<span class="go">7 white</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">e</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">Color</span><span class="o">.</span><span class="n">effects</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+<span class="go">0 none</span>
+<span class="go">1 bold</span>
+<span class="go">2 dim</span>
+<span class="go">3 italic</span>
+<span class="go">4 underline</span>
+<span class="go">5 blink</span>
+<span class="go">6 blinking</span>
+<span class="go">7 negative</span>
+<span class="go">8 empty</span>
+<span class="go">9 strikethrough</span>
+</pre></div>
+</div>
+<p><strong>Usage</strong></p>
+<blockquote>
+<div><p><em>To configure the current object either ``effect``, ``fore``, or ``back`` can be provided and they must be an ``int``, ``str``, or ``None``</em></p>
+<p><em>Create new objects with by providing a ``dict`` object with any keyword argument</em></p>
+<p><em>Use ``set`` to set multiple parameters</em></p>
+</div></blockquote>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">object_colors</span> <span class="kn">import</span> <span class="n">Color</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">Color</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">effect</span><span class="o">=</span><span class="s2">&quot;bold&quot;</span><span class="p">,</span> <span class="n">fore</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="n">back</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+<span class="go">Color(effect=1, fore=1, back=1, objects())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">bold_green</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;effect&quot;</span><span class="p">:</span> <span class="s2">&quot;bold&quot;</span><span class="p">,</span> <span class="s2">&quot;fore&quot;</span><span class="p">:</span> <span class="s2">&quot;green&quot;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+<span class="go">Color(effect=1, fore=1, back=1, objects(bold_green))</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p><em>Return ``str`` or ``tuple`` using ``get``</em></p>
+</div></blockquote>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">object_colors</span> <span class="kn">import</span> <span class="n">Color</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">Color</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">red</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;fore&quot;</span><span class="p">:</span> <span class="s2">&quot;red&quot;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">yellow</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;fore&quot;</span><span class="p">:</span> <span class="s2">&quot;yellow&quot;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">red</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">c</span><span class="o">.</span><span class="n">yellow</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Warning&quot;</span><span class="p">))</span>
+<span class="go">&#39;\u001b[31m*\u001b[0;0m \u001b[33mWarning\u001b[0;0m&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">red</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="s2">&quot;z&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
+<span class="go">&#39;\u001b[31mx\u001b[0;0m \u001b[31my\u001b[0;0m \u001b[31mz\u001b[0;0m&#39;</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p><em>Print the result using ``print``</em></p>
+</div></blockquote>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">object_colors</span> <span class="kn">import</span> <span class="n">Color</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">Color</span><span class="p">(</span><span class="n">effect</span><span class="o">=</span><span class="s2">&quot;bold&quot;</span><span class="p">,</span> <span class="n">fore</span><span class="o">=</span><span class="s2">&quot;cyan&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="s2">&quot;bold cyan&quot;</span><span class="p">)</span>
+<span class="go">&#39;\u001b[1;36mbold cyan\u001b[0;0m&#39;</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p><em>Load all ``effect``, ``fore``, or ``back`` elements using ``populate``</em></p>
+</div></blockquote>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">object_colors</span> <span class="kn">import</span> <span class="n">Color</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">Color</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">populate</span><span class="p">(</span><span class="s2">&quot;fore&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+<span class="go">Color(effect=None, fore=None, back=None, objects(black, red, green, yellow, blue, magenta, cyan, white))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">red</span><span class="o">.</span><span class="n">populate</span><span class="p">(</span><span class="s2">&quot;effect&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">red</span><span class="p">)</span>
+<span class="go">Color(effect=None, fore=1, back=None, objects(none, bold, dim, italic, underline, blink, blinking, negative, empty, strikethrough))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">red</span><span class="o">.</span><span class="n">strikethrough</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="s2">&quot;strikethrough red&quot;</span><span class="p">)</span>
+<span class="go">&#39;\u001b[9;31mstrikethrough red\u001b[0;0m&#39;</span>
+</pre></div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/oc.png" alt="Logo"/>
+            </a></p>
+<h3><a href="index.html">Table of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="object_colors.html">object_colors</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">README</a></li>
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="object_colors.html" title="object_colors"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">object_colors 2.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">README</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Stephen Whitlock.
+    </div>
+  </body>
+</html>
