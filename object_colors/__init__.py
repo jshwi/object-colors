@@ -14,9 +14,9 @@ __version__ = "2.0.0"
 
 class Color:
     """Color object. Args passed to constructor call may be strings or
-    integers. There are a defined set of options for each. The list
-    of options referenced below are the string form. The integer that
-    can be called is the index of the list item beginning with 0.
+    integers. There are a defined set of options for each. The list of
+    options referenced below are the string form. The integer that can
+    be called is the index of the list item beginning with 0.
 
     @DynamicAttrs
 
@@ -101,7 +101,7 @@ class Color:
 
                 except ValueError as err:
                     raise ValueError(
-                        "'{}' cannot be assigned to '{}'".format(value, key)
+                        f"'{value}' cannot be assigned to '{key}'"
                     ) from err
 
             elif value is not None:
@@ -114,9 +114,7 @@ class Color:
             object.__setattr__(self, key, value)
         else:
             if not isinstance(value, dict):
-                raise TypeError(
-                    "got an unexpected keyword argument '{}'".format(key)
-                )
+                raise TypeError(f"got an unexpected keyword argument '{key}'")
 
             self._objects[key] = self.__class__(**value)
 
@@ -186,7 +184,7 @@ class Color:
                     sequence.insert(len(sequence) - 1, ";")
 
                 prefix = count + 2 if count > 0 else ""
-                sequence.insert(len(sequence) - 1, "{}{}".format(prefix, attr))
+                sequence.insert(len(sequence) - 1, f"{prefix}{attr}")
 
             if last and sequence:
                 sequence.insert(len(sequence) - 1, "m")
@@ -214,6 +212,7 @@ class Color:
 
     def populate_colors(self) -> None:
         """Create an object for every available foreground color.
+
         Deprecated.
         """
         self.populate("fore")

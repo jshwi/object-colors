@@ -1,6 +1,4 @@
-"""
-tests.conftest
-"""
+"""tests.conftest."""
 import pytest
 
 from object_colors import Color
@@ -14,8 +12,7 @@ def fixture_color() -> Color:
 
 @pytest.fixture(name="populated_colors")
 def fixture_populated_colors(color: Color) -> Color:
-    """Instantiated ``Color`` object with ``populate_colors``
-    executed.
+    """Instantiated ``Color`` object with ``populate_colors`` executed.
 
     :param color: Instantiated ``Color`` object.
     """

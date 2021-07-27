@@ -125,8 +125,8 @@ def test_repr(color: Color, capsys: Any) -> None:
 
 
 def test_populate_err(color: Color) -> None:
-    """Test attribute error is raised when invalid value is provided
-    to populate.
+    """Test attribute error is raised when invalid value is provided to
+    populate.
 
     :param color: Instantiated ``Color`` object.
     """
@@ -199,8 +199,8 @@ def test_index_error_kwargs(key: str, idx: int) -> None:
     "key,value", ATTR_COLOR_EFFECT_TYPE_ERROR, ids=["effect", "fore", "back"]
 )
 def test_type_error_kwargs(key: str, value: Any) -> None:
-    """Test that ``TypeError`` and correct error message are raised
-    when an invalid type is supplied to ``Color`` constructor.
+    """Test that ``TypeError`` and correct error message are raised when
+    an invalid type is supplied to ``Color`` constructor.
 
     :param key: Keyword argument for constructor: ``effect``, ``fore``,
                 or ``back``
