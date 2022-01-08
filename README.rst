@@ -1,8 +1,8 @@
 object-colors
 =============
-.. image:: https://github.com/jshwi/object-colors/workflows/build/badge.svg
-    :target: https://github.com/jshwi/object_colors/workflows/build/badge.svg
-    :alt: build
+.. image:: https://github.com/jshwi/gitspy/actions/workflows/ci.yml/badge.svg
+    :target: https://github.com/jshwi/gitspy/actions/workflows/ci.yml
+    :alt: ci
 .. image:: https://img.shields.io/badge/python-3.8-blue.svg
     :target: https://www.python.org/downloads/release/python-380
     :alt: python3.8
