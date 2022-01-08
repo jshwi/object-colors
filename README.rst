@@ -12,9 +12,6 @@ object-colors
 .. image:: https://codecov.io/gh/jshwi/object-colors/branch/master/graph/badge.svg
     :target: https://codecov.io/gh/jshwi/object-colors
     :alt: codecov.io
-.. image:: https://readthedocs.org/projects/object-colors/badge/?version=latest
-    :target: https://object-colors.readthedocs.io/en/latest/?badge=latest
-    :alt: readthedocs.org
 .. image:: https://img.shields.io/badge/License-MIT-blue.svg
     :target: https://lbesson.mit-license.org/
     :alt: mit
