@@ -42,7 +42,7 @@ jobs:
           pip install --upgrade pip poetry
 
       - name: Cache Virtualenvs
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         id: poetry-cache
         with:
           path: ~/.local/share/virtualenvs
