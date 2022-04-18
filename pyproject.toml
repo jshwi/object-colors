@@ -67,7 +67,7 @@ modules = [
     "unused",
     "lint",
     "coverage",
-    "readme",
+    "doctest-readme",
     "docs",
 ]
 
