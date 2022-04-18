@@ -52,7 +52,6 @@ modules = [
     "unused",
     "lint",
     "coverage",
-    "readme",
     "docs",
 ]
 
