@@ -56,7 +56,9 @@ restview = "^2.9.2"
 
 [tool.pyaud.audit]
 modules = [
-    "files",
+    "toc",
+    "whitelist",
+    "sort-pyproject",
     "format",
     "format-docs",
     "format-str",
@@ -65,7 +67,8 @@ modules = [
     "unused",
     "lint",
     "coverage",
-    "doctest-readme",
+    "const",
+    "test",
     "docs",
 ]
 
