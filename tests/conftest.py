@@ -3,6 +3,8 @@ import pytest
 
 from object_colors import Color
 
+from . import FORE
+
 
 @pytest.fixture(name="color")
 def fixture_color() -> Color:
@@ -16,5 +18,5 @@ def fixture_populated_colors(color: Color) -> Color:
 
     :param color: Instantiated ``Color`` object.
     """
-    color.populate("fore")
+    color.populate(FORE)
     return color
