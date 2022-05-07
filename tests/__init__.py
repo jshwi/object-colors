@@ -9,15 +9,11 @@ from object_colors import Color
 CODE: str = "\u001b["
 COLORS: Tuple[str, ...] = Color.colors
 EFFECTS: Tuple[str, ...] = Color.effects
-BACK_CODES: Tuple[str, ...] = tuple(
-    [f"{CODE}4{i}m" for i in range(len(COLORS))]
-)
+BACK_CODES: Tuple[str, ...] = tuple(f"{CODE}4{i}m" for i in range(len(COLORS)))
 EFFECT_CODES: Tuple[str, ...] = tuple(
-    [f"{CODE}{i}m" for i in range(len(EFFECTS))]
+    f"{CODE}{i}m" for i in range(len(EFFECTS))
 )
-FORE_CODES: Tuple[str, ...] = tuple(
-    [f"{CODE}3{i}m" for i in range(len(COLORS))]
-)
+FORE_CODES: Tuple[str, ...] = tuple(f"{CODE}3{i}m" for i in range(len(COLORS)))
 CODE_OBJ: Dict[str, Tuple[str, ...]] = {
     "effect": EFFECT_CODES,
     "fore": FORE_CODES,
@@ -37,12 +33,10 @@ ATTR_KEY_VALUES: Dict[str, Tuple[Tuple[str, int], ...]] = {
 ATTR_COLOR_EFFECT_CODE_INDEX: Tuple[
     Tuple[str, Tuple[Any, int], Any], ...
 ] = tuple(
-    [
-        (s, (t[i], t[1]), CODE_OBJ[s][t[1]])
-        for i in (0, 1)
-        for s, v in ATTR_KEY_VALUES.items()
-        for t in v
-    ]
+    (s, (t[i], t[1]), CODE_OBJ[s][t[1]])
+    for i in (0, 1)
+    for s, v in ATTR_KEY_VALUES.items()
+    for t in v
 )
 RESET: str = "\u001b[0;0m"
 TEST_STR: str = "A simple string"
@@ -58,10 +52,10 @@ UNMATCHED_VALUES: Dict[str, Tuple[str, ...]] = {
     "back": EFFECTS,
 }
 ATTR_COLOR_EFFECT_UNMATCHED_INDEX: Tuple[Tuple[str, str], ...] = tuple(
-    [(k, i) for k, v in UNMATCHED_VALUES.items() for i in v]
+    (k, i) for k, v in UNMATCHED_VALUES.items() for i in v
 )
 ATTR_COLOR_EFFECT_EXCEED_INDEX: Tuple[Tuple[str, int], ...] = tuple(
-    [(k, len(v) + 1) for k, v in MATCHED_VALUES.items()]
+    (k, len(v) + 1) for k, v in MATCHED_VALUES.items()
 )
 ATTR_COLOR_EFFECT_TYPE_ERROR: Tuple[
     Union[Tuple[str, float], Tuple[str, Tuple[str]], Tuple[str, List[str]]],
