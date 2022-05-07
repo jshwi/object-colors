@@ -3,7 +3,7 @@ object-colors docs
 
 |
 
-The source code is available `here <https://github.com/jshwi/object_colors>`_
+The source code is available `here <https://github.com/jshwi/object-colors>`_
 
 |
 
