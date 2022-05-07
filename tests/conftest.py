@@ -1,4 +1,7 @@
-"""tests.conftest."""
+"""
+tests.conftest
+==============
+"""
 import pytest
 
 from object_colors import Color
