@@ -64,7 +64,7 @@ class Color:
         self.effect = effect
         self.fore = fore
         self.back = back
-        object.__setattr__(self, "_objects", dict())
+        object.__setattr__(self, "_objects", {})
 
     def __setattr__(self, key: str, value: Any) -> None:
         """The two types of attributes to set are the object's instance
@@ -207,7 +207,7 @@ class Color:
 
         except KeyError as err:
             raise AttributeError(
-                "'{}' has no attribute '{}'".format(type(self).__name__, elem)
+                f"'{type(self).__name__}' has no attribute '{elem}'"
             ) from err
 
     def populate_colors(self) -> None:
