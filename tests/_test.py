@@ -13,8 +13,11 @@ from . import (
     ATTR_COLOR_EFFECT_EXCEED_INDEX,
     ATTR_COLOR_EFFECT_TYPE_ERROR,
     ATTR_COLOR_EFFECT_UNMATCHED_INDEX,
+    BACK,
     COLOR_INT_INDEX,
     COLORS,
+    EFFECT,
+    FORE,
     FORE_CODES,
     RESET,
     TEST_STR,
@@ -62,7 +65,7 @@ def test_set_dynamic(color: Color) -> None:
     :param color: Instantiated ``Color`` object.
     """
     key = "the_name_is_up_to_the_user"
-    setattr(color, key, {"fore": "red"})
+    setattr(color, key, {FORE: "red"})
     expected = f"{FORE_CODES[1]}{TEST_STR}{RESET}"
     assert getattr(color, key).get(TEST_STR) == expected
 
@@ -196,7 +199,7 @@ def test_index_error_kwargs(key: str, idx: int) -> None:
 
 
 @pytest.mark.parametrize(
-    "key,value", ATTR_COLOR_EFFECT_TYPE_ERROR, ids=["effect", "fore", "back"]
+    "key,value", ATTR_COLOR_EFFECT_TYPE_ERROR, ids=[EFFECT, FORE, BACK]
 )
 def test_type_error_kwargs(key: str, value: Any) -> None:
     """Test that ``TypeError`` and correct error message are raised when
@@ -258,7 +261,7 @@ def test_len(color: Color) -> None:
     :param color: Instantiated ``Color`` object.
     """
     assert len(color) == 0
-    color.populate("fore")
+    color.populate(FORE)
     assert len(color) == 8
 
 
