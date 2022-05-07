@@ -1,6 +1,8 @@
 """
 tests
 =====
+
+Test package for ``object-colors``.
 """
 from typing import Any, Dict, List, Tuple, Union
 

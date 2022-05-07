@@ -1,9 +1,4 @@
-"""
-object-colors
-=============
-
-Object-oriented library for stylizing terminal output.
-"""
+"""Object-oriented library for stylizing terminal output."""
 import builtins
 from typing import Any, Dict, List, Optional, Tuple, Union
 
