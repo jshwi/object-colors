@@ -17,7 +17,7 @@
 
 # -- Project information -----------------------------------------------------
 
-project = "object_colors"
+project = "objectcolors"
 copyright = "2022, Stephen Whitlock"
 author = "Stephen Whitlock"
 
