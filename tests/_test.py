@@ -33,12 +33,10 @@ from . import (
 def test_get(attr: str, pair: Tuple[str, int], expected: str) -> None:
     """Test returning a simple string with effects and colors.
 
-    :param attr:        Attribute belonging to ``Color`` constructor
-                        call.
-    :param pair:        A pair containing a str and an int or an int and
-                        and int.
-    :param expected:    Expected escape codes ordered in indexed order
-                        by their integer value.
+    :param attr: Attribute belonging to ``Color`` constructor call.
+    :param pair: A pair containing a str and an int or an int and int.
+    :param expected: Expected escape codes ordered in indexed order by
+        their integer value.
     """
     color = Color(**{attr: pair[0]})
     assert color.get(TEST_STR) == f"{expected}{TEST_STR}{RESET}"
@@ -50,8 +48,7 @@ def test_get(attr: str, pair: Tuple[str, int], expected: str) -> None:
 
 
 def test_set_static(color: Color) -> None:
-    """Test that an existing instance attribute can be set with the
-    ``set`` method.
+    """Test existing instance attribute can be set with  ``set``.
 
     :param color: Instantiated ``Color`` object.
     """
@@ -60,7 +57,7 @@ def test_set_static(color: Color) -> None:
 
 
 def test_set_dynamic(color: Color) -> None:
-    """Test that a subclass can be set with the ``set`` method.
+    """Test a subclass can be set with ``set``.
 
     :param color: Instantiated ``Color`` object.
     """
@@ -80,14 +77,11 @@ def test_print(
 ) -> None:
     """Test printing a simple string with effects and colors.
 
-    :param attr:        Attribute belonging to ``Color`` constructor
-                        call.
-    :param pair:        A pair containing a str and an int or an int and
-                        and int.
-    :param expected:    Expected escape codes ordered in indexed order
-                        by their integer value.
-    :param capsys:      ``pytest`` fixture for capturing and returning
-                        terminal output
+    :param attr: Attribute belonging to ``Color`` constructor call.
+    :param pair: A pair containing a str and an int or an int and int.
+    :param expected: Expected escape codes ordered in indexed order by
+        their integer value.
+    :param capsys: Capture sys stdout and stderr.
     """
     color = Color(**{attr: pair[0]})
     color.print(TEST_STR)
@@ -100,13 +94,11 @@ def test_print(
 
 @pytest.mark.parametrize("name,idx", COLOR_INT_INDEX, ids=COLORS)
 def test_populate_colors(color: Color, name: str, idx: int) -> None:
-    """Test the string is as it is supposed to be when the ``get``
-    method is used within a color subclass.
+    """Test for expected str when ``get`` is used within color subclass.
 
     :param color: Instantiated ``Color`` object.
-                                ``populate_colors`` has been called.
-    :param name:                Name of attribute to test for.
-    :param idx:                 Index of expected ANSI escape code.
+    :param name: Name of attribute to test for.
+    :param idx: Index of expected ANSI escape code.
     """
     color.populate_colors()
     result = getattr(color, name).get(TEST_STR)
@@ -116,9 +108,8 @@ def test_populate_colors(color: Color, name: str, idx: int) -> None:
 def test_repr(color: Color, capsys: Any) -> None:
     """Test output from ``__repr__``.
 
-    :param color:   Instantiated ``Color`` object.
-    :param capsys:  ``pytest`` fixture for capturing and returning
-                    terminal output
+    :param color: Instantiated ``Color`` object.
+    :param capsys: Capture sys stdout and stderr.
     """
     print(color)
     captured = capsys.readouterr()
@@ -129,8 +120,7 @@ def test_repr(color: Color, capsys: Any) -> None:
 
 
 def test_populate_err(color: Color) -> None:
-    """Test attribute error is raised when invalid value is provided to
-    populate.
+    """Test ``AttributeError`` raised for invalid value to ``populate``.
 
     :param color: Instantiated ``Color`` object.
     """
@@ -141,7 +131,7 @@ def test_populate_err(color: Color) -> None:
 
 
 def test_populate_colors_deprecated(color: Color) -> None:
-    """Test the legacy ``populate_colors`` works as it should.
+    """Test ``populate_colors`` properly sets attributes.
 
     :param color: Instantiated ``Color`` object.
     """
@@ -151,8 +141,7 @@ def test_populate_colors_deprecated(color: Color) -> None:
 
 
 def test_set_invalid(color: Color) -> None:
-    """Test that a non-existing instance attribute will raise an
-    ``AttributeError`` if attempting to be set.
+    """Test ``AttributeError`` raised for non-existing attribute.
 
     :param color: Instantiated ``Color`` object.
     """
@@ -166,8 +155,7 @@ def test_set_invalid(color: Color) -> None:
 
 
 def test_key_error(color: Color) -> None:
-    """Test ``AttributeError`` is raised when invalid keyword arguments
-    are provided as ``effect``, ``fore``, or ``back``
+    """Test ``AttributeError`` raised for invalid keyword arguments.
 
     :param color: Instantiated ``Color`` object.
     """
@@ -183,14 +171,12 @@ def test_key_error(color: Color) -> None:
     ids=[f"{k}-exceed" for k in ATTR_COLOR_EFFECT_EXCEED_INDEX],
 )
 def test_index_error_kwargs(key: str, idx: int) -> None:
-    """Test that ``IndexError`` and correct error message are raised
-    when an out-of-range integer argument is supplied to ``Color``
-    constructor.
+    """Test ``IndexError`` raised for out-of-range integer.
 
     :param key: Keyword argument for constructor: ``effect``, ``fore``,
-                or ``back``
+        or ``back``
     :param idx: Index exceeding the length of the key's respective
-                tuple.
+        tuple.
     """
     with pytest.raises(IndexError) as err:
         kwargs = {key: idx}
@@ -203,11 +189,10 @@ def test_index_error_kwargs(key: str, idx: int) -> None:
     "key,value", ATTR_COLOR_EFFECT_TYPE_ERROR, ids=[EFFECT, FORE, BACK]
 )
 def test_type_error_kwargs(key: str, value: Any) -> None:
-    """Test that ``TypeError`` and correct error message are raised when
-    an invalid type is supplied to ``Color`` constructor.
+    """Test ``TypeError`` raised when for invalid type.
 
     :param key: Keyword argument for constructor: ``effect``, ``fore``,
-                or ``back``
+        or ``back``
     :param value: A type not valid for attribute.
     """
     with pytest.raises(TypeError) as err:
@@ -219,13 +204,11 @@ def test_type_error_kwargs(key: str, value: Any) -> None:
 
 @pytest.mark.parametrize("key,value", ATTR_COLOR_EFFECT_UNMATCHED_INDEX)
 def test_value_error_kwargs(key: str, value: str) -> None:
-    """Test that ``ValueError`` and correct error message are raised
-    when an incorrect keyword argument are supplied to ``Color``
-    constructor.
+    """Test ``ValueError`` raised for invalid keyword argument.
 
-    :param key:     Keyword argument for constructor: ``effect``,
-                    ``fore``, or ``back``
-    :param value:   Value NOT belonging to any of the above keys.
+    :param key: Keyword argument for constructor: ``effect``, ``fore``,
+        or ``back``
+    :param value: Value NOT belonging to any of the above keys.
     """
     with pytest.raises(ValueError) as err:
         kwargs = {key: value}
@@ -235,8 +218,7 @@ def test_value_error_kwargs(key: str, value: str) -> None:
 
 
 def test_all_fields(color: Color) -> None:
-    """Test all fields are properly compiled with the semicolon when
-    returning a string.
+    """Test fields are properly returned with semicolon for str.
 
     :param color: Instantiated ``Color`` object.
     """
@@ -245,10 +227,9 @@ def test_all_fields(color: Color) -> None:
 
 
 def test_get_no_key(color: Color) -> None:
-    """Test that a non-existing instance attribute will raise an
-    ``AttributeError`` if attempting get.
+    """Test ``AttributeError`` raised for invalid value to ``get``.
 
-    :param color:       Instantiated ``Color`` object.
+    :param color: Instantiated ``Color`` object.
     """
     with pytest.raises(AttributeError) as err:
         color.r.get()
@@ -267,8 +248,7 @@ def test_len(color: Color) -> None:
 
 
 def test_print_nothing(color: Color) -> None:
-    """Test no error is raised when printing nothing (as per the result
-    from the builtin).
+    """Test no error is raised when printing nothing.
 
     :param color: Instantiated ``Color`` object.
     """

@@ -1,9 +1,4 @@
-"""
-object-colors
-=============
-
-Object-oriented library for stylizing terminal output.
-"""
+"""Object-oriented library for stylizing terminal output."""
 import builtins
 from typing import Any, Dict, List, Optional, Tuple, Union
 
@@ -13,19 +8,44 @@ __version__ = "2.0.1"
 
 
 class Color:
-    """Color object. Args passed to constructor call may be strings or
-    integers. There are a defined set of options for each. The list of
-    options referenced below are the string form. The integer that can
-    be called is the index of the list item beginning with 0.
+    """Color object.
+
+    Args passed to constructor call may be strings or integers. There
+    are a defined set of options for each.
+
+    The list of options referenced below are the string form.
+
+    The integer that can be called is the index of the list item
+    beginning.
+
+    The two types of attributes to set are the object's instance
+    attributes, and the dynamic object attributes.
+
+    Standard attributes can be either int, str, or None.
+
+    Object values can only be a dict to create a new object.
+
+    All int values correspond to the index of the color or effect and
+    their respective ANSI code.
+
+    All str values will be converted to their index integer.
+
+    Ensure int passed as parameter does not exceed the length of the
+    key's index.
+
+    Ensure str is one of the specific strings matching the key's index.
+
+    If a key does not match ``effect``, ``fore``, or ``back`` it must be
+    a dict which can be instantiated to create a new named object.
 
     @DynamicAttrs
 
-    :param effect:  Effect applied to text output. Select from the
-                    following :py:attr:`Color.effects`.
-    :param fore:    Foreground color applied to text output. Select from
-                    the following :py:attr:`Color.colors`.
-    :param back:    Background color applied to text output. Select from
-                    the following :py:attr:`Color.colors`.
+    :param effect: Effect applied to text output. Select from the
+        following :py:attr:`Color.effects`.
+    :param fore: Foreground color applied to text output. Select from
+        the following :py:attr:`Color.colors`.
+    :param back: Background color applied to text output. Select from
+        the following :py:attr:`Color.colors`.
     """
 
     effects: Tuple[str, ...] = (
@@ -64,32 +84,11 @@ class Color:
         self.effect = effect
         self.fore = fore
         self.back = back
+
+        #: prevents infinite recursion when set
         object.__setattr__(self, "_objects", {})
 
     def __setattr__(self, key: str, value: Any) -> None:
-        """The two types of attributes to set are the object's instance
-        attributes, and the dynamic object attributes. Standard
-        attributes can be either ``int``, ``str``, or ``NoneType``.
-        Object values can only be a ``dict`` i.e. ``**kwargs`` to create
-        a new object. All ``int`` values correspond to the index of the
-        color or effect and their respective ANSI code. All ``str``
-        values will be converted to their index integer. Ensure ``int``
-        passed as parameter does not exceed the length of the key's
-        index. Ensure ``str`` is one of the specific strings matching
-        the key's index. If a key does not match ``effect``, ``fore``,
-        or ``back`` it must be a ``dict` which can be instantiated to
-        create a new named object.
-
-        :param key:         The attribute to set.
-        :param value:       The value of the attribute to set.
-        :raises IndexError: If length of ``int`` exceeds key's length.
-        :raises ValueError: If ``str`` does not a match a ``str`` in the
-                            corresponding tuple.
-        :raises TypeError:  If a type is provided that does not match
-                            one of the allowed types.
-        :raises TypeError:  If an unexpected keyword is provided and the
-                            value is not a ``dict``.
-        """
         if key in self._opts:
             if isinstance(value, int):
                 if value > len(self._opts[key]):
@@ -119,16 +118,17 @@ class Color:
             self._objects[key] = self.__class__(**value)
 
     def __getattribute__(self, key: str) -> Any:
-        """Attempt to return the attribute matching the key. If no
-        attribute can be found search ``_objects`` for objects. If
-        neither of the above can yield a result then raise
+        """Attempt to return the attribute matching the key.
+
+        If no attribute can be found search ``_objects`` for objects.
+
+        If neither of the above can yield a result then raise
         ``AttributeError`` error.
 
-        :param key:             The attribute to get.
+        :param key: The attribute to get.
         :raises AttributeError: Raise if no instance attribute or
-                                objects can be returned with the given
-                                key.
-        :return:                The retrieved attribute.
+            objects can be returned with the given key.
+        :return: The retrieved attribute.
         """
         try:
             return object.__getattribute__(self, key)
@@ -141,11 +141,6 @@ class Color:
                 raise AttributeError(err) from err
 
     def __repr__(self) -> str:
-        """View the containing attributes within the ``str``
-        representation.
-
-        :return:  ``str`` representation of this class.
-        """
         return "{}({})".format(
             type(self).__name__,
             ", ".join(
@@ -157,19 +152,16 @@ class Color:
         )
 
     def __len__(self) -> int:
-        """Length of ``_objects``.
-
-        :return: The number of objects in ``_objects``.
-        """
         return len(self._objects)
 
     def _color_str(self, string: str) -> str:
-        """Compile and return ANSI escaped string if parameters are
-        provided or a regular ``str`` otherwise.
+        """Compile and return ANSI escaped str.
 
-        :param string:  Regular ``str`` object.
-        :return:        ``str`` with escape codes added or the regular
-                        ``str`` if ``NoneType``s provided.
+        If parameters are not provided return a regular str.
+
+        :param string: Regular ``str`` object.
+        :return: str with escape codes added or the regular str if None
+            provided.
         """
         sequence: List[str] = []
         keys = tuple(self._opts.keys())
@@ -195,8 +187,7 @@ class Color:
     def populate(self, elem: str) -> None:
         """Create an object for every available selection.
 
-        :param elem:            Attribute to fill with available
-                                options.
+        :param elem: Attribute to fill with available options.
         :raises AttributeError: If element does not exist.
         """
         kwargs = {k: v for k, v in vars(self).items() if not k.startswith("_")}
@@ -220,27 +211,27 @@ class Color:
             getattr(self, color).populate("effect")
 
     def set(self, **kwargs: Optional[Union[str, int, Dict[str, Any]]]) -> None:
-        """Call to set new instance values. If not making a subclass
-        then process args and kwargs and add compiled dict to
-        masterclass.
+        """Call to set new instance values.
 
-        :key effect:    Text effect to use.
-        :key fore:      Color of text foreground.
-        :key back:      Color of text background.
-        :key ``dict``:  If ``**kwargs`` are provided then any keyword
-                        can be provided.
+        If not making a subclass then process args and kwargs and add
+        compiled dict to masterclass.
+
+        :key effect: Text effect to use.
+        :key fore: Color of text foreground.
+        :key back: Color of text background.
+        :key dict: If ``**kwargs`` are provided then any keyword can
+            be provided.
         """
         for key, value in kwargs.items():
             setattr(self, key, value)
 
     def get(self, *args: str, **kwargs: bool) -> Any:
-        """Return colored ``str`` or ``tuple`` depending on the arg
-        passed to method.
+        """Return colored str or tuple depending on the arg passed.
 
-        :param args:    Manipulate string(s).
-        :key format:    Return a string instead of a tuple if strings
-                        are passed as tuple.
-        :return:        Colored string or ``None``.
+        :param args: Manipulate string(s).
+        :key format: Return a string instead of a tuple if strings are
+            passed as tuple.
+        :return: Colored string or None.
         """
         if len(args) > 1:
             if kwargs.get("format", False):
@@ -256,13 +247,13 @@ class Color:
     def print(self, *args: str, **kwargs: Any) -> None:
         """Print colored strings using the builtin ``print`` function.
 
-        :param args:    String(s) to print.
-        :key file:      A file-like object (stream); defaults to the
-                        current sys.stdout.
-        :key sep:       String inserted between values, default a space.
-        :key end:       String appended after the last value, default a
-                        newline.
-        :key flush:     Whether to forcibly flush the stream.
+        :param args: String(s) to print.
+        :key file: A file-like object (stream); defaults to the current
+            sys.stdout.
+        :key sep: String inserted between values, default a space.
+        :key end: String appended after the last value, default a
+            newline.
+        :key flush: Whether to forcibly flush the stream.
         """
         args = self.get(*args, format=True)
         if args is not None:
