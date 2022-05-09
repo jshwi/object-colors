@@ -52,7 +52,7 @@ ipython = "^7.19.0"
 prompt-toolkit = "^3.0.13"
 pyaud = "^3.13.5"
 pytest = "^6.2.1"
-restview = "^2.9.2"
+restview = "^3.0.0"
 sphinx-toolbox = "^2.18.3"
 
 [tool.pyaud.audit]
