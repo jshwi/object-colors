@@ -54,7 +54,7 @@ pyaud = "^3.13.5"
 pytest = "^6.2.1"
 restview = "^2.9.2"
 sphinx-toolbox = "^2.18.3"
-twine = "^3.3.0"
+twine = "^4.0.0"
 urllib3 = "^1.26.5"
 
 [tool.pyaud.audit]
