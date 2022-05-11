@@ -1,10 +1,15 @@
 """Object-oriented library for stylizing terminal output."""
-import builtins
-from typing import Any, Dict, List, Optional, Tuple, Union
+from __future__ import annotations
 
-import colorama
+import builtins as _builtins
+import typing as _t
+
+import colorama as _colorama
 
 __version__ = "2.0.1"
+
+EffectTuple = _t.Tuple[str, str, str, str, str, str, str, str, str, str]
+ColorTuple = _t.Tuple[str, str, str, str, str, str, str, str]
 
 
 class Color:
@@ -48,7 +53,7 @@ class Color:
         the following :py:attr:`Color.colors`.
     """
 
-    effects: Tuple[str, ...] = (
+    effects: EffectTuple = (
         "none",
         "bold",
         "dim",
@@ -60,7 +65,7 @@ class Color:
         "empty",
         "strikethrough",
     )
-    colors: Tuple[str, ...] = (
+    colors: ColorTuple = (
         "black",
         "red",
         "green",
@@ -70,16 +75,16 @@ class Color:
         "cyan",
         "white",
     )
-    _opts: Dict[str, Tuple[str, ...]] = dict(
+    _opts: _t.Dict[str, _t.Union[EffectTuple, ColorTuple]] = dict(
         effect=effects, fore=colors, back=colors
     )
-    colorama.init()
+    _colorama.init()
 
     def __init__(
         self,
-        effect: Optional[Union[int, str]] = None,
-        fore: Optional[Union[int, str]] = None,
-        back: Optional[Union[int, str]] = None,
+        effect: _t.Optional[_t.Union[int, str]] = None,
+        fore: _t.Optional[_t.Union[int, str]] = None,
+        back: _t.Optional[_t.Union[int, str]] = None,
     ) -> None:
         self.effect = effect
         self.fore = fore
@@ -88,7 +93,11 @@ class Color:
         #: prevents infinite recursion when set
         object.__setattr__(self, "_objects", {})
 
-    def __setattr__(self, key: str, value: Any) -> None:
+    def __setattr__(
+        self,
+        key: str,
+        value: _t.Optional[_t.Union[int, str, _t.Dict[str, _t.Any]]],
+    ) -> None:
         if key in self._opts:
             if isinstance(value, int):
                 if value > len(self._opts[key]):
@@ -117,7 +126,7 @@ class Color:
 
             self._objects[key] = self.__class__(**value)
 
-    def __getattribute__(self, key: str) -> Any:
+    def __getattribute__(self, key: str) -> _t.Any:
         """Attempt to return the attribute matching the key.
 
         If no attribute can be found search ``_objects`` for objects.
@@ -163,7 +172,7 @@ class Color:
         :return: str with escape codes added or the regular str if None
             provided.
         """
-        sequence: List[str] = []
+        sequence: _t.List[str] = []
         keys = tuple(self._opts.keys())
         for count, key in enumerate(keys):
             attr = getattr(self, key)
@@ -210,7 +219,7 @@ class Color:
         for color in self.colors:
             getattr(self, color).populate("effect")
 
-    def set(self, **kwargs: Optional[Union[str, int, Dict[str, Any]]]) -> None:
+    def set(self, **kwargs: _t.Union[str, int, _t.Dict[str, _t.Any]]) -> None:
         """Call to set new instance values.
 
         If not making a subclass then process args and kwargs and add
@@ -225,7 +234,7 @@ class Color:
         for key, value in kwargs.items():
             setattr(self, key, value)
 
-    def get(self, *args: str, **kwargs: bool) -> Any:
+    def get(self, *args: str, **kwargs: bool) -> _t.Any:
         """Return colored str or tuple depending on the arg passed.
 
         :param args: Manipulate string(s).
@@ -244,7 +253,7 @@ class Color:
 
         return None
 
-    def print(self, *args: str, **kwargs: Any) -> None:
+    def print(self, *args: str, **kwargs: _t.Any) -> None:
         """Print colored strings using the builtin ``print`` function.
 
         :param args: String(s) to print.
@@ -257,4 +266,4 @@ class Color:
         """
         args = self.get(*args, format=True)
         if args is not None:
-            builtins.print(args, **kwargs)
+            _builtins.print(args, **kwargs)
