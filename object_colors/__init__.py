@@ -91,7 +91,7 @@ class Color:
         self.back = back
 
         #: prevents infinite recursion when set
-        object.__setattr__(self, "_objects", {})
+        super().__setattr__("_objects", {})
 
     def __setattr__(
         self,
@@ -119,7 +119,7 @@ class Color:
                     )
                 )
 
-            object.__setattr__(self, key, value)
+            super().__setattr__(key, value)
         else:
             if not isinstance(value, dict):
                 raise TypeError(f"got an unexpected keyword argument '{key}'")
@@ -140,7 +140,7 @@ class Color:
         :return: The retrieved attribute.
         """
         try:
-            return object.__getattribute__(self, key)
+            return super().__getattribute__(key)
 
         except AttributeError as err:
             try:
