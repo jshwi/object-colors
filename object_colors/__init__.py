@@ -191,7 +191,7 @@ class Color:
                 sequence.insert(len(sequence) - 1, "m")
 
         sequence.insert(len(sequence) - 1, string)
-        return "".join(sequence)
+        return "".join(str(i) for i in sequence)
 
     def populate(self, elem: str) -> None:
         """Create an object for every available selection.
@@ -234,7 +234,7 @@ class Color:
         for key, value in kwargs.items():
             setattr(self, key, value)
 
-    def get(self, *args: str, **kwargs: bool) -> _t.Any:
+    def get(self, *args: _t.Any, **kwargs: bool) -> _t.Any:
         """Return colored str or tuple depending on the arg passed.
 
         :param args: Manipulate string(s).
@@ -244,7 +244,7 @@ class Color:
         """
         if len(args) > 1:
             if kwargs.get("format", False):
-                return self._color_str(" ".join(args))
+                return self._color_str(" ".join(str(i) for i in args))
 
             return tuple(self._color_str(i) for i in list(args))
 
@@ -253,7 +253,7 @@ class Color:
 
         return None
 
-    def print(self, *args: str, **kwargs: _t.Any) -> None:
+    def print(self, *args: _t.Any, **kwargs: _t.Any) -> None:
         """Print colored strings using the builtin ``print`` function.
 
         :param args: String(s) to print.

@@ -253,3 +253,18 @@ def test_print_nothing(color: Color) -> None:
     :param color: Instantiated ``Color`` object.
     """
     color.print()
+
+
+def test_print_non_str(capsys: pytest.CaptureFixture, color: Color) -> None:
+    """Test printing of any objects.
+
+    :param capsys: Capture sys stdout and stderr.
+    :param color: Instantiated ``Color`` object.
+    """
+    color.print(None)
+    assert capsys.readouterr()[0].strip() == "None"
+    color.print(None, color)
+    assert (
+        capsys.readouterr()[0].strip()
+        == "None Color(effect=None, fore=None, back=None, objects())"
+    )

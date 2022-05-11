@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 [Unreleased](https://github.com/jshwi/object_colors/compare/v2.0.1...HEAD)
 ------------------------------------------------------------------------
+### Added
+- Allows any object for `print`
 
 [2.0.1](https://github.com/jshwi/object_colors/releases/tag/v2.0.1) - 2021-07-27
 ------------------------------------------------------------------------
