@@ -1,6 +1,6 @@
 {
   "name": "object-colors",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "description": "Object-oriented library for stylizing terminal output",
   "private": true,
   "directories": {
