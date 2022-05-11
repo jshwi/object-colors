@@ -99,16 +99,17 @@ def test_print(
 
 
 @pytest.mark.parametrize("name,idx", COLOR_INT_INDEX, ids=COLORS)
-def test_populate_colors(populated_colors: Color, name: str, idx: int) -> None:
+def test_populate_colors(color: Color, name: str, idx: int) -> None:
     """Test the string is as it is supposed to be when the ``get``
     method is used within a color subclass.
 
-    :param populated_colors:    Instantiated ``Color`` object where
+    :param color: Instantiated ``Color`` object.
                                 ``populate_colors`` has been called.
     :param name:                Name of attribute to test for.
     :param idx:                 Index of expected ANSI escape code.
     """
-    result = getattr(populated_colors, name).get(TEST_STR)
+    color.populate_colors()
+    result = getattr(color, name).get(TEST_STR)
     assert result == f"{FORE_CODES[idx]}{TEST_STR}{RESET}"
 
 
