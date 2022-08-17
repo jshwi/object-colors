@@ -53,7 +53,7 @@ prompt-toolkit = "^3.0.30"
 pyaud = "^4.0.2"
 pytest = "^7.1.2"
 restview = "^3.0.0"
-sphinx-toolbox = "^3.1.2"
+sphinx-toolbox = "^3.2.0"
 
 [tool.pyaud.audit]
 modules = [
