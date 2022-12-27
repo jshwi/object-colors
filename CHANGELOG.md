@@ -56,9 +56,9 @@ Bump urllib3 from 1.26.3 to 1.26.5
 ### Added
 - Adds method to get multicoloured strings
 - Makes some methods & variables public for more manual configuration
-  
+
 ### Changed
-- Updates README.rst 
+- Updates README.rst
 
 [v1.0.7](https://github.com/jshwi/object_colors/releases/tag/v1.0.7) - 2020-01-31
 ------------------------------------------------------------------------
@@ -71,12 +71,12 @@ Bump urllib3 from 1.26.3 to 1.26.5
 - Removes get_nested() method (now useless)
 
 ### Fixed
-- "Ignore_case" fully functional 
+- "Ignore_case" fully functional
 
 [v1.0.6](https://github.com/jshwi/object_colors/releases/tag/v1.0.6) - 2019-12-07
 ------------------------------------------------------------------------
 ### Changed
-- Change ``populate_colors`` arg: "colors" -> populate=True 
+- Change ``populate_colors`` arg: "colors" -> populate=True
 
 [v1.0.5](https://github.com/jshwi/object_colors/releases/tag/v1.0.5) - 2019-11-10
 ------------------------------------------------------------------------
@@ -87,11 +87,11 @@ Bump urllib3 from 1.26.3 to 1.26.5
 ------------------------------------------------------------------------
 ### Added
 - Adds additional bold switch for more flexible use
-- Adds unpack tuple feature to self.get() 
-- Adds full pop() return test module 
+- Adds unpack tuple feature to self.get()
+- Adds full pop() return test module
 
 ### Changed
-- Updates docs structure 
+- Updates docs structure
 
 [v1.0.3](https://github.com/jshwi/object_colors/releases/tag/v1.0.3) - 2019-10-08
 ------------------------------------------------------------------------
@@ -102,15 +102,15 @@ Bump urllib3 from 1.26.3 to 1.26.5
 ------------------------------------------------------------------------
 ### Added
 - Can now instantiate several subclasses at once
-- Uses set() without overwriting previous values 
-- Made keys list global (class scope) 
+- Uses set() without overwriting previous values
+- Made keys list global (class scope)
 - Adds subclass tests
 
 ### Changed
 - Updates docs
 
 ### Fixed
-- Valid integers no longer missed in main loop 
+- Valid integers no longer missed in main loop
 
 [v1.0.1](https://github.com/jshwi/object_colors/releases/tag/v1.0.1) - 2019-10-03
 ------------------------------------------------------------------------
@@ -118,11 +118,11 @@ Bump urllib3 from 1.26.3 to 1.26.5
 - Adds delete keypair method
 - Adds docs
 - Adds setup.py
-- Can now create separate color objects and add new ones 
+- Can now create separate color objects and add new ones
 - Adds test suite
 
 ### Changed
 - Updates README.md
 
 ### Fixed
-- Resolves unresolved references/attributes 
+- Resolves unresolved references/attributes
