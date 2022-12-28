@@ -17,6 +17,16 @@ exclude = '''
 line-length = 79
 skip-magic-trailing-comma = true
 
+[tool.codespell]
+ignore-words-list = "keypair"
+
+[tool.constcheck]
+ignore_strings = [
+    "store",
+    "store_true",
+    "utf-8",
+]
+
 [tool.coverage.report]
 fail_under = 100
 
@@ -25,11 +35,26 @@ omit = [
     "whitelist.py",
 ]
 
+[tool.docsig]
+check-class = true
+summary = true
+
+[tool.isort]
+ensure_newline_before_comments = true
+force_grid_wrap = 0
+include_trailing_comma = true
+line_length = 79
+multi_line_output = 3
+profile = "black"
+use_parentheses = true
+
 [tool.poetry]
 authors = [
     "jshwi <stephen@jshwisolutions.com>",
 ]
 description = "Object-oriented library for stylizing terminal output"
+documentation = "https://object-colors.readthedocs.io/en/latest"
+homepage = "https://pypi.org/project/object-colors/"
 keywords = [
     "tty",
     "ansi",
@@ -38,8 +63,12 @@ keywords = [
     "oop",
 ]
 license = "MIT"
+maintainers = [
+    "jshwi <stephen@jshwisolutions.com>",
+]
 name = "object-colors"
 readme = "README.rst"
+repository = "https://github.com/jshwi/object-colors"
 version = "2.1.0"
 
 [tool.poetry.dependencies]
@@ -58,9 +87,7 @@ sphinx-toolbox = "^2.18.3"
 
 [tool.pyaud.audit]
 modules = [
-    "toc",
-    "whitelist",
-    "sort-pyproject",
+    "files",
     "format",
     "format-docs",
     "format-str",
@@ -68,17 +95,17 @@ modules = [
     "typecheck",
     "unused",
     "lint",
-    "coverage",
     "const",
+    "params",
     "test",
     "docs",
 ]
 
 [tool.pyaud.clean]
 exclude = [
-    "*.egg*",
     ".mypy_cache",
     ".env",
+    "node_modules",
 ]
 
 [tool.pyaud.indexing]
@@ -119,8 +146,8 @@ addopts = [
 filterwarnings = "ignore::DeprecationWarning"
 norecursedirs = [
     "docs",
-    "*.egg-info",
     ".git",
     ".mypy_cache",
     ".idea",
+    ".pytest_cache"
 ]
