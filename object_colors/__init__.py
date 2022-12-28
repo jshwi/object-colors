@@ -153,7 +153,7 @@ class Color:
         return "{}({})".format(
             type(self).__name__,
             ", ".join(
-                "{}={}".format(k, v)
+                f"{k}={v}"
                 if not isinstance(v, dict)
                 else "objects({})".format(", ".join(v))
                 for k, v in vars(self).items()
