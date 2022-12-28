@@ -25,6 +25,9 @@ omit = [
     "whitelist.py",
 ]
 
+[tool.isort]
+profile = "black"
+
 [tool.poetry]
 authors = [
     "jshwi <stephen@jshwisolutions.com>",
