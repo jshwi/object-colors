@@ -24,6 +24,15 @@ object-colors
 .. image:: https://img.shields.io/badge/code%20style-black-000000.svg
     :target: https://github.com/psf/black
     :alt: black
+.. image:: https://img.shields.io/badge/linting-pylint-yellowgreen
+    :target: https://github.com/PyCQA/pylint
+    :alt: pylint
+.. image:: https://img.shields.io/badge/security-bandit-yellow.svg
+    :target: https://github.com/PyCQA/bandit
+    :alt: Security Status
+.. image:: https://results.pre-commit.ci/badge/github/jshwi/object-colors/master.svg
+   :target: https://results.pre-commit.ci/latest/github/jshwi/object-colors/master
+   :alt: pre-commit.ci status
 
 Object-oriented library for stylizing terminal output
 -----------------------------------------------------
