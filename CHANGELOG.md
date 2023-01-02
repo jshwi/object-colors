@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 [Unreleased](https://github.com/jshwi/object_colors/compare/v2.1.0...HEAD)
 ------------------------------------------------------------------------
+### Added
+- Add py.typed
 
 [2.1.0](https://github.com/jshwi/object_colors/releases/tag/v2.1.0) - 2022-05-11
 ------------------------------------------------------------------------
