@@ -4,22 +4,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-[Unreleased](https://github.com/jshwi/object_colors/compare/v2.1.0...HEAD)
+[Unreleased](https://github.com/jshwi/object-colors/compare/v2.1.0...HEAD)
 ------------------------------------------------------------------------
 ### Added
 - Add py.typed
 
-[2.1.0](https://github.com/jshwi/object_colors/releases/tag/v2.1.0) - 2022-05-11
+[2.1.0](https://github.com/jshwi/object-colors/releases/tag/v2.1.0) - 2022-05-11
 ------------------------------------------------------------------------
 ### Added
 - Allows any object for `print`
 
-[2.0.1](https://github.com/jshwi/object_colors/releases/tag/v2.0.1) - 2021-07-27
+[2.0.1](https://github.com/jshwi/object-colors/releases/tag/v2.0.1) - 2021-07-27
 ------------------------------------------------------------------------
 ### Security
 Bump urllib3 from 1.26.3 to 1.26.5
 
-[2.0.0](https://github.com/jshwi/object_colors/releases/tag/v2.0.0) - 2021-03-15
+[2.0.0](https://github.com/jshwi/object-colors/releases/tag/v2.0.0) - 2021-03-15
 ------------------------------------------------------------------------
 ### Added
 - Adds ``colorama`` for ``Windows`` systems
@@ -53,7 +53,7 @@ Bump urllib3 from 1.26.3 to 1.26.5
 - Adds all effects
 - Objects can be properly added with ``__setattr__``
 
-[v1.0.8](https://github.com/jshwi/object_colors/releases/tag/v1.0.8)  - 2020-02-02
+[v1.0.8](https://github.com/jshwi/object-colors/releases/tag/v1.0.8)  - 2020-02-02
 ------------------------------------------------------------------------
 ### Added
 - Adds method to get multicoloured strings
@@ -62,7 +62,7 @@ Bump urllib3 from 1.26.3 to 1.26.5
 ### Changed
 - Updates README.rst
 
-[v1.0.7](https://github.com/jshwi/object_colors/releases/tag/v1.0.7) - 2020-01-31
+[v1.0.7](https://github.com/jshwi/object-colors/releases/tag/v1.0.7) - 2020-01-31
 ------------------------------------------------------------------------
 ### Added
 - Adds ignore-case / scatter search
@@ -75,17 +75,17 @@ Bump urllib3 from 1.26.3 to 1.26.5
 ### Fixed
 - "Ignore_case" fully functional
 
-[v1.0.6](https://github.com/jshwi/object_colors/releases/tag/v1.0.6) - 2019-12-07
+[v1.0.6](https://github.com/jshwi/object-colors/releases/tag/v1.0.6) - 2019-12-07
 ------------------------------------------------------------------------
 ### Changed
 - Change ``populate_colors`` arg: "colors" -> populate=True
 
-[v1.0.5](https://github.com/jshwi/object_colors/releases/tag/v1.0.5) - 2019-11-10
+[v1.0.5](https://github.com/jshwi/object-colors/releases/tag/v1.0.5) - 2019-11-10
 ------------------------------------------------------------------------
 #### Added
 - Adds ``populate_colors`` method
 
-[v1.0.4](https://github.com/jshwi/object_colors/releases/tag/v1.0.4) - 2019-11-09
+[v1.0.4](https://github.com/jshwi/object-colors/releases/tag/v1.0.4) - 2019-11-09
 ------------------------------------------------------------------------
 ### Added
 - Adds additional bold switch for more flexible use
@@ -95,12 +95,12 @@ Bump urllib3 from 1.26.3 to 1.26.5
 ### Changed
 - Updates docs structure
 
-[v1.0.3](https://github.com/jshwi/object_colors/releases/tag/v1.0.3) - 2019-10-08
+[v1.0.3](https://github.com/jshwi/object-colors/releases/tag/v1.0.3) - 2019-10-08
 ------------------------------------------------------------------------
 ### Fix
 - New Python unicode characters no longer cause build to fail
 
-[v1.0.2](https://github.com/jshwi/object_colors/releases/tag/v1.0.2)  - 2019-10-07
+[v1.0.2](https://github.com/jshwi/object-colors/releases/tag/v1.0.2)  - 2019-10-07
 ------------------------------------------------------------------------
 ### Added
 - Can now instantiate several subclasses at once
@@ -114,7 +114,7 @@ Bump urllib3 from 1.26.3 to 1.26.5
 ### Fixed
 - Valid integers no longer missed in main loop
 
-[v1.0.1](https://github.com/jshwi/object_colors/releases/tag/v1.0.1) - 2019-10-03
+[v1.0.1](https://github.com/jshwi/object-colors/releases/tag/v1.0.1) - 2019-10-03
 ------------------------------------------------------------------------
 ### Added
 - Adds delete keypair method
