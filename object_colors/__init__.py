@@ -6,9 +6,9 @@ import typing as _t
 
 import colorama as _colorama
 
-__all__ = ["Color", "__version__"]
+from ._version import __version__
 
-__version__ = "2.2.0"
+__all__ = ["Color", "__version__"]
 
 EffectTuple = _t.Tuple[str, str, str, str, str, str, str, str, str, str]
 ColorTuple = _t.Tuple[str, str, str, str, str, str, str, str]
