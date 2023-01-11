@@ -6,6 +6,7 @@ from typing import Any, Tuple
 
 import pytest
 
+import object_colors
 from object_colors import Color
 
 from . import (
@@ -22,6 +23,7 @@ from . import (
     RESET,
     TEST_STR,
     TEST_TUPLE,
+    VERSION,
 )
 
 
@@ -268,3 +270,12 @@ def test_print_non_str(capsys: pytest.CaptureFixture, color: Color) -> None:
         capsys.readouterr()[0].strip()
         == "None Color(effect=None, fore=None, back=None, objects())"
     )
+
+
+def test_version(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Test ``object_colors.__version__``.
+
+    :param monkeypatch: Mock patch environment and attributes.
+    """
+    monkeypatch.setattr("object_colors.__version__", VERSION)
+    assert object_colors.__version__ == VERSION
