@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 [Unreleased](https://github.com/jshwi/object-colors/compare/v2.2.0...HEAD)
 ------------------------------------------------------------------------
+### Added
+- Add `__all__`
 
 [2.2.0](https://github.com/jshwi/object-colors/releases/tag/v2.2.0) - 2023-01-04
 ------------------------------------------------------------------------
