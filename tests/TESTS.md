@@ -96,3 +96,8 @@ Test `TypeError` raised when for invalid type.
 Test `ValueError` raised for invalid keyword argument.
 
 
+### Version
+
+Test `object_colors.__version__`.
+
+
