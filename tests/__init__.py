@@ -66,3 +66,4 @@ ATTR_COLOR_EFFECT_TYPE_ERROR: Tuple[
     Union[Tuple[str, float], Tuple[str, Tuple[str]], Tuple[str, List[str]]],
     ...,
 ] = tuple([(EFFECT, 1.1), (FORE, ("tuple",)), (BACK, ["list"])])
+VERSION = "0.1.0"
