@@ -30,6 +30,9 @@ object-colors
 .. image:: https://img.shields.io/badge/linting-pylint-yellowgreen
     :target: https://github.com/PyCQA/pylint
     :alt: pylint
+.. image:: https://snyk.io/test/github/jshwi/object-colors/badge.svg
+    :target: https://snyk.io/test/github/jshwi/object-colors/badge.svg
+    :alt: Known Vulnerabilities
 
 Object-oriented library for stylizing terminal output
 -----------------------------------------------------
