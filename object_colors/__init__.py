@@ -77,9 +77,11 @@ class Color:
         "cyan",
         "white",
     )
-    _opts: _t.Dict[str, _t.Union[EffectTuple, ColorTuple]] = dict(
-        effect=effects, fore=colors, back=colors
-    )
+    _opts: _t.Dict[str, _t.Union[EffectTuple, ColorTuple]] = {
+        "effect": effects,
+        "fore": colors,
+        "back": colors,
+    }
     _colorama.init()
 
     def __init__(
