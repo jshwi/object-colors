@@ -6,8 +6,8 @@ object-colors
 .. image:: https://img.shields.io/pypi/v/object-colors
     :target: https://pypi.org/project/object-colors/
     :alt: PyPI
-.. image:: https://github.com/jshwi/object-colors/actions/workflows/ci.yml/badge.svg
-    :target: https://github.com/jshwi/object-colors/actions/workflows/ci.yml
+.. image:: https://github.com/jshwi/object-colors/actions/workflows/build.yaml/badge.svg
+    :target: https://github.com/jshwi/object-colors/actions/workflows/build.yaml
     :alt: CI
 .. image:: https://results.pre-commit.ci/badge/github/jshwi/object-colors/master.svg
    :target: https://results.pre-commit.ci/latest/github/jshwi/object-colors/master
