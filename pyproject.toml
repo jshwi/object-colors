@@ -81,6 +81,7 @@ pyaud = "^6.2.2"
 pylint = "2.16.2"
 pytest = "^7.1.2"
 restview = "^3.0.0"
+sphinx-immaterial = "^0.11.3"
 sphinx-toolbox = "^3.4.0"
 
 [tool.pyaud]
