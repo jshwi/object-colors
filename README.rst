@@ -43,8 +43,8 @@ object-colors
     :target: https://snyk.io/test/github/jshwi/object-colors/badge.svg
     :alt: Known Vulnerabilities
 .. image:: https://snyk.io/advisor/python/object-colors/badge.svg
-  :target: https://snyk.io/advisor/python/object-colors
-  :alt: object-colors
+    :target: https://snyk.io/advisor/python/object-colors
+    :alt: object-colors
 
 Object-oriented library for stylizing terminal output
 -----------------------------------------------------
