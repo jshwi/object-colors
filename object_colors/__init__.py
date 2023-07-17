@@ -241,9 +241,8 @@ class Color:
     def get(self, *args: _t.Any, **kwargs: bool) -> _t.Any:
         """Return colored str or tuple depending on the arg passed.
 
-        :param args: Manipulate string(s).
-        :key format: Return a string instead of a tuple if strings are
-            passed as tuple.
+        :param args: Manipulate string(s). :key format: Return a string
+            instead of a tuple if strings are passed as tuple.
         :return: Colored string or None.
         """
         if len(args) > 1:
@@ -260,13 +259,11 @@ class Color:
     def print(self, *args: _t.Any, **kwargs: _t.Any) -> None:
         """Print colored strings using the builtin ``print`` function.
 
-        :param args: String(s) to print.
-        :key file: A file-like object (stream); defaults to the current
-            sys.stdout.
-        :key sep: String inserted between values, default a space.
-        :key end: String appended after the last value, default a
-            newline.
-        :key flush: Whether to forcibly flush the stream.
+        :param args: String(s) to print. :key file: A file-like object
+            (stream); defaults to the current sys.stdout. :key sep:
+            String inserted between values, default a space. :key end:
+            String appended after the last value, default a newline.
+            :key flush: Whether to forcibly flush the stream.
         """
         args = self.get(*args, format=True)
         if args is not None:
