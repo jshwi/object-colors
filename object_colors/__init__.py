@@ -260,17 +260,24 @@ class Color:
 
         return None
 
-    def print(self, *args: _t.Any, **kwargs: _t.Any) -> None:
+    def print(
+        self,
+        *args,
+        file: _t.Any = None,
+        sep: str = " ",
+        end: str = "\n",
+        flush: bool = False,
+    ) -> None:  # known special case of print
         """Print colored strings using the builtin ``print`` function.
 
         :param args: String(s) to print.
-        :key file: A file-like object (stream); defaults to the current
-            sys.stdout.
-        :key sep: String inserted between values, default a space.
-        :key end: String appended after the last value, default a
+        :param file: A file-like object (stream); defaults to the
+            current sys.stdout.
+        :param sep: String inserted between values, default a space.
+        :param end: String appended after the last value, default a
             newline.
-        :key flush: Whether to forcibly flush the stream.
+        :param flush: Whether to forcibly flush the stream.
         """
         args = self.get(*args, format=True)
         if args is not None:
-            _builtins.print(args, **kwargs)
+            _builtins.print(args, sep=sep, end=end, file=file, flush=flush)
