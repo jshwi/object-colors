@@ -238,16 +238,21 @@ class Color:
         for key, value in kwargs.items():
             setattr(self, key, value)
 
-    def get(self, *args: _t.Any, **kwargs: bool) -> _t.Any:
+    # noinspection PyShadowingBuiltins
+    def get(
+        self,
+        *args: _t.Any,
+        format: bool = False,  # pylint: disable=redefined-builtin
+    ) -> _t.Any:
         """Return colored str or tuple depending on the arg passed.
 
         :param args: Manipulate string(s).
-        :key format: Return a string instead of a tuple if strings are
+        :param format: Return a string instead of a tuple if strings are
             passed as tuple.
         :return: Colored string or None.
         """
         if len(args) > 1:
-            if kwargs.get("format", False):
+            if format:
                 return self._color_str(" ".join(str(i) for i in args))
 
             return tuple(self._color_str(i) for i in list(args))
