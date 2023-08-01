@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Add `__all__`
 
+### Changed
+- update param passed to `Color.get`
+
 [2.2.0](https://github.com/jshwi/object-colors/releases/tag/v2.2.0) - 2023-01-04
 ------------------------------------------------------------------------
 ### Added
