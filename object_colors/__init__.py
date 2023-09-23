@@ -84,9 +84,9 @@ class Color:
 
     def __init__(
         self,
-        effect: _t.Optional[_t.Union[int, str]] = None,
-        fore: _t.Optional[_t.Union[int, str]] = None,
-        back: _t.Optional[_t.Union[int, str]] = None,
+        effect: int | str | None = None,
+        fore: int | str | None = None,
+        back: int | str | None = None,
     ) -> None:
         self.effect = effect
         self.fore = fore
@@ -96,9 +96,7 @@ class Color:
         super().__setattr__("_objects", {})
 
     def __setattr__(
-        self,
-        key: str,
-        value: _t.Optional[_t.Union[int, str, _t.Dict[str, _t.Any]]],
+        self, key: str, value: int | str | dict[str, _t.Any] | None
     ) -> None:
         if key in self._opts:
             if isinstance(value, int):
@@ -174,7 +172,7 @@ class Color:
         :return: str with escape codes added or the regular str if None
             provided.
         """
-        sequence: _t.List[str] = []
+        sequence: list[str] = []
         keys = tuple(self._opts.keys())
         for count, key in enumerate(keys):
             attr = getattr(self, key)
@@ -221,7 +219,7 @@ class Color:
         for color in self.colors:
             getattr(self, color).populate("effect")
 
-    def set(self, **kwargs: _t.Union[str, int, _t.Dict[str, _t.Any]]) -> None:
+    def set(self, **kwargs: str | int | dict[str, _t.Any]) -> None:
         """Call to set new instance values.
 
         If not making a subclass then process args and kwargs and add
