@@ -98,7 +98,7 @@ class Color:
         super().__setattr__("_objects", {})
 
     def __setattr__(
-        self, key: str, value: int | str | dict[str, _t.Any] | None
+        self, key: str, value: int | str | dict[str, _t.Any] | None = None
     ) -> None:
         if key in self._opts:
             if isinstance(value, int):
