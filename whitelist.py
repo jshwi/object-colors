@@ -1,1 +1,1 @@
-fixture_color  # unused function (tests/conftest.py:10)
+fixture_color  # unused function (tests/conftest.py)
