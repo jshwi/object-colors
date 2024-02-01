@@ -4,6 +4,7 @@ tests
 
 Test package for ``object-colors``.
 """
+
 from typing import Any, Dict, List, Tuple, Union
 
 from object_colors import Color
@@ -35,13 +36,13 @@ ATTR_KEY_VALUES: Dict[str, Tuple[Tuple[str, int], ...]] = {
     FORE: COLOR_INT_INDEX,
     BACK: COLOR_INT_INDEX,
 }
-ATTR_COLOR_EFFECT_CODE_INDEX: Tuple[
-    Tuple[str, Tuple[Any, int], Any], ...
-] = tuple(
-    (s, (t[i], t[1]), CODE_OBJ[s][t[1]])
-    for i in (0, 1)
-    for s, v in ATTR_KEY_VALUES.items()
-    for t in v
+ATTR_COLOR_EFFECT_CODE_INDEX: Tuple[Tuple[str, Tuple[Any, int], Any], ...] = (
+    tuple(
+        (s, (t[i], t[1]), CODE_OBJ[s][t[1]])
+        for i in (0, 1)
+        for s, v in ATTR_KEY_VALUES.items()
+        for t in v
+    )
 )
 RESET: str = "\u001b[0;0m"
 TEST_STR: str = "A simple string"
