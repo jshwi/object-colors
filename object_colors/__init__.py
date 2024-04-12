@@ -1,4 +1,5 @@
 """Object-oriented library for stylizing terminal output."""
+
 from __future__ import annotations
 
 import builtins as _builtins
@@ -155,9 +156,11 @@ class Color:
         return "{}({})".format(
             type(self).__name__,
             ", ".join(
-                f"{k}={v}"
-                if not isinstance(v, dict)
-                else "objects({})".format(", ".join(v))
+                (
+                    f"{k}={v}"
+                    if not isinstance(v, dict)
+                    else "objects({})".format(", ".join(v))
+                )
                 for k, v in vars(self).items()
             ),
         )
